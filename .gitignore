@@ -1,0 +1,15 @@
+# Lean / Lake
+.lake/
+lake-packages/
+
+# Editor
+.DS_Store
+
+# LaTeX (paper/)
+**/paper/*.aux
+**/paper/*.fdb_latexmk
+**/paper/*.fls
+**/paper/*.log
+**/paper/*.out
+**/paper/*.toc
+**/paper/*.synctex.gz

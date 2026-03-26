@@ -21,6 +21,7 @@
 | `CylinderBoundary` | `ClosedCylinder`, `closedCylinder_boundary`, `closedCylinder_boundary_eq_union`, connected faces, disjoint faces, `not_isConnected_closedCylinderBoundaryUnion` (two circles disconnect) |
 | `HalfLineVsLine` | 1D half-space vs line: `euclideanHalfSpace1_not_homeomorphic_euclidean1`, `euclideanFinOneHomeoReal`, plumbing lemmas |
 | `HalfPlaneVsPlane` | 2D half-space vs plane: `euclideanHalfSpace2_not_homeomorphic_euclidean2` (punctured half-plane vs punctured `ℝ²` / simple connectivity); `complexNeZeroHomeoPuncturedE2`, `puncturedHalfPlaneHomeoH2NeZero`, `notSimplyConnected_punctured_E2`; **`tendsto_norm_complexHomeoE2_nhds_zero`** (shrink `‖complexHomeoE2 z‖` as `z → 0`, for half-ball vs `ℝ²` chart obstruction) |
+| `HalfSpaceNeighborVsPlane` | Local model: `isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2` (open `V ⊆ H2`, `0 ∈ V` ⇒ no `Subtype V ≃ₜ R2`); supporting `puncturedRNBallInVHomeoPuncturedHalfBallR2`, star-convex punctured half-ball |
 | `OpenCompactChartObstruction` | Compact nonempty patch of `ℝ²` not homeomorphic to all of `ℝ²` (`not_compactSpace_euclidean_two`, `isEmpty_homeomorph_euclideanClosedSquare_euclidean_two`) |
 | `MobiusCylinderBoundaryContrast` | `mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion` (connected vs disconnected boundary union) |
 | `ChartableR2Bridge` | `ChartableR2`, `Homeomorph.chartableR2_iff`, conditional `mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary` |

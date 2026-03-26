@@ -27,6 +27,7 @@
 | Closed cylinder / boundary | `RepresentationalRegress/CylinderBoundary.lean` | `ClosedCylinder`, `closedCylinder_boundary`, two connected boundary faces |
 | Half-line vs line | `RepresentationalRegress/HalfLineVsLine.lean` | `euclideanHalfSpace1_not_homeomorphic_euclidean1` (1D chart obstacle) |
 | Half-plane vs plane | `RepresentationalRegress/HalfPlaneVsPlane.lean` | `euclideanHalfSpace2_not_homeomorphic_euclidean2` (2D punctured half-plane vs punctured `ℝ²` / simple connectivity) |
+| Half-space neighbor vs plane | `RepresentationalRegress/HalfSpaceNeighborVsPlane.lean` | `isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2` — open `V ⊆ H2` with `0 ∈ V` ⇒ `Subtype V` not `≃ₜ` `ℝ²` (local chart obstruction) |
 | Assembly | `RepresentationalRegress/Main.lean` | `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterV2`, `representational_regress_master_v2` |
 
 `RepresentationalRegress.lean` imports the above (including `Lawvere`, `CylinderMobius`, and `CylinderBoundary`) so they participate in the default library target.

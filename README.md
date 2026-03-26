@@ -8,11 +8,11 @@ This library targets a Lean 4 + Mathlib proof that:
 
 1. In category-theoretic settings, the object/morphism sorts are not collapsed; cross-sort identifications are ruled out via the appropriate formalization (`Basic`, `FixedPoints`).
 
-2. A representational account of awareness-of-awareness yields a non-terminating ascent of meta-levels, modeled through `metaRepresent` and the regress theorems (`Regress`).
+2. A representational setup yields a non-terminating ascent of meta-levels **as iterated morphisms** `represent^n` (`metaRegressArrow` / `metaRepresent`) and corresponding **slice** objects `metaOver n` — **provided** the bundled hypothesis `iter_injective` holds (`Regress`).
 
-3. Fixed-point phenomena (Lawvere / cartesian closed structure) do not equate morphisms with objects; the “wall” is a limitation, not a dissolution of the arrow/node distinction (`FixedPoints`).
+3. Fixed-point phenomena: injective **currying** in monoidal closed categories (`FixedPoints`); Lawvere’s **diagonal fixed-point theorem in `Type`** (`Lawvere.lean`); and a tagged lemma that the representational arrow does not “become” an arbitrary object witness in `OntologicalSlot`.
 
-4. Topological orientability links (homeomorphism invariance, contrast with non-orientable models) will be wired to the correct mathlib manifold API (`Orientability` — see `SPEC_001_RR1` for the exact statements).
+4. Topology: **Hausdorff (T₂)** is preserved by homeomorphisms (`Orientability`). `CylinderMobius.lean` defines an open cylinder and a Möbius quotient model; `CylinderBoundary.lean` proves the **closed** cylinder’s **manifold boundary** is **two disjoint connected** faces. **Proving** the Möbius model is not homeomorphic to either cylinder (or formal manifold orientability on the quotient) is still open.
 
 ## What this does not prove
 
@@ -35,21 +35,27 @@ Lawvere (1969): “Diagonal arguments and cartesian closed categories”; Mathli
 
 ## Build
 
-From this directory (after `lake update`):
+**Use the Mathlib binary cache** — do not compile all of Mathlib from source:
 
 ```bash
-lake exe cache get   # fetch pre-built Mathlib .olean artifacts
-lake build
+lake update              # resolve deps → exact mathlib revision
+lake exe cache get       # REQUIRED: download pre-built .olean blobs (GitHub source ≠ binaries)
+lake build RepresentationalRegress   # default library target; only this repo + uncached leaves
 ```
+
+If `lake build` starts compiling thousands of `Mathlib.*` files, you skipped `cache get`, hit a cache miss for an untagged mathlib rev, or removed `~/.cache/mathlib/`. Fix: run `lake exe cache get` again; keep `lakefile.lean` on a **tagged** mathlib release (as pinned) so the community cache always has artifacts.
 
 Workspace documentation: `../docs/lean_mathlib_cache_workflow.md`, `../docs/optional_mathlib.md`.
 
 ## Structure
 
-- `RepresentationalRegress/Basic.lean` — core definitions
+- `RepresentationalRegress/Basic.lean` — core definitions (`iter_injective`, iterates, `Over A`)
 - `RepresentationalRegress/Regress.lean` — regress chain theorems
-- `RepresentationalRegress/FixedPoints.lean` — Lawvere / fixed-point layer
-- `RepresentationalRegress/Orientability.lean` — topological hooks
+- `RepresentationalRegress/FixedPoints.lean` — curry/uncurry injectivity; `OntologicalSlot` “wall”
+- `RepresentationalRegress/Lawvere.lean` — Lawvere fixed-point theorem in `Type`
+- `RepresentationalRegress/Orientability.lean` — T₂ and homeomorphisms
+- `RepresentationalRegress/CylinderMobius.lean` — cylinder vs Möbius definitions  
+- `RepresentationalRegress/CylinderBoundary.lean` — closed cylinder boundary (two faces)
 - `RepresentationalRegress/Main.lean` — master conditional theorem
 - `docs/argument-structure.md` — plain-language map
 

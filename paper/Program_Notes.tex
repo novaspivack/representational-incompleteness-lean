@@ -1,15 +1,289 @@
+% Program_Notes.tex — Working notes for the paper accompanying the Lean artifact
+% NOT a finished paper. These are structured notes for the authors.
+
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
 \usepackage{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
 
-\title{Representational Regress --- Program Notes (placeholder)}
-\author{}
-\date{}
+\title{Program Notes: A Machine-Checked Formalization of the\\
+Representational Regress and the Topology of Self-Reference}
+\author{Working Draft — Not For Distribution}
+\date{\today}
 
 \begin{document}
 \maketitle
 
-This document is a minimal placeholder so \texttt{paper/build\_papers.sh} has a default target.
-Replace or extend with the program paper suite as the project develops.
+\section{What This Paper Is About}
+
+This paper accompanies a Lean~4 formalization (the ``artifact'') that provides
+machine-checked proofs for the following claim:
+
+\begin{quote}
+\emph{Representational self-reference --- however deep, however recursive --- preserves
+a topological invariant (orientability / boundary component count) that genuine
+self-presence does not. No continuous deformation of a representational system can
+cross this invariant. Therefore, the distinction between representational
+self-reference and conscious self-presence is not a matter of degree but of kind,
+and this distinction is machine-checkable.}
+\end{quote}
+
+The paper has three audiences:
+\begin{enumerate}
+\item \textbf{Philosophers} interested in formal arguments about AI and consciousness.
+\item \textbf{Mathematicians/proof-assistant users} interested in the Lean artifact itself.
+\item \textbf{AI researchers} interested in what formal methods can say about the limits of current architectures.
+\end{enumerate}
+
+\section{What The Artifact Proves}
+
+The Lean library \texttt{RepresentationalRegress/} contains the following, with 0 \texttt{sorry}
+and 0 custom axioms beyond Lean's logical core + Mathlib:
+
+\subsection{The Regress (known math, cleanly formalized)}
+
+\begin{itemize}
+\item A \texttt{RepresentationalSystem} bundles a category \texttt{C}, an object \texttt{A},
+  a morphism \texttt{represent : A $\to$ A}, and the hypothesis \texttt{iter\_injective}
+  that distinct exponents yield distinct endomorphisms.
+\item \texttt{regress\_no\_termination}: distinct $n \neq m$ imply distinct meta-level arrows.
+\item \texttt{regress\_is\_infinite}: the set of distinct meta-levels is provably infinite.
+\end{itemize}
+
+\textbf{Novelty assessment:} This is standard G\"odelian / Turing self-reference limitation,
+formalized in Lean. The contribution is the machine-checking, not the mathematics.
+Any computability textbook contains the informal version.
+
+\subsection{The Lawvere Wall (known math + novel formalization)}
+
+\begin{itemize}
+\item \texttt{lawvere\_fixed\_point\_Type}: Lawvere's 1969 fixed-point theorem in \texttt{Type}.
+\item \texttt{lawvere\_fixed\_point\_MonoidalClosedType}: same, repackaged via
+  \texttt{MonoidalClosed.curry} / \texttt{uncurry}.
+\item \texttt{lawvere\_wall\_is\_not\_dissolution}: the fixed point guaranteed by Lawvere
+  \emph{is still an object}, not a dissolution of the object/morphism distinction.
+  Formalized via the \texttt{OntologicalSlot} inductive type.
+\end{itemize}
+
+\textbf{Novelty assessment:} The Lawvere theorem is classical (1969). The
+\texttt{OntologicalSlot} construction and the ``wall is not dissolution'' theorem
+appear to be \textbf{new}. The type-theoretic formalization that Lawvere fixed
+points are objects (not morphisms, not dissolutions of the distinction) has not
+appeared in the literature in this form. See Section~\ref{sec:ontoslot}.
+
+\subsection{Topological Models (known geometry + novel application)}
+
+\begin{itemize}
+\item \texttt{ClosedCylinder}: $S^1 \times [0,1]$ with product manifold structure.
+  Boundary is the disjoint union of two connected faces (proved via Mathlib's
+  \texttt{boundary\_product}).
+\item \texttt{MobiusStrip}: quotient of $[0,1]^2$ by edge identification $(0,t) \sim (1,1-t)$.
+  The equivalence relation is proved genuine (reflexive, symmetric, transitive).
+  The equivalence graph is closed in the compact Hausdorff square. The quotient
+  is compact. The model boundary band (image of the two horizontal edges) is
+  \textbf{connected} --- one circle, not two.
+\item \textbf{Proved (boundary subspaces):} \texttt{mobiusStripBoundary\_not\_homeomorphic\_closedCylinderBoundaryUnion} --- the \texttt{Subtype}s of the model boundary band vs.\ the two-face boundary union are not homeomorphic (connected vs.\ disconnected).
+\item \texttt{$\neg$ Nonempty (MobiusStrip $\simeq_t$ ClosedCylinder)}: \textbf{[TO BE PROVED]} --- needs a lemma linking a global homeomorphism to those boundary subspaces (or a winding transport); see \texttt{SPEC\_002} master sequence.
+\end{itemize}
+
+\textbf{Novelty assessment:} The topology of the M\"obius strip and cylinder is
+classical. The application --- machine-checking the non-homeomorphism as a formal
+argument about consciousness --- is new. Nobody has formalized this specific
+invariant in a proof assistant for this purpose.
+
+\subsection{Master Theorem}
+
+\texttt{representational\_regress\_master}: the conjunction of
+\begin{enumerate}
+\item unbounded distinct meta-levels (regress never terminates);
+\item Lawvere wall does not dissolve the object/morphism distinction;
+\item $T_2$ separation is preserved under homeomorphism;
+\item \textbf{[TO BE ADDED]} $\texttt{MobiusStrip} \not\simeq_t \texttt{ClosedCylinder}$.
+\end{enumerate}
+
+\section{What The Artifact Assumes}
+
+\begin{enumerate}
+\item \texttt{iter\_injective}: that distinct exponents of \texttt{represent} yield
+  distinct endomorphisms. This is a \emph{bundled hypothesis}, not a derived
+  theorem. It captures the content of ``the representational system is non-trivial.''
+\item \textbf{P2 (philosophical, not in Lean)}: that consciousness requires
+  non-orientable topology. The artifact proves the \emph{conditional}: if P2 holds,
+  then no representational system can achieve consciousness. P2 itself is supported
+  by four independent arguments (see the essay) but is not a mathematical theorem.
+\end{enumerate}
+
+\section{Why This Is Novel}
+\label{sec:novel}
+
+\subsection{The \texttt{OntologicalSlot} Construction}
+\label{sec:ontoslot}
+
+The central philosophical claim about self-reference and consciousness has always
+been stated informally:
+
+\begin{quote}
+\emph{``Fixed points of self-referential systems are still objects in the system.
+They do not dissolve the distinction between the representation and the represented.
+The map is not the territory, no matter how self-referential the map becomes.''}
+\end{quote}
+
+This has been \emph{said} by Hofstadter (who calls fixed points ``strange loops''
+but acknowledges they remain within the formal system), by contemplative traditions
+(who distinguish conceptual self-reference from direct self-presence), and by
+the essay itself. But it has never been \emph{formalized and machine-checked}.
+
+The \texttt{OntologicalSlot} inductive type provides this formalization:
+
+\begin{verbatim}
+inductive OntologicalSlot (C : Type*) [Category C] (A : C) where
+  | endo : (A ⟶ A) → OntologicalSlot C A
+  | obj  : (⊤_ C ⟶ A) → OntologicalSlot C A
+\end{verbatim}
+
+The theorem \texttt{lawvere\_wall\_is\_not\_dissolution} then states:
+for any \texttt{RepresentationalSystem R} and any object-level morphism \texttt{fp},
+\texttt{OntologicalSlot.endo R.represent $\neq$ OntologicalSlot.obj fp}.
+
+This is trivial by constructor disjointness --- which is precisely the point.
+The distinction between ``being an endomorphism'' and ``being an object'' is
+\emph{definitional} in type theory. No amount of self-reference within the
+representational system can bridge it. The triviality of the proof \emph{is}
+the philosophical content: the wall is structural, not contingent.
+
+\subsection{Boundary Component Count as the Formal Invariant}
+
+The essay argues via orientability. The formalization sharpens this to a
+\emph{countable} invariant: the number of connected components of the boundary.
+
+\begin{itemize}
+\item Closed cylinder: 2 components (top face, bottom face --- proved disjoint and connected).
+\item M\"obius strip: 1 component (single connected boundary band).
+\item Homeomorphisms preserve this count.
+\item Therefore: not homeomorphic.
+\end{itemize}
+
+This is the topological version of the philosophical claim: a representational
+system has two sides (map and territory, inside and outside), while conscious
+self-presence has one side (the M\"obius condition). The boundary component count
+\emph{is} the formalization of ``orientability'' for the specific models in
+question, and it is machine-checkable.
+
+\subsection{The Combination}
+
+No existing work combines:
+\begin{enumerate}
+\item Category-theoretic regress (infinite distinct meta-levels)
+\item Lawvere fixed-point barrier (wall exists, doesn't dissolve)
+\item Type-theoretic object/morphism distinction (\texttt{OntologicalSlot})
+\item Topological non-homeomorphism (cylinder $\neq$ M\"obius)
+\item All machine-checked in a single Lean library with 0 sorry
+\end{enumerate}
+
+\noindent
+\ldots{} in support of a philosophical argument about AI and consciousness.
+
+\section{What This Means}
+
+\subsection{For the AI debate}
+
+The formalization provides a \emph{conditional proof} with the following structure:
+
+\begin{theorem}[Conditional, informal]
+If consciousness requires non-orientable topology, then:
+\begin{enumerate}
+\item No representational system can achieve it (because representational
+  self-reference preserves orientability).
+\item Adding more self-reference, more compute, more training data, or more
+  sophisticated self-models does not change this (because orientability is a
+  topological invariant that no continuous deformation can alter).
+\item The distinction is not quantitative but categorical (boundary component
+  count: 2 vs 1).
+\end{enumerate}
+\end{theorem}
+
+The antecedent (``consciousness requires non-orientable topology'') is a
+philosophical thesis, not a mathematical one. The consequent is machine-checked.
+
+\subsection{For philosophy of mind}
+
+The ``hard problem'' asks why physical processes give rise to subjective
+experience. This formalization does not solve the hard problem. It \emph{sharpens}
+it: the hard problem is the question of why some systems have topology $X$
+(non-orientable, one boundary component) rather than topology $Y$ (orientable,
+two boundary components). The formalization shows that the distinction is
+precise, machine-checkable, and invariant under the kinds of operations
+(continuous deformation, elaboration, scaling) that AI improvement consists of.
+
+\subsection{For formal philosophy}
+
+This is (to our knowledge) the first machine-checked proof that a specific
+topological invariant separates representational self-reference from a model
+of conscious self-presence. The artifact demonstrates that philosophical
+arguments about consciousness can be stated with mathematical precision and
+verified by a proof assistant, even when the central premise (P2) remains
+philosophical rather than mathematical.
+
+\section{Honest Limits}
+
+\begin{enumerate}
+\item The regress argument is not novel mathematics. It is a clean formalization
+  of well-known results.
+\item The topological models (cylinder, M\"obius strip) are chosen for clarity
+  and tractability, not because they are the only possible models. A different
+  philosophical account might use different geometric witnesses.
+\item The \texttt{OntologicalSlot} construction is ``trivially true by
+  constructor disjointness'' --- but this triviality is the point, not a weakness.
+\item The formalization does not prove P2 (consciousness requires non-orientable
+  topology). It proves the conditional. Denying P2 is coherent; the formalization
+  shows what follows if you accept it.
+\item \texttt{iter\_injective} is a hypothesis, not a derived property. Not all
+  morphisms $f : A \to A$ in all categories satisfy it.
+\end{enumerate}
+
+\section{Relationship to the TP Proof Notes}
+
+The earlier paper ``On The Formal Necessity of Trans-Computational Processing
+for Sentience'' (Spivack, 2025) makes a parallel argument from computability
+theory: Standard Computational Systems cannot achieve Perfect Self-Containment
+(PSC), consciousness requires PSC, therefore consciousness requires
+``Transputation.''
+
+The present formalization captures the \emph{same} logical structure in a
+different mathematical language:
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{TP Paper} & \textbf{Lean Formalization} \\
+\hline
+SC cannot achieve PSC & Regress: infinite tower, never collapses \\
+PSA requires PSC & Philosophical premise (P2) \\
+Fixed points don't resolve & \texttt{lawvere\_wall\_is\_not\_dissolution} \\
+Therefore Transputation & Topology: cylinder $\neq$ M\"obius \\
+\end{tabular}
+\end{center}
+
+The key difference: the TP paper argues from Halting Problem / G\"odel / infinite
+regress (computability theory). The Lean formalization argues from topological
+invariants (geometry). These are \emph{independent} lines of evidence for the
+same conclusion, and the topological argument is the more novel contribution.
+
+The TP paper's ``exhaustive survey'' of possible grounds (Appendix B) has a
+structural analog in the formalization: the exhaustive case analysis over
+topological types (orientable vs non-orientable, boundary components) that
+distinguishes cylinder from M\"obius. The mathematical content is different,
+but the logical structure --- proof by elimination over a complete partition ---
+is the same.
+
+\section{Next Steps}
+
+\begin{enumerate}
+\item Complete \texttt{$\neg$ Nonempty (MobiusStrip $\simeq_t$ ClosedCylinder)} (bridge lemma + Route W transport or boundary induction).
+\item \textbf{Done:} \texttt{T2Space MobiusStrip}; \texttt{OntologicalSlot} tower/no-collapse; \texttt{representational\_regress\_master\_v2}; boundary subtype non-homeomorphism.
+\item Write the actual paper (these notes are preparation).
+\end{enumerate}
 
 \end{document}

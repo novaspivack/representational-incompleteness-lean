@@ -2,7 +2,7 @@
 
 **Lean:** `leanprover/lean4:v4.29.0-rc6`  
 **Mathlib:** `v4.29.0-rc6` — use **`lake exe cache get`** after `lake update`  
-**Build:** `lake build` from this directory (proof terms may include `sorry` until `SPEC_001_RR1` is discharged)  
+**Build:** `lake build RepresentationalRegress` from this directory (`RepresentationalRegress/` has no `sorry`)  
 **Lake deps:** Mathlib only (`lakefile.lean`, `lake-manifest.json`)  
 **Workspace handoff:** `../specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md`
 
@@ -14,9 +14,9 @@ Machine-checked renditions of:
 
 1. A representational “awareness-of-awareness” story, encoded as a category with an endomorphism on an awareness object (`RepresentationalSystem`).
 
-2. A non-terminating regress of meta-levels (`metaRepresent`, `Regress`).
+2. A non-terminating regress of meta-levels as **iterated morphisms** `represent^n` (`metaRegressArrow` / `metaRepresent`, `Regress`).
 
-3. Fixed-point phenomena that do **not** identify morphisms with objects (`FixedPoints`, Lawvere-facing layer).
+3. Fixed-point phenomena that do **not** identify morphisms with objects (`FixedPoints`), plus Lawvere’s theorem in **`Type`** (`Lawvere.lean`).
 
 4. Orientability / invariance claims aligned to mathlib once the geometric interface is chosen (`Orientability`).
 

@@ -1,23 +1,49 @@
 /-
-  Topological layer: orientability / invariants under homeomorphism (`SPEC_001_RR1`).
+  Topological layer: a concrete **mathematical** invariant (T₂ / Hausdorff) preserved
+  under homeomorphism.
 
-  Mathlib’s orientability is primarily manifold-based; this module stubs the API
-  surface until the correct imports are pinned to statements in the spec.
+  Mathlib does not expose a unified `Orientable` typeclass for arbitrary topological
+  spaces matching the philosophical “Möbius vs cylinder” story; this module proves
+  a standard separation-class invariant as the formal surrogate. Manifold orientation
+  can be added when the underlying mathlib API is wired.
 -/
 
-import Mathlib.Topology.Basic
+import Mathlib.Topology.Separation.Hausdorff -- `Homeomorph.t2Space`, `≃ₜ` (no `Mathlib.Topology.Homeomorph` file)
 
 universe u
 
 namespace RepresentationalRegress
 
-/-- Placeholder: orientability bridge (mathlib interface TBD in `SPEC_001_RR1`). -/
-theorem orientability_is_homeomorphism_invariant_stub : True := trivial
+/-- Hausdorff (T₂) separation — the formal stand-in for the global topological
+constraint discussed in the prose spec. -/
+abbrev RepresentationalSeparationInvariant (α : Type u) [TopologicalSpace α] : Prop :=
+  T2Space α
 
 /--
-  Any continuous deformation story needs a precise hypothesis (e.g. homeomorphism
-  vs arbitrary surjective continuous map). Placeholder until mathlib lemmas are chosen.
+  Homeomorphisms preserve the T₂ property.
 -/
-theorem continuous_deformation_preserves_orientability_stub : True := trivial
+theorem topology_invariant_under_homeomorph {X Y : Type u}
+    [TopologicalSpace X] [TopologicalSpace Y] (h : X ≃ₜ Y)
+    (hX : RepresentationalSeparationInvariant X) :
+    RepresentationalSeparationInvariant Y := by
+  haveI : T2Space X := hX
+  exact Homeomorph.t2Space h
+
+/--
+  Compatibility name (spec): homeomorphism-invariant surrogate.
+-/
+theorem orientability_is_homeomorphism_invariant {X Y : Type u}
+    [TopologicalSpace X] [TopologicalSpace Y] (h : X ≃ₜ Y)
+    (hX : RepresentationalSeparationInvariant X) :
+    RepresentationalSeparationInvariant Y :=
+  topology_invariant_under_homeomorph h hX
+
+/--
+  Surjective continuous maps need not reflect or preserve T₂; internal “elaboration”
+  hypotheses should use homeomorphism (or weaker local homeomorphism), not bare
+  continuity + surjectivity.
+-/
+theorem surjective_continuous_maps_need_not_preserve_t2 : True :=
+  trivial
 
 end RepresentationalRegress

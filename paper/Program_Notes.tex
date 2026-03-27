@@ -141,9 +141,10 @@ The \texttt{OntologicalSlot} inductive type provides this formalization:
 
 \begin{verbatim}
 inductive OntologicalSlot (C : Type*) [Category C] (A : C) where
-  | endo : (A ⟶ A) → OntologicalSlot C A
-  | obj  : (⊤_ C ⟶ A) → OntologicalSlot C A
+  | endo : (A --> A) -> OntologicalSlot C A
+  | obj  : (top_ C --> A) -> OntologicalSlot C A
 \end{verbatim}
+\noindent (ASCII rendering; Lean source uses Unicode long arrows and $\top$.)
 
 The theorem \texttt{lawvere\_wall\_is\_not\_dissolution} then states:
 for any \texttt{RepresentationalSystem R} and any object-level morphism \texttt{fp},
@@ -283,7 +284,7 @@ is the same.
 
 \begin{enumerate}
 \item \textbf{Done:} M-FINAL (\texttt{mobiusStrip\_not\_homeomorphic\_closedCylinder}); \texttt{T2Space MobiusStrip}; \texttt{OntologicalSlot} tower/no-collapse; \texttt{representational\_regress\_master\_extended}; boundary subtype non-homeomorphism; seam + equator charts.
-\item Write the actual paper from \texttt{PAPER\_OUTLINE.tex}.
+\item Write the actual paper from \texttt{The\_Representational\_Regress.tex}.
 \item Optional: complete Route W Step 5 (independent cross-check); full \texttt{IsManifold} polish.
 \end{enumerate}
 

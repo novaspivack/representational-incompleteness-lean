@@ -1,10 +1,6 @@
-% PAPER_OUTLINE.tex — Full outline for the final paper
+% The_Representational_Regress.tex — Full paper
 % Based on the proved Lean artifact (0 sorry, 0 custom axioms)
 % Companion to representational-regress-lean
-%
-% This is a STRUCTURAL OUTLINE with section prose guides, theorem statements,
-% proof-sketch annotations, and cross-references to Lean modules.
-% It is intended to be expanded into the finished paper.
 
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
@@ -327,9 +323,35 @@ A point $x$ of a topological space $X$ is \emph{$\mathrm{ChartableR2}$} if there
 (\leanref{Homeomorph.chartableR2\_iff}) If $h : X \simeq_t Y$ is a homeomorphism, then $\mathrm{ChartableR2}(x) \iff \mathrm{ChartableR2}(h(x))$.
 \end{theorem}
 
-% This is the key: any global homeomorphism MobiusStrip ≃ₜ ClosedCylinder
-% would have to respect the ChartableR2 classification, hence map boundary
-% to boundary — contradicting the boundary-subspace contrast.
+\subsection{The Generic Boundary-Contrast Obstruction}
+\label{sec:generic}
+
+The following theorem is the \textbf{universal engine} behind M-FINAL and any
+future surface pair separated by $\mathrm{ChartableR2}$-detected boundary topology.
+
+\begin{theorem}[\novel\ \leanref{ChartableR2Bridge.lean}]
+\label{thm:generic}
+(\leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast})
+Let $X$ and $Y$ be topological spaces with predicates $b_X \subseteq X$ and $b_Y \subseteq Y$ such that:
+\begin{enumerate}[label=(\roman*)]
+\item $\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$,
+\item $\forall y,\; y \in b_Y \iff \neg\,\mathrm{ChartableR2}(y)$,
+\item $\mathrm{IsEmpty}(\mathrm{Subtype}(b_X) \simeq_t \mathrm{Subtype}(b_Y))$.
+\end{enumerate}
+Then $\mathrm{IsEmpty}(X \simeq_t Y)$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Any homeomorphism $e : X \simeq_t Y$ preserves $\mathrm{ChartableR2}$
+(Theorem~\ref{thm:chartable-invar}), hence maps $b_X$ to $b_Y$ pointwise.
+By $e.\mathrm{subtype}$, we get a homeomorphism
+$\mathrm{Subtype}(b_X) \simeq_t \mathrm{Subtype}(b_Y)$, contradicting~(iii).
+\end{proof}
+
+% This means: to prove IsEmpty (X ≃ₜ Y) for any NEW pair, supply boundary
+% predicates + ChartableR2 biconditionals + boundary incompatibility.
+% No bridge re-proof needed. M-FINAL is a one-line corollary.
+% Klein bottle vs torus, etc. would follow the same pattern.
 
 \subsection{Half-Space Obstructions}
 \label{sec:halfspace}
@@ -515,18 +537,18 @@ For all $x \in \mathrm{MobiusStrip}$:
 \end{theorem}
 
 \begin{proof}[Proof sketch]
-Suppose $h : \mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder}$. By Theorem~\ref{thm:chartable-invar}, $h$ preserves $\mathrm{ChartableR2}$. By the biconditionals (Theorems~\ref{thm:cylinder-c4} and~\ref{thm:mobius-c4}), $h$ restricts to a homeomorphism $\partial_{\mathrm{Mob}} \cong_t \partial_{\mathrm{Cyl}}$. But Theorem~\ref{thm:boundary-contrast} gives $\mathrm{IsEmpty}(\partial_{\mathrm{Mob}} \cong_t \partial_{\mathrm{Cyl}})$. Contradiction.
+Instantiate Theorem~\ref{thm:generic} with $b_X = \partial_{\mathrm{Mob}}$,
+$b_Y = \partial_{\mathrm{Cyl}}$, the biconditionals
+(Theorems~\ref{thm:cylinder-c4} and~\ref{thm:mobius-c4}), and the boundary
+incompatibility (Theorem~\ref{thm:boundary-contrast}).
 \end{proof}
 
-% Lean decomposition:
-%   1. mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary
-%      (conditional: given both C4 biconditionals)
-%   2. mobiusStrip_not_homeomorphic_closedCylinder_of_mobius_boundary_chartable
-%      (cylinder C4 discharged)
-%   3. mobiusStrip_not_homeomorphic_closedCylinder_of_forall_off_edge_chartable
-%      (Möbius C4 reduced to ∀ interior-height → ChartableR2)
-%   4. mobiusStrip_not_homeomorphic_closedCylinder
-%      (instantiates with chartableR2_mobiusQuotientMk_of_interior_height)
+% The Lean proof chain:
+%   1. not_homeomorphic_of_chartableR2_boundary_contrast (generic engine)
+%   2. mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary (instantiates generic)
+%   3. mobiusStrip_not_homeomorphic_closedCylinder_of_mobius_boundary_chartable (cylinder C4 discharged)
+%   4. mobiusStrip_not_homeomorphic_closedCylinder_of_forall_off_edge_chartable (Möbius C4 reduced)
+%   5. mobiusStrip_not_homeomorphic_closedCylinder (instantiates with interior_height)
 
 % ============================================================================
 % 7. THE EXTENDED MASTER THEOREM AND PHILOSOPHICAL INTERPRETATION
@@ -738,6 +760,7 @@ where this abbreviation expands to:
 \leanref{isConnected\_mobiusStripBoundary} & Boundary band is connected & \leanref{CylinderMobius} \\
 \leanref{closedCylinder\_boundary\_eq\_union} & Cylinder boundary = 2 disjoint faces & \leanref{CylinderBoundary} \\
 \leanref{euclideanHalfSpace2\_not\_homeomorphic\_euclidean2} & $H^2 \not\cong_t \mathbb{R}^2$ & \leanref{HalfPlaneVsPlane} \\
+\leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast} & Generic: incompatible boundaries $\Rightarrow$ $\neg$ homeo & \leanref{ChartableR2Bridge} \\
 \leanref{closedCylinder\_boundaryUnion\_iff\_not\_chartableR2} & Cylinder C4 biconditional & \leanref{CylinderChartableBoundary} \\
 \leanref{not\_chartableR2\_of\_mem\_mobiusStripBoundary} & M\"obius boundary $\Rightarrow$ $\neg$\leanref{ChartableR2} & \leanref{MobiusChartableBdy} \\
 \leanref{chartableR2\_mobiusQuotientMk\_of\_interior\_height} & Interior height $\Rightarrow$ \leanref{ChartableR2} & \leanref{MobiusSeamChartableR2} \\

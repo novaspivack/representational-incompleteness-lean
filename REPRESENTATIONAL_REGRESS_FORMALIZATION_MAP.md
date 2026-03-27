@@ -19,7 +19,7 @@
 | `RepresentationalRegress/CylinderBoundary.lean` | Closed cylinder `Circle × Icc 0 1`: Mathlib `boundary_product`, two connected / disjoint boundary faces |
 | `RepresentationalRegress/CylinderChartableBoundary.lean` | Closed cylinder **C4:** **`closedCylinder_boundaryUnion_iff_not_chartableR2`**, **`H2`** boundary charts |
 | `RepresentationalRegress/ChartableR2Neighbor.lean` | Predicate **`ChartableR2`** (open nbhd **≃ₜ** `ℝ²`); half-space obstruction; sequential stability |
-| `RepresentationalRegress/ChartableR2Bridge.lean` | **`ChartableR2`** under homeomorphism; **conditional** **`mobiusStrip_not_homeomorphic_closedCylinder_of_*`** |
+| `RepresentationalRegress/ChartableR2Bridge.lean` | **`ChartableR2`** under homeomorphism; **generic** **`not_homeomorphic_of_chartableR2_boundary_contrast`** (universal obstruction for any pair); **conditional** Möbius / cylinder corollaries **`mobiusStrip_not_homeomorphic_closedCylinder_of_*`** |
 | `RepresentationalRegress/ChartableR2Models.lean` | Interior charts on manifold models; cylinder interior **`ChartableR2`** |
 | `RepresentationalRegress/MobiusChartableBoundary.lean` | Möbius **open cell** charts; **bot/top** edge **`¬ ChartableR2`**; **`mobiusStripBoundary → ¬ ChartableR2`**; C4 packaging **`mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`** |
 | `RepresentationalRegress/MobiusSeamChartable.lean` | **`mobiusSeamSaturatedPatch`** (open, saturated); left/right patches; sheet-interior injectivity |

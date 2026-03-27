@@ -1,16 +1,15 @@
 /-
-  **Intrinsic “ℝ² chart” predicate (open neighborhood ≃ₜ `R2`).**
+  **`ChartableR2` invariance under homeomorphism and the generic boundary-contrast obstruction.**
 
-  A global homeomorphism preserves existence of such charts. Together with lemmas identifying
-  `mobiusStripBoundary` / `closedCylinderBoundaryUnion` with the complement of this predicate
-  (cylinder side is proved; Möbius **`mobiusStripBoundary → ¬ ChartableR2`** in `MobiusChartableBoundary`;
-  full **`↔`** reduces via   **`mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`** to
-  **`∀ p, 0 < p.2 ∧ p.2 < 1 → ChartableR2 ⟦p⟧`**, now discharged in **`MobiusSeamChartableR2`** by
-  **`chartableR2_mobiusQuotientMk_of_interior_height`**. The unconditional theorem
-  **`mobiusStrip_not_homeomorphic_closedCylinder`** is also in **`MobiusSeamChartableR2`**.
+  **Generic theorem (`not_homeomorphic_of_chartableR2_boundary_contrast`):** if two topological spaces
+  each have a "boundary" predicate that is equivalent to `¬ ChartableR2`, and the resulting boundary
+  **subspaces** are not homeomorphic, then the ambient spaces are not homeomorphic. This is the
+  universal engine behind **M-FINAL** and any future pair separated by `ChartableR2`-detected boundary
+  topology. See `MobiusSeamChartableR2` for the unconditional instantiation.
 
-  This file proves **`ChartableR2`** invariance and the **conditional** packaging
-  **`mobiusStrip_not_homeomorphic_closedCylinder_of_*`**; the fully instantiated M-FINAL lives in **`MobiusSeamChartableR2`**.
+  Concrete Möbius / cylinder packaging (`mobiusStrip_not_homeomorphic_closedCylinder_of_*`) delegates
+  to the generic theorem with `mobiusStripBoundary` / `closedCylinderBoundaryUnion` and
+  `mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion`.
 -/
 
 import Mathlib.Topology.Homeomorph.Lemmas
@@ -54,25 +53,57 @@ theorem Homeomorph.chartableR2_iff (e : X ≃ₜ Y) (x : X) :
         (Homeomorph.setCongr hUV.symm).trans (Homeomorph.image e.symm U).symm
       exact ⟨ψ.trans φ⟩
 
+-- ═══════════════════════════════════════════════════════════════════
+-- Generic obstruction: any two spaces whose ChartableR2-detected
+-- boundaries are topologically incompatible cannot be homeomorphic.
+-- ═══════════════════════════════════════════════════════════════════
+
+/-- A homeomorphism maps points in a `¬ ChartableR2`-characterized "boundary" of `X` to those of `Y`. -/
+theorem homeomorph_boundary_iff_of_chartableR2 {bX : Set X} {bY : Set Y}
+    (e : X ≃ₜ Y)
+    (hX : ∀ x, x ∈ bX ↔ ¬ ChartableR2 x)
+    (hY : ∀ y, y ∈ bY ↔ ¬ ChartableR2 y)
+    (x : X) : x ∈ bX ↔ e x ∈ bY := by
+  rw [hX, hY, Homeomorph.chartableR2_iff e x]
+
+/-- **Generic boundary-contrast obstruction.** If `X` and `Y` each have a predicate characterizing
+  "boundary = complement of `ChartableR2`", and the resulting boundary subspaces are **not**
+  homeomorphic, then the ambient spaces are not homeomorphic.
+
+  This is the universal engine: to prove `IsEmpty (X ≃ₜ Y)`, supply:
+  * `bX`, `bY` — boundary predicates;
+  * `hX`, `hY` — each is `↔ ¬ ChartableR2`;
+  * `hincompat` — `IsEmpty (Subtype bX ≃ₜ Subtype bY)`.
+
+  **M-FINAL** and any future surface pair separated by boundary topology are one-line corollaries. -/
+theorem not_homeomorphic_of_chartableR2_boundary_contrast
+    {bX : Set X} {bY : Set Y}
+    (hX : ∀ x, x ∈ bX ↔ ¬ ChartableR2 x)
+    (hY : ∀ y, y ∈ bY ↔ ¬ ChartableR2 y)
+    (hincompat : IsEmpty (Subtype bX ≃ₜ Subtype bY)) :
+    IsEmpty (X ≃ₜ Y) :=
+  ⟨fun e => hincompat.false (e.subtype (homeomorph_boundary_iff_of_chartableR2 e hX hY))⟩
+
+-- ═══════════════════════════════════════════════════════════════════
+-- Concrete Möbius / cylinder packaging (corollaries of the generic theorem)
+-- ═══════════════════════════════════════════════════════════════════
+
 /-- Boundary points in the Möbius model ↔ non-chartable points, once that lemma is available. -/
 theorem mobiusStrip_homeomorph_boundary_iff_closedCylinderBoundaryUnion
     (h : MobiusStrip ≃ₜ ClosedCylinder) (x : MobiusStrip)
     (hM : ∀ x : MobiusStrip, x ∈ mobiusStripBoundary ↔ ¬ ChartableR2 x)
     (hC : ∀ x : ClosedCylinder, x ∈ closedCylinderBoundaryUnion ↔ ¬ ChartableR2 x) :
-    x ∈ mobiusStripBoundary ↔ h x ∈ closedCylinderBoundaryUnion := by
-  rw [hM, hC, Homeomorph.chartableR2_iff h x]
+    x ∈ mobiusStripBoundary ↔ h x ∈ closedCylinderBoundaryUnion :=
+  homeomorph_boundary_iff_of_chartableR2 h hM hC x
 
-/-- **Conditional M-FINAL** from `ChartableR2` boundary characterizations on both spaces. -/
+/-- **Conditional M-FINAL** from `ChartableR2` boundary characterizations on both spaces.
+  Corollary of `not_homeomorphic_of_chartableR2_boundary_contrast`. -/
 theorem mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary
     (hM : ∀ x : MobiusStrip, x ∈ mobiusStripBoundary ↔ ¬ ChartableR2 x)
     (hC : ∀ x : ClosedCylinder, x ∈ closedCylinderBoundaryUnion ↔ ¬ ChartableR2 x) :
-    IsEmpty (MobiusStrip ≃ₜ ClosedCylinder) := by
-  classical
-  refine ⟨fun h => ?_⟩
-  have hbij := fun x => mobiusStrip_homeomorph_boundary_iff_closedCylinderBoundaryUnion h x hM hC
-  have hsub : (Subtype mobiusStripBoundary) ≃ₜ (Subtype closedCylinderBoundaryUnion) :=
-    h.subtype hbij
-  exact mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion.false hsub
+    IsEmpty (MobiusStrip ≃ₜ ClosedCylinder) :=
+  not_homeomorphic_of_chartableR2_boundary_contrast hM hC
+    mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion
 
 /-- Same as `mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary` with the cylinder side
 discharged by `closedCylinder_boundaryUnion_iff_not_chartableR2`. -/

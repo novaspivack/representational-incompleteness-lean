@@ -7,14 +7,14 @@
 \usepackage{enumitem}
 \usepackage{array}
 \usepackage{booktabs}
+\usepackage{longtable}
 \usepackage{xcolor}
 \usepackage{stmaryrd}
-\usepackage[breakable]{tcolorbox}
+\usepackage{tcolorbox}
 \newtcolorbox{keybox}[1][]{
   colback=blue!4, colframe=blue!35,
   arc=3pt, boxrule=0.5pt,
-  fonttitle=\bfseries, #1,
-  breakable
+  fonttitle=\bfseries, #1
 }
 
 % Allow line breaks in long Lean identifiers (\_, namespaces, CamelCase).
@@ -2461,14 +2461,22 @@ fixed standard rather than debated informally.
 \section{Lean Module Map}
 \label{app:modules}
 
-\begin{table}[h]
-\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.95cm}>{\raggedright\arraybackslash}p{11.45cm}@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{3.95cm}>{\raggedright\arraybackslash}p{11.45cm}@{}}
 \toprule
 \textbf{Module} & \textbf{Role} \\
 \midrule
+\endfirsthead
+\toprule
+\textbf{Module} & \textbf{Role} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{\textit{continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
 \leanref{Basic} & \leanref{RepresentationalSystem}, iterates, \leanref{OntologicalSlot} \\
 \leanref{Regress} & Non-termination, unbounded levels \\
 \leanref{FixedPoints} & \leanref{EndoVsPoint}, Lawvere wall non-dissolution \\
@@ -2498,21 +2506,28 @@ fixed standard rather than debated informally.
 \leanref{OpenCompactChartObstruction} & Compact $\mathbb{R}^2$ patch $\neq$ $\mathbb{R}^2$ \\
 \leanref{ClosureProperties} & Compositional inheritance; \leanref{ComputationalSelfModel} (P3); slot robustness; \leanref{TopologicalSelfModelingSystem} pillar bridge; exhaustive closure; simulation; computability independence \\
 \leanref{Main} & Master theorem + extended bundle \\
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}
+\normalsize
 
 \section{Key Theorem Index}
 \label{app:theorems}
 
-\begin{table}[h]
-\centering
 \footnotesize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.85cm}>{\raggedright\arraybackslash}p{7.55cm}>{\raggedright\arraybackslash}p{3.15cm}@{}}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{3.85cm}>{\raggedright\arraybackslash}p{7.55cm}>{\raggedright\arraybackslash}p{3.15cm}@{}}
 \toprule
 \textbf{Lean name} & \textbf{Statement} & \textbf{Module} \\
 \midrule
+\endfirsthead
+\toprule
+\textbf{Lean name} & \textbf{Statement} & \textbf{Module} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r}{\textit{continued on next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
 \leanref{representational\_incompleteness} & \textbf{Summit:} $\forall a_0$, $s\,a_0 \neq \lambda a.\,f(s\,a\,a)$; $\neg\exists$ total $s$ & \leanref{LawvereRegressBridge} \\
 \midrule
 \leanref{regress\_iterates\_unbounded} & $\forall B, \exists L > B$, distinct iterate & \leanref{Regress} \\
@@ -2551,9 +2566,8 @@ fixed standard rather than debated informally.
 \leanref{combined\_diagonal\_and\_topological\_barrier} & Conjunction: blind spot $\wedge$ $\neg$surjective $\wedge$ $\neg$homeo & \leanref{ClosureProperties} \\
 \leanref{pillar1\_full\_closure} & Full Pillar 1: diagonal + no surjection + $\mathbb{N}$ + Bool & \leanref{ClosureProperties} \\
 \leanref{diagonal\_exclusion\_is\_constructive} & Diagonal exclusion needs no LEM & \leanref{ClosureProperties} \\
-\bottomrule
-\end{tabular}
-\end{table}
+\end{longtable}
+\normalsize
 
 \section{Theorem Dependency Graph}
 \label{app:deps}

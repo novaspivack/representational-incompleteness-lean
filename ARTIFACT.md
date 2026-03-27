@@ -11,8 +11,7 @@
 
 ## M-FINAL (closed)
 
-**Theorem:** **`mobiusStrip_not_homeomorphic_closedCylinder`** — `IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)` (**`MobiusSeamChartableR2`**, instantiating **`ChartableR2Bridge`**). **Spine:** cylinder **C4** vs Möbius interior **`ChartableR2`** (**`chartableR2_mobiusQuotientMk_of_interior_height`**, including seam + equator charts) → boundary biconditional → contradiction with boundary-subspace contrast. **MANIFEST.md** / **`docs/ADVISOR_OVERVIEW.md`** summarize the dependency graph. **Route W** in **`CylinderMobiusNonhomeo`** remains an optional cross-check.
-
+**Theorem:** **`mobiusStrip_not_homeomorphic_closedCylinder`** — `IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)` (**`MobiusSeamChartableR2`**, instantiating **`ChartableR2Bridge`**). **Spine:** cylinder **C4** vs Möbius interior **`ChartableR2`** (**`chartableR2_mobiusQuotientMk_of_interior_height`**, including seam + equator charts) → boundary biconditional → contradiction with boundary-subspace contrast. **MANIFEST.md** / **`docs/ADVISOR_OVERVIEW.md`** summarize the dependency graph. 
 ---
 
 ## What this artifact aims to prove

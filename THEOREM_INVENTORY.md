@@ -19,7 +19,6 @@
 | `LawvereCCCType` | `lawvereBinary`, `curry_lawvereBinary`, `lawvere_universal_iff_surjective_curry`, `lawvere_fixed_point_MonoidalClosedType` |
 | `Orientability` | `RepresentationalSeparationInvariant`, T₂ homeomorphism invariance, `surjective_continuous_maps_need_not_preserve_t2` |
 | `CylinderMobius` | Models + relation: `mobiusRel₀`, compact Hausdorff `MobiusStrip`, closed graph, connected boundary; **`mobiusClass_eq_singleton_of_Ioo_fx`** (vertical interior off seam); see table below |
-| `CylinderMobiusNonhomeo` | Toward punchline: `two_zsmul_not_injective_addCircle_twoPi` |
 | `PuncturedPlaneNotSimplyConnected` | `notSimplyConnected_complex_ne_zero`, `notSimplyConnected_punctured_open_unit_ball`, `puncturedBall_loop_not_homotopic_const`; **scaled loop** `puncturedBallLoopOfReal` / `puncturedBall_loopOfReal_not_homotopic_const` (`exp` covering + path lifting) |
 | `CylinderBoundary` | `ClosedCylinder`, `closedCylinder_boundary`, `closedCylinder_boundary_eq_union`, connected faces, disjoint faces, `not_isConnected_closedCylinderBoundaryUnion` (two circles disconnect) |
 | `HalfLineVsLine` | 1D half-space vs line: `euclideanHalfSpace1_not_homeomorphic_euclidean1`, `euclideanFinOneHomeoReal`, plumbing lemmas |
@@ -184,17 +183,6 @@ Orthogonal to the main **`iter_injective`** hypothesis: records what follows if 
 | `theorem` | `representational_regress_master_extended` | Proves that extended conjunction (incl. **`mobiusStrip_not_homeomorphic_closedCylinder`**) |
 | `theorem` | `representational_regress_topology_halfLineModel` | 1D half-space vs line only (first topology leg; pair with `representational_regress_master` if splitting the bundle) |
 
-## Cylinder / Möbius non-homeomorphism (`CylinderMobiusNonhomeo`)
-
-| Kind | Lean name | Notes |
-|------|-----------|--------|
-| `lemma` | `equivAddCircle_symm_map_zsmul`, `homeomorphCircle_at_period`, `homeomorphAddCircle_self` | Circle rescaling / `homeomorphCircle (2π)` = `homeomorphCircle'` |
-| `theorem` | `two_zsmul_not_injective_addCircle_twoPi`, `two_zsmul_not_injective_addCircle_two` | Doubling not injective on `AddCircle (2π)` and on `AddCircle 2` |
-| `lemma` | `mobiusAddCircleRescale_symm_map_two_zsmul` | `mobiusAddCircleRescale.symm` commutes with `2 • ·` |
-| `noncomputable def` | `cylinderToAddCircle`, `cylinderBoundaryLoop` | Bottom-face cylinder loop + `Circle` → `AddCircle (2π)` via `Prod.fst` |
-| `theorem` | `continuous_cylinderToAddCircle`, `continuous_cylinderBoundaryLoop`, `cylinderToAddCircle_comp_cylinderBoundaryLoop`, `injective_cylinderToAddCircle_comp_cylinderBoundaryLoop` | Cylinder-side **Route W** step 4: composite equals **`mobiusAddCircleRescale`** (hence injective) |
-| `def` / `theorem` | `mobiusStripToAddCircle`, `mobiusBoundaryLoop`, `mobiusStripToAddCircle_comp_mobiusBoundaryLoop`, `mobiusStripToAddCircle_comp_mobiusBoundaryLoop_not_injective` | Steps 1–3 (winding / doubling on `AddCircle`) |
-
 ## Boundary subtype contrast (`MobiusCylinderBoundaryContrast`)
 
 | Kind | Lean name | Notes |
@@ -271,11 +259,6 @@ Orthogonal to the main **`iter_injective`** hypothesis: records what follows if 
 ## Not machine-checked in this artifact (philosophy / gaps)
 
 - **Deriving `iter_injective`** from minimal data about `represent` alone (in general false — bundled hypothesis).
-- **Cylinder vs Möbius (geometry track):** `CylinderBoundary` proves the **closed** cylinder’s **manifold boundary** is **two disjoint connected** faces and that **their union is not connected** as a subspace (`not_isConnected_closedCylinderBoundaryUnion`). `CylinderMobius` gives **compact Hausdorff** `MobiusStrip` and **connected** `mobiusStripBoundary`. **`MobiusChartableBoundary`** proves **`mobiusStripBoundary → ¬ ChartableR2`**; **`MobiusSeamChartableR2`** proves interior-height **`ChartableR2`** and **`mobiusStrip_not_homeomorphic_closedCylinder`**. Cylinder **C4**: **`closedCylinder_boundaryUnion_iff_not_chartableR2`**. `HalfLineVsLine`, **`HalfPlaneVsPlane`**, **`HalfSpaceNeighborVsPlane`**, **`OpenCompactChartObstruction`**, **`ChartableR2Bridge`**, **`CylinderMobiusNonhomeo`** (Route W 1–4), **`MobiusCylinderBoundaryContrast`**, **`PuncturedPlaneNotSimplyConnected`**. See **`SPEC_002`**, **`docs/ADVISOR_OVERVIEW.md`**.
+- **Cylinder vs Möbius (geometry track):** `CylinderBoundary` proves the **closed** cylinder’s **manifold boundary** is **two disjoint connected** faces and that **their union is not connected** as a subspace (`not_isConnected_closedCylinderBoundaryUnion`). `CylinderMobius` gives **compact Hausdorff** `MobiusStrip` and **connected** `mobiusStripBoundary`. **`MobiusChartableBoundary`** proves **`mobiusStripBoundary → ¬ ChartableR2`**; **`MobiusSeamChartableR2`** proves interior-height **`ChartableR2`** and **`mobiusStrip_not_homeomorphic_closedCylinder`**. Cylinder **C4**: **`closedCylinder_boundaryUnion_iff_not_chartableR2`**. `HalfLineVsLine`, **`HalfPlaneVsPlane`**, **`HalfSpaceNeighborVsPlane`**, **`OpenCompactChartObstruction`**, **`ChartableR2Bridge`**, **`MobiusCylinderBoundaryContrast`**, **`PuncturedPlaneNotSimplyConnected`**. See **`SPEC_002`**, **`docs/ADVISOR_OVERVIEW.md`**.
 - **HEq / cross-sort:** library uses tagged `OntologicalSlot` for object vs endomorphism contrast; fully general `¬ HEq (hom) (obj)` for arbitrary categories is not a single named deliverable here.
 - **Bundled CCC Lawvere:** concrete theorem is in `Type`; the master package still uses `MonoidalClosed` fragments + `OntologicalSlot`.
-</think>
-
-
-<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
-StrReplace

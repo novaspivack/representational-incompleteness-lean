@@ -31,7 +31,6 @@
 | `RepresentationalIncompleteness/MobiusSeamTrigInject.lean` | Trig coordinates injective on quotient window when **`δ < \|t₀-½\|`** |
 | `RepresentationalIncompleteness/MobiusSeamChartableR2.lean` | Full seam **quotient** **`ChartableR2`** (trig + **unfold** at equator); **`chartableR2_mobiusQuotientMk_of_interior_height`**; **`mobiusStrip_not_homeomorphic_closedCylinder`** |
 | `RepresentationalIncompleteness/MobiusCylinderBoundaryContrast.lean` | **`mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion`** |
-| `RepresentationalIncompleteness/CylinderMobiusNonhomeo.lean` | Optional **Route W** (circle doubling / winding) |
 | `RepresentationalIncompleteness/HalfLineVsLine.lean`, `HalfPlaneVsPlane.lean`, `HalfSpaceNeighborVsPlane.lean` | Low-dimensional **half-space vs Euclidean** obstructions |
 | `RepresentationalIncompleteness/PuncturedPlaneNotSimplyConnected.lean` | Punctured plane / disk not simply connected |
 | `RepresentationalIncompleteness/Main.lean` | Re-imports **`SymbolGrounding`**, **`LawvereRegressBridge`**, **`ChartableR2ConcreteBoundaryModels`**; `representational_regress_master` + **`RepresentationalIncompletenessMasterExtended`** (`representational_regress_master_extended`: core + 1D half-line + **M-FINAL**) |
@@ -59,5 +58,5 @@
 
 - **Regress vs `represent`:** Meta-stages are **definitionally** `represent^n : A ⟶ A`, packaged as `Over.mk (represent^n)`. Distinctness across `n` is still the **hypothesis** `iter_injective` (not derivable from `represent` alone in general).
 - **Lawvere:** Full diagonal theorem is proved for `Type`; CCC packaging remains the `MonoidalClosed` fragment in `FixedPoints` plus the standalone `Lawvere` module.
-- **Geometry / SPEC_002 (status):** **`mobiusStrip_not_homeomorphic_closedCylinder`** is proved in **`MobiusSeamChartableR2`** via **`chartableR2_mobiusQuotientMk_of_interior_height`** and **`ChartableR2Bridge`**. Cylinder **C4** remains **`CylinderChartableBoundary`**. Contradiction route: incompatible homeomorphisms would identify **boundary subspaces**, contradicting **`MobiusCylinderBoundaryContrast`**. **Route W** is optional; see **`docs/ADVISOR_OVERVIEW.md`**.
+- **Geometry / SPEC_002 (status):** **`mobiusStrip_not_homeomorphic_closedCylinder`** is proved in **`MobiusSeamChartableR2`** via **`chartableR2_mobiusQuotientMk_of_interior_height`** and **`ChartableR2Bridge`**. Cylinder **C4** remains **`CylinderChartableBoundary`**. Contradiction route: incompatible homeomorphisms would identify **boundary subspaces**, contradicting **`MobiusCylinderBoundaryContrast`**.
 - Coinductive `RegressChain` from early prose remains optional if ergonomics improve; current story is `ℕ`-indexed iterates.

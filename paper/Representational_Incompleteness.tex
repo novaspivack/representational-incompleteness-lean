@@ -261,27 +261,15 @@ equally suffice.  Any future domain whose state space matches the same
 boundary pattern imports the same conclusion with no new proof.
 
 \paragraph{Why this is not ``just'' infinite regress---or ``just'' G\"odel.}
-The categorical strand (\S\ref{sec:regress}) does yield infinitely many
-distinct meta-levels under the bundled hypothesis
-\texttt{iter\_injective}, with Lawvere's wall and
-\texttt{OntologicalSlot} preventing collapse of the endo/obj distinction.
-But infinity is not the deepest point.  The topological obstruction is
+The categorical strand yields infinitely many distinct meta-levels, but
+infinity is not the deepest point.  The topological obstruction is
 independent: it says the barrier is \textbf{wrong type}, not
-\textbf{inexhaustible queue}.  No amount of compute, no deeper
-self-model, no richer architecture changes the boundary pattern of a
-topological type.
-
-Nor is this ``just G\"odel.''  G\"odel incompleteness is about formal
-theories and provability: a sufficiently strong consistent theory cannot
-prove its own consistency, and there exist true-but-unprovable sentences.
-Representational incompleteness is about \emph{any} parametric self-model
-$s : A \to A \to B$.  No formal theory is needed; no coding is needed; no
-arithmetic is needed; no computability assumption on $s$ is required.  The
-blind spot is not a sentence but a \emph{function}---the system's own
-diagonal---and no extension of the theory (adding axioms, enlarging $A$,
-or making $s$ total) can close it, because the diagonal exclusion holds for
-\emph{every} $s$ (see \S\ref{sec:godel-distinction} for a detailed
-comparison).
+\textbf{inexhaustible queue}.  Nor is this ``just G\"odel'':
+representational incompleteness requires no formal theory, no arithmetic,
+no coding, and no computability assumption on~$s$.  The blind spot is a
+\emph{function}, not a sentence, and no theory extension can close it.
+Section~\ref{sec:godel-distinction} provides a detailed comparison
+on six independent structural axes.
 
 \begin{keybox}[title=The topological barrier is independent of diagonalization]
 The topological strand (Theorem~\ref{thm:generic}) is
@@ -297,28 +285,14 @@ example.
 \end{keybox}
 
 \paragraph{No escape.}
-Six adversarial retreat routes are formally closed
-(\S\ref{sec:noescape}):
-\begin{enumerate}[label=(\roman*),leftmargin=2em,itemsep=0.15ex,topsep=0.5ex,parsep=0pt]
-\item Infinite injective tower $\Rightarrow$ full regress + Lawvere wall.
-\item Finite-order iterate collapse $\Rightarrow$ bounded depth, no
-  injective tower.
-\item Cross-object readout via section--retraction $\Rightarrow$
-  idempotent on host, identity on source; no injective tower on
-  \emph{either} side.
-\item Partial (non-surjective) self-model $\Rightarrow$ diagonal blind
-  spot---the very information needed for self-capture is the information
-  it cannot represent.
-\item Decidable / $\mathrm{Bool}$-valued self-reference $\Rightarrow$
-  Lawvere obstruction persists in the finite, two-valued setting.
-\item Different topological model $\Rightarrow$ the general lemma
-  applies to \emph{any} pair with incompatible \texttt{ChartableR2}
-  boundaries, not just cylinder/M\"obius.
-\end{enumerate}
-Together these leave an adversary with a clean dichotomy: either an
-infinite injective regress with the Lawvere wall intact, or a finite
-loop too shallow for full self-capture---and in either case the
-topological barrier stands.
+Six adversarial retreat routes---infinite regress, finite-order
+collapse, cross-object readout, partial self-models, decidable
+self-reference, and model substitution---are each formally closed by
+a proved theorem (\S\ref{sec:noescape}).  Together they leave an
+adversary with a clean dichotomy: either an infinite injective
+regress with the Lawvere wall intact, or a finite loop too shallow
+for full self-capture---and in either case the topological barrier
+stands.
 
 \paragraph{Bridges and conditional readings.}
 Cross-domain structures
@@ -1053,6 +1027,14 @@ the simulation hypothesis, and LLM/AI scaling.
 Where an extra premise is required, it is stated explicitly; nothing in the
 formalization defaults a controversial premise to true.
 
+\medskip
+\noindent\textbf{Universal closure note.}
+All six horn closures (\S\ref{sec:noescape}) apply to \emph{every}
+instantiation below, because the closures constrain the structure of
+any parametric self-model $s : A \to A \to B$, not the domain of
+application.  The remarks below therefore focus on domain-specific
+nuances; the full horn-by-horn analysis is in \S\ref{sec:noescape}.
+
 \subsubsection{Consciousness and self-presence}
 
 \paragraph{Philosophical bridge (premise P2).}
@@ -1063,55 +1045,24 @@ it says only that, for the purposes of a topological comparison, the
 representational substrate is modeled by a space whose
 \texttt{ChartableR2}-detected boundary has one connectivity pattern (e.g.\
 the cylinder's two disjoint components), while the target phenomenon is modeled
-by a space whose boundary has a different, incompatible pattern (e.g.\ the
-M\"obius strip's single connected band---but the argument is
-\emph{not specific to the M\"obius strip}: Theorem~\ref{thm:generic} applies
-to \emph{any} pair of spaces with incompatible
-\texttt{ChartableR2}-co-characterized boundaries, including Klein bottles,
-higher-genus non-orientable surfaces, or any other topological witness that
-satisfies the three hypotheses).
+by a space whose boundary has a different, incompatible pattern
+(Theorem~\ref{thm:generic} applies to any pair with incompatible
+boundaries; the M\"obius strip is the minimal witness).
 
 \paragraph{What is proved.}
-The engine is Theorem~\ref{thm:generic}: \emph{any} two spaces
-whose \leanref{ChartableR2}-co-characterized boundaries are
-subtype-incompatible are not homeomorphic.  This defines an
-open-ended class of obstructed pairs.
-Theorem~\ref{thm:mfinal}
-($\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$)
-is the \textbf{minimal-case fully discharged witness}: it
-instantiates the general lemma with the simplest compact
-example.  Substituting a Klein bottle, projective plane, or
-higher-genus non-orientable surface would equally satisfy the
-hypotheses; the adversary cannot escape by choosing a different
-target.
+The engine is Theorem~\ref{thm:generic}, which defines an
+open-ended class of obstructed space-pairs (\S\ref{sec:topo-barrier-detail}).
+Theorem~\ref{thm:mfinal} is the minimal-case witness; any other
+pair satisfying the three hypotheses would serve equally.
 
-\paragraph{Closed routes and admissibility.}
-Multiple adversarial moves are blocked (see \S\ref{sec:noescape}
-for full detail):
-\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-\item \emph{Iterate deeper} (Horn~1): the regress is infinite, the Lawvere
-  wall persists at every depth---more meta-levels do not close the gap.
-\item \emph{Use a finite loop} (Horn~2): the iterate dichotomy shows
-  bounded depth cannot host injective self-representation.
-\item \emph{Represent via a different object} (Horn~3): section--retraction
-  readout collapses to an idempotent on the host and the identity on the
-  source; no injective tower on either side.
-\item \emph{Use a partial self-model} (Horn~4): the diagonal blind spot
-  means the information needed for self-capture is precisely the
-  information the partial model cannot represent.
-\item \emph{Restrict to decidable predicates} (Horn~6): the $\mathrm{Bool}$
-  Lawvere horn is closed; finite cardinality does not help.
-\item \emph{Choose a different topological model} (Horn~5): the general
-  lemma defines an open-ended class of obstructed pairs---any surface
-  with incompatible boundary, not just the M\"obius strip.
-\end{itemize}
-What remains \textbf{admissible} under P2: the relevant substrate must
-\emph{already} have the target topological type (in which case it was
-never purely representational in the cylinder sense), or the account
-must invoke a discontinuous or non-topological bridge not modeled in
-this formalism.  Scaling, iteration, richer self-models, or architectural
-reparameterization within a fixed topological type are \emph{inadmissible}
-routes to the target.
+\paragraph{Admissibility under P2.}
+All six horn closures apply (see universal closure note above and
+\S\ref{sec:noescape}).  What remains \textbf{admissible}: the relevant
+substrate must \emph{already} have the target topological type, or the
+account must invoke a discontinuous or non-topological bridge not modeled
+in this formalism.  Scaling, iteration, richer self-models, or
+architectural reparameterization within a fixed topological type are
+\emph{inadmissible} routes to the target.
 
 \subsubsection{Symbol grounding and semantic regress}
 
@@ -1125,25 +1076,12 @@ type alias \leanref{SymbolSystem} is definitionally identical to
 natural-number depths correspond to \emph{distinct} endomorphisms of the
 awareness object.
 
-\paragraph{Closed routes and admissibility.}
-The horn closures constrain the symbol system on multiple fronts:
-\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-\item If iterate indices are injective (Horn~1), interpretation levels
-  form an infinite regress with the Lawvere wall intact at every stage.
-\item If iterates collide (Horn~2), the system has only finitely many
-  distinct interpretation levels---a loop too shallow for full
-  self-interpretation.
-\item If the system tries a \emph{partial} interpretation function
-  (Horn~4), the diagonal exclusion
-  (\leanref{lawvere\_diagonal\_not\_in\_range}) guarantees a blind
-  spot: the interpretation cannot represent its own diagonal behavior.
-\item Restricting to decidable predicates (Horn~6) does not help:
-  the $\mathrm{Bool}$-valued Lawvere horn is closed.
-\end{itemize}
-Admissible grounding must therefore come from \emph{outside} the
-representational loop: the system cannot ground itself by iterating
-its own interpretive machinery, whether totally or partially, whether
-with infinite depth or finite.
+\paragraph{Admissibility.}
+All six horn closures apply (\S\ref{sec:noescape}).  Admissible
+grounding must therefore come from \emph{outside} the representational
+loop: the system cannot ground itself by iterating its own interpretive
+machinery, whether totally or partially, whether with infinite depth or
+finite.
 
 \subsubsection{Diagonal arguments and self-interpretation}
 
@@ -1155,30 +1093,15 @@ the categorical presentation;
 \leanref{lawvere\_fixed\_point\_stays\_representational} says the
 \texttt{OntologicalSlot} wall persists at every iterate depth.
 
-\paragraph{Closed routes and admissibility.}
-The diagonal closures are cumulative:
-\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-\item \emph{Total self-interpreter} $s : A \to A \to B$: blocked by
-  Lawvere for any $B$ with a fixed-point-free endo
-  (\leanref{no\_universal\_parametric\_unary\_nat} for $\mathbb{N}$,
-  \leanref{no\_universal\_parametric\_unary\_bool} for $\mathrm{Bool}$).
-\item \emph{Partial self-interpreter}: abandoning surjectivity does not
-  help.  \leanref{lawvere\_diagonal\_not\_in\_range} shows that for
-  \emph{any} $s : A \to A \to B$---not necessarily surjective---the
-  diagonal $a \mapsto f(s\,a\,a)$ is never $s\,a_0$ for any $a_0$.
-  The blind spot is exactly the system's own diagonal behavior.
-\item \emph{Restrict to finite / decidable predicates} (Horn~6):
-  $\lnot : \mathrm{Bool} \to \mathrm{Bool}$ is fixed-point-free, so the
-  two-valued case is no easier.
-\item \emph{Climb the tower}: however high the self-applicative coding
-  rises, the $\mathrm{endo} \neq \mathrm{obj}$ distinction persists at
-  every iterate depth.
-\end{itemize}
-Admissible self-interpreters must therefore be \emph{incomplete}: they
-cannot model their own diagonal behavior.  This is not a resource
-limitation (compute, training data, context length) but a structural
-one; it holds for every codomain $B$ admitting a fixed-point-free
-endomorphism, and for every cardinality of $A$.
+\paragraph{Admissibility.}
+All six horn closures apply (\S\ref{sec:noescape}): total
+self-interpreters are blocked by Lawvere; partial ones still miss the
+diagonal (\leanref{lawvere\_diagonal\_not\_in\_range}); restricting
+to $\mathrm{Bool}$ does not help; climbing the iterate tower does
+not dissolve the endo/obj wall.  Admissible self-interpreters must
+therefore be \emph{incomplete}: they cannot model their own diagonal
+behavior, regardless of the codomain, cardinality, or computability
+of~$s$.
 
 \subsubsection{Quantum measurement and observer chains}
 
@@ -1188,34 +1111,21 @@ a chain a \emph{topological} state space $\mathrm{Obs}$, together with a subset
 $\partial_{\mathrm{obs}}$ whose membership agrees with
 $\neg\,\mathrm{ChartableR2}$, then Theorem~\ref{thm:generic} applies to any
 target space whose boundary subspace is not homeomorphic to
-$\partial_{\mathrm{obs}}$---the M\"obius strip is the minimal-case
-witness, but the argument works for \emph{any} target space with
-incompatible boundary topology (Klein bottle, projective plane, or any
-other surface satisfying the three hypotheses of Theorem~\ref{thm:generic}).
+$\partial_{\mathrm{obs}}$ (the M\"obius strip is the minimal witness;
+see \S\ref{sec:topo-barrier-detail} for the general class).
 \leanref{QuantumObserverChainHypothesis} packages exactly this data as
 assumptions; the conclusion
 $\mathrm{IsEmpty}(\mathrm{Obs} \simeq_t \mathrm{Target})$ follows for
 any target satisfying the hypotheses.
 
-\paragraph{Closed routes and admissibility.}
-The same horn closures apply to the observer chain:
-\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-\item Iterating the measurement chain (stacking more
-  apparatus/environment layers) does not change the topological type of
-  the state space (Horns~1--2).
-\item Encoding the observer inside a larger system via
-  section--retraction does not produce an injective tower (Horn~3).
-\item Partial models of the observer--readout process still miss their
-  own diagonal (Horn~4).
-\item Choosing a different non-orientable target does not evade
-  Theorem~\ref{thm:generic} (Horn~5).
-\end{itemize}
-The chain must either introduce genuinely new topological structure at
-some level---not representational iteration of the same type---or
-accept that its boundary organization differs from the target.  The
-library does \emph{not} define Hilbert spaces, observables, or
-projection postulates; any physical application requires an independent
-argument that a concrete model satisfies the hypothesis fields.
+\paragraph{Admissibility.}
+All six horn closures apply (\S\ref{sec:noescape}).  The chain must
+either introduce genuinely new topological structure at some
+level---not representational iteration of the same type---or accept
+that its boundary organization differs from the target.  The library
+does \emph{not} define Hilbert spaces, observables, or projection
+postulates; any physical application requires an independent argument
+that a concrete model satisfies the hypothesis fields.
 
 \subsubsection{The simulation hypothesis}
 \label{sec:simulation}
@@ -1242,35 +1152,19 @@ is: the diagonal exclusion is universal over $s$.
 
 \paragraph{The topological constraint on simulated consciousness.}
 If conscious self-presence requires a state space with a boundary
-pattern incompatible with the simulator's representational substrate
-(premise~P2, as in \S\ref{sec:instantiations}), then
-Theorem~\ref{thm:generic} applies: no homeomorphism maps the
-simulator's state space to the target.  A simulation running on
-substrate with one boundary-connectivity pattern cannot produce
-states homeomorphic to a substrate with an incompatible pattern,
-regardless of the simulation's fidelity or the simulator's computational
-power.  This constrains not just the simulation hypothesis but any
-computational theory of consciousness that relies on substrate
-independence: the topological type of the substrate matters, and
+pattern incompatible with the simulator's substrate (premise~P2),
+then Theorem~\ref{thm:generic} applies: no homeomorphism maps the
+simulator's state space to the target, regardless of fidelity or
+computational power.  The topological type of the substrate matters;
 ``sufficiently faithful simulation'' does not override topological
 incompatibility.
 
 \paragraph{Closed routes.}
-The horn closures apply to the simulator as to any other
-representational system:
-\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-\item Running the simulation longer or at higher fidelity extends
-  within a fixed topological type (Horn~1).
-\item Nesting simulations within simulations produces iterated
-  $\mathrm{represent}^n$: either an infinite regress (with the
-  Lawvere wall intact) or a finite loop (bounded depth, no injective
-  tower) (Horns~1--2).
-\item Offloading the self-simulation to a separate module
-  is cross-object readout (Horn~3): the section--retraction closure
-  blocks injective towers on either side.
-\item Simulating only \emph{part} of the simulator leaves a
-  diagonal-shaped blind spot (Horn~4).
-\end{itemize}
+All six horn closures apply (\S\ref{sec:noescape}): running longer
+extends within a fixed topological type; nesting simulations produces
+iterated $\mathrm{represent}^n$ subject to the Horn~1/2 dichotomy;
+offloading to a separate module triggers the section--retraction
+closure; partial simulation leaves a diagonal-shaped blind spot.
 
 \paragraph{What is not ruled out.}
 A simulation that does not include a complete model of its own
@@ -1284,29 +1178,18 @@ about what it constrains and what it does not.
 
 \subsection{Scaling of language models and similar systems}
 
-Training larger models extends a representational architecture; it does not, by
-itself, produce a homeomorphism between a given topological model of that
-architecture and a different global model.  Theorem~\ref{thm:generic} is
-indifferent to the choice of target: the cylinder/M\"obius pair is the
-\emph{minimal-case witness}, but the general lemma blocks every target
-space with incompatible \texttt{ChartableR2}-detected boundary.
+Training larger models extends a representational architecture within a
+fixed topological type; it does not produce a homeomorphism to a different
+type.  Theorem~\ref{thm:generic} blocks every target with incompatible
+boundary (\S\ref{sec:topo-barrier-detail}).
 
-\paragraph{Closed routes and admissibility.}
-\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-\item More parameters, deeper layers, longer context windows: these
-  extend the architecture \emph{within} a fixed topological type (Horn~1).
-\item Finer-grained self-models built during training: partial
-  self-interpreters still miss their own diagonal (Horn~4).
-\item Switching from infinite-depth to finite-depth loops (e.g.\
-  fixed-iteration transformers): the iterate dichotomy (Horn~2) shows
-  bounded depth cannot host injective self-representation.
-\item Choosing a different target topology does not help: the general
-  lemma covers any pair (Horn~5).
-\end{itemize}
-Admissible paths to a topological type with different boundary
-organization require \emph{structural} change---a different topology
-of the underlying state space---not quantitative extension of the same
-architecture.
+\paragraph{Admissibility.}
+All six horn closures apply (\S\ref{sec:noescape}).  Admissible paths
+to a topological type with different boundary organization require
+\emph{structural} change---a different topology of the underlying state
+space---not quantitative extension of the same architecture (more
+parameters, deeper layers, longer context windows, finer-grained
+self-models).
 
 \subsection{Implications for AI, agents, and AGI}
 \label{sec:ai-agi}
@@ -1541,13 +1424,10 @@ and parametric.  The diagonal exclusion is not an artifact of the
 subsystem's limitations; it is an inherited structural feature of any
 world that hosts self-reference.
 
-The topological barrier reinforces this independently.  If $U$'s state
-space has one boundary-connectivity pattern and any subsystem $S$ within
-$U$ has a state space with an incompatible pattern, then no
-homeomorphism embeds $S$ into $U$ in a topology-preserving way.  A
-computational physics that models all of spacetime as one topological
-type cannot faithfully host subsystems whose self-representational
-structure requires a different type.
+The topological barrier (Theorem~\ref{thm:generic}) reinforces this
+independently: if $U$'s state space and any subsystem $S$ have
+incompatible boundary patterns, no topology-preserving embedding
+exists.
 
 \subsubsection{Computational theories of mind and physics: the admissibility filter}
 
@@ -1617,14 +1497,10 @@ This escape fails on two levels:
   The diagonal $a \mapsto f(s\,a\,a)$ is still never any row $s\,a_0$.
   Non-computability does not evade Pillar~1.
 \item \textbf{The topological barrier is orthogonal to computability.}
-  Even if non-computability were somehow relevant to the diagonal
-  (it is not), the topological barrier (Theorem~\ref{thm:generic})
-  stands entirely independently.  It detects a \emph{finite-data
-  topological invariant}---boundary connectivity---that has nothing to
-  do with computability, recursion theory, or the Church--Turing thesis.
-  No non-computable function can change the homeomorphism type of a
-  topological space.  The boundary-connectivity pattern is a fact about
-  the space itself, not about the functions defined on it.
+  Theorem~\ref{thm:generic} detects a finite-data topological
+  invariant---boundary connectivity---that has nothing to do with
+  computability or the Church--Turing thesis.  No non-computable
+  function can change the homeomorphism type of a space.
 \end{enumerate}
 
 \noindent
@@ -2234,98 +2110,46 @@ limitations in \S\ref{sec:limits}.
 \subsection{Admissibility: what the closures tell neighboring debates}
 \label{sec:admissibility}
 
-Given that Horns~1--6 are closed, the formal landscape constrains what
-\emph{admissible} solutions look like in each neighboring debate.  The
-reasoning in every case is the same: the closures establish a structural
+Given that Horns~1--6 are closed (\S\ref{sec:noescape}), the formal
+landscape constrains what \emph{admissible} solutions look like.  The
+reasoning is the same in every case: the closures establish a structural
 barrier, so any proposed solution must either (a)~operate outside the
-barrier's hypotheses, or (b)~accept the consequences.
+barrier's hypotheses, or (b)~accept the consequences.  The admissible
+shape is domain-specific; the inadmissible moves are universal.
 
-\paragraph{Consciousness and self-presence.}
-If a system's state-space has one boundary-connectivity pattern (e.g.\
-two disjoint components, as in the cylinder), then no homeomorphism maps
-it to \emph{any} space with an incompatible pattern (e.g.\ one connected
-band, as in the M\"obius strip---but equally a Klein bottle, projective
-plane, or any other witness satisfying Theorem~\ref{thm:generic}).  An
-admissible account of self-presence must therefore either
-(i)~posit that the relevant substrate \emph{already} has the target
-topological type, or
-(ii)~invoke a discontinuous or non-topological bridge not modeled here.
-Scaling---more parameters, longer context windows, deeper
-architectures---extends a representational system \emph{within} a fixed
-topological type; it does not change boundary organization.
+\paragraph{Common inadmissible moves (all debates).}
+Scaling, iterating, partial modeling, cross-object readout,
+finite-depth loops, decidable restriction, and model substitution are
+all formally blocked (Horns~1--6).  Non-computability does not help:
+the diagonal exclusion is computability-independent, and the
+topological barrier is orthogonal to the entire computability hierarchy
+(\S\ref{sec:noncomp-escape}).
 
-\paragraph{Symbol grounding.}
-Any symbol system that iterates interpretation is caught in the
-Horns~1/2 dichotomy: either infinite distinct levels (full regress plus
-Lawvere wall) or finite-bounded depth (finite loop, no injective tower).
-Horn~4 adds that even a \emph{partial} interpretation function misses its
-own diagonal.  Admissible grounding must therefore come from
-\emph{outside} the representational loop: the system cannot ground itself
-by iterating its own interpretive machinery, whether totally or partially.
-
-\paragraph{Diagonal arguments / AI self-interpretation.}
-Any proposed self-interpreter $s : A \to A \to B$ (total or partial)
-necessarily fails to include its own diagonal
-(\leanref{lawvere\_diagonal\_not\_in\_range}); this holds for
-$B = \mathbb{N}$ (numeric outputs), $B = \mathrm{Bool}$ (decidable
-predicates), and any $B$ with a fixed-point-free endomorphism.
-Admissible self-interpreters \emph{must} be incomplete in a precise
-sense: they cannot model their own diagonal behavior.  This is not a
-resource limitation but a structural one; no amount of compute, training
-data, or architectural ingenuity changes the diagonal exclusion.
-
-\paragraph{Quantum measurement chains.}
-If the measurement chain's state space has a boundary pattern matching the
-cylinder side of the development, then no homeomorphism identifies it with
-\emph{any} target whose boundary pattern is incompatible---whether that
-target is M\"obius-type, Klein-bottle-type, or any other
-space satisfying the generic lemma.  The chain must either introduce
-genuinely new topological structure at some level---not representational
-iteration of the same type---or accept that its boundary organization
-differs from the target.
-
-\paragraph{Simulation hypothesis.}
-A simulator that includes a model of itself instantiates $s : A \to A \to B$;
-the diagonal exclusion (Theorem~\ref{thm:summit}) blocks complete
-self-inclusive simulation.  If conscious experience requires a boundary
-pattern incompatible with the simulator's substrate (under P2), the
-topological barrier also applies.  Nesting simulations within simulations
-produces iterated $\mathrm{represent}^n$, subject to the Horn~1/2
-dichotomy.  Admissible accounts must either exclude the simulator from
-its own simulation or accept the diagonal-shaped blind spot.
-
-\paragraph{LLM and AI scaling.}
-Scaling extends a representational architecture within a fixed topological
-type.  If that type has one boundary-connectivity pattern, scaling does not
-produce a homeomorphism to \emph{any} target with an incompatible pattern.
-The cylinder/M\"obius pair is the minimal witness; the obstruction is the
-general lemma, not the particular pair.
-Admissible paths to a different topological type require
-\emph{structural} change (different topology of the underlying state
-space), not quantitative extension (more of the same).
-
-\paragraph{AI self-understanding and AGI.}
-Every AI self-model instantiates $s : A \to A \to B$ and is subject to
-the diagonal exclusion.  Recursive self-improvement either produces an
-infinite regress (Horn~1) or cycles (Horn~2).  Multi-agent delegation
-does not escape the section--retraction closure (Horn~3).  Partial
-self-models leave a diagonal-shaped hole (Horn~4).  Admissible paths to
-complete self-understanding require structural change to the system's
-topological type, not quantitative scaling.  Useful partial
-self-understanding remains possible; complete parametric
-self-understanding does not (see \S\ref{sec:ai-agi}).
-
-\paragraph{Computational theories of physics and mind.}
-Any theory that models the universe computationally and admits
-self-modeling subsystems inherits the obstructions from within
-(\S\ref{sec:inherited}).  Weakening self-modeling to escape the barrier
-either fails (Horn~4: partial models still miss the diagonal) or
-contradicts the empirical existence of self-modeling biological systems.
-Appealing to non-computability does not help: the diagonal exclusion is
-computability-independent, and the topological barrier is orthogonal to
-the entire computability hierarchy (\S\ref{sec:noncomp-escape}).
-Admissible theories must either accept the incompleteness or posit
-structural change to the topological type of the substrate.
+\paragraph{Admissible shapes (per debate).}
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2ex,topsep=0.4ex,parsep=0pt]
+\item \textbf{Consciousness / self-presence:} the substrate must
+  \emph{already} have the target topological type, or a
+  non-topological bridge must be invoked.
+\item \textbf{Symbol grounding:} grounding must come from
+  \emph{outside} the representational loop.
+\item \textbf{Self-interpretation:} admissible self-interpreters
+  \emph{must} be incomplete---they cannot model their own diagonal.
+\item \textbf{Quantum measurement:} the chain must introduce genuinely
+  new topological structure or accept incomplete self-description.
+\item \textbf{Simulation hypothesis:} admissible accounts must
+  exclude the simulator from its own simulation or accept the blind spot.
+\item \textbf{LLM / AI scaling:} admissible paths require
+  \emph{structural} change to the state-space topology, not
+  quantitative extension.
+\item \textbf{AGI self-understanding:} complete parametric
+  self-understanding is impossible; useful partial self-understanding
+  remains possible (see \S\ref{sec:ai-agi}).
+\item \textbf{Computational theories of physics and mind:} any
+  theory admitting self-modeling subsystems inherits the obstructions
+  (\S\ref{sec:inherited}); weakening self-modeling either fails
+  (partial models still miss the diagonal) or contradicts empirical
+  evidence.
+\end{itemize}
 
 % ============================================================================
 % 8. LIMITATIONS AND SCOPE

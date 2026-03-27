@@ -22,10 +22,10 @@
 \newcommand{\novel}{\textcolor{blue!70!black}{[Novel]}}
 \newcommand{\known}{\textcolor{gray}{[Known math]}}
 
+% Title: mathematical frame first; consciousness and other readings are instantiations (§7).
 \title{The Representational Regress:\\
-  A Machine-Checked Proof That Topological Structure\\
-  Separates Representational Self-Reference\\
-  from Conscious Self-Presence}
+  Machine-Checked Topology, Diagonal Arguments,\\
+  and Boundary Obstructions for Representational Systems}
 \author{[Authors]}
 \date{2026}
 
@@ -37,35 +37,48 @@
 % ============================================================================
 \begin{abstract}
 We present a Lean~4 formalization, verified against Mathlib with zero
-\texttt{sorry} and zero custom axioms, establishing three machine-checked results
-that jointly constrain the relationship between representational self-reference
-and phenomenal self-presence:
+\texttt{sorry} and zero custom axioms, for a family of claims about
+\emph{representational systems}---categories with a non-trivial self-representation
+endomorphism---and about \emph{intrinsic} planar-chartability as a topological
+sensor on compact models.
 
 \begin{enumerate}[label=(\roman*)]
-\item A \emph{representational system} --- any category equipped with a
-  self-referential endomorphism --- generates infinitely many distinct
-  meta-levels of representation, and Lawvere's fixed-point theorem does not
-  collapse the object/morphism distinction (the ``wall'' exists and does not
-  dissolve).
-\item The closed cylinder $S^1 \times [0,1]$ and the M\"obius strip
-  (quotient of $[0,1]^2$ by the orientation-reversing edge identification)
-  are \emph{not} homeomorphic. The proof proceeds via a \texttt{ChartableR2}
-  predicate: interior points admit planar neighborhoods while boundary points
-  do not, yielding an intrinsic topological sensor that homeomorphisms must
-  preserve --- but the boundary subspaces are incompatible (connected vs.\
-  disconnected).
-\item Under the philosophical premise that conscious self-presence requires
-  the non-orientable topology of the M\"obius strip, no representational system
-  (which preserves the orientable topology of the cylinder) can achieve
-  consciousness. The distinction is categorical, not quantitative, and is
-  invariant under scaling, iteration, and continuous deformation.
+\item \textbf{Categorical strand.} A representational system generates infinitely
+  many distinct meta-levels; Lawvere's fixed-point theorem, packaged in
+  \texttt{Type} and \texttt{MonoidalClosed(Type)}, does not dissolve an
+  object/morphism distinction formalized by the inductive type
+  \texttt{OntologicalSlot} (the ``wall'' remains).
+\item \textbf{Topological strand.} The closed cylinder $S^1 \times [0,1]$ and the
+  M\"obius strip (quotient of $[0,1]^2$ by $(0,t)\sim(1,1-t)$) are \emph{not}
+  homeomorphic. The engine is \texttt{ChartableR2} (open neighborhood
+  $\cong\mathbb{R}^2$): boundary points are exactly non-\texttt{ChartableR2} on
+  both models, and the boundary \emph{subspaces} are incompatible (connected vs.\
+  disconnected). A \textbf{generic} lemma
+  (\texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}) abstracts this
+  pattern for any future pair of spaces with the same sensor hypotheses.
+\item \textbf{Paper-facing instantiations (mostly re-exports).} The library adds
+  named packaging for \emph{symbol grounding} (\texttt{SymbolSystem}),
+  Lawvere-style \emph{no universal self-interpreter} lemmas
+  (\texttt{LawvereRegressBridge}), bundled \texttt{ChartableR2BoundaryModel}s for
+  the cylinder and M\"obius strip, and a \textbf{hypothesis-only} schematic
+  \texttt{QuantumObserverChainHypothesis} recording what a future formal
+  observer/measurement-chain model would need to reuse the same obstruction---%
+  \emph{no} physics axioms and no quantum formalism in the artifact.
 \end{enumerate}
 
-The artifact comprises ${\sim}20$ Lean modules totaling ${\sim}15{,}000$
-lines of proof, building on Mathlib's topology, category theory, and manifold
-libraries. We discuss the novel \texttt{OntologicalSlot} construction, the
-seam-chart technique for proving \texttt{ChartableR2} at the M\"obius quotient
-equator, and the honest limits of the formalization.
+\medskip
+\noindent\textbf{Consciousness as one instantiation.}
+The mathematics does not mention consciousness. A \emph{philosophical} premise
+P2 (that a form of self-presence is modeled by M\"obius-type rather than
+cylinder-type topology) yields a \emph{conditional} gloss: no representational
+system whose world bears the cylinder-side invariant can be globally
+homeomorphic to that target. The distinction is invariant under scaling,
+iteration, and continuous deformation of the representational layer.
+
+\medskip
+The artifact comprises ${\sim}25$ Lean modules; we summarize the
+\texttt{OntologicalSlot} construction, the seam--equator chart technique, and
+honest limits in the text and appendices.
 \end{abstract}
 
 % ============================================================================
@@ -77,53 +90,67 @@ equator, and the honest limits of the formalization.
 % ~3-4 pages. Structure:
 
 \subsection{The Problem}
-% The essay "The Figure Without Ground" argues that representational
-% self-reference (however recursive, however sophisticated) is topologically
-% orientable, while conscious self-presence is non-orientable. This paper
-% provides machine-checked evidence for that claim.
-%
-% Motivate: AI scaling debate, "hard problem" as topological question,
-% why machine-checking matters (adversarial peer review, no hidden sorry).
+Representational systems---symbolic AI, formal theories, any setting where a
+structure represents itself by iterating a fixed construction---support arbitrarily
+deep \emph{meta}-levels. Classical diagonal and fixed-point arguments constrain
+how much ``self-capture'' such a layer can achieve. Independently, one may ask
+whether intrinsic topology distinguishes different \emph{kinds} of ``inside vs.\
+outside'' organization when a global homeomorphism is the notion of sameness.
+
+This paper reports a single Lean artifact that makes a substantial fragment of
+that story adversarially checkable. We state the mathematics without
+phenomenological vocabulary; \S\ref{sec:instantiations} explains how
+consciousness, grounding, and related readings attach as \emph{optional}
+instantiations.
 
 \subsection{Summary of Results}
-% Three pillars in one artifact:
-%   (A) Categorical regress strand — infinite meta-levels, Lawvere wall,
-%       OntologicalSlot.
-%   (B) Topological strand — MobiusStrip ≄ₜ ClosedCylinder (M-FINAL).
-%   (C) Bridge — the extended master theorem
-%       (representational_regress_master_extended) bundling (A) + (B).
-%
-% State M-FINAL informally:
-%   Theorem. IsEmpty (MobiusStrip ≃ₜ ClosedCylinder).
-%   [Lean: mobiusStrip_not_homeomorphic_closedCylinder]
+The artifact proves, with zero \texttt{sorry} and zero custom axioms:
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Categorical regress and Lawvere wall} (\S\ref{sec:regress}):
+  unbounded distinct iterates of \texttt{represent}; Lawvere in \texttt{Type} /
+  CCC flavor; \texttt{OntologicalSlot} disjointness so the wall does not
+  dissolve into a bare object witness.
+\item \textbf{Generic boundary obstruction} (\S\ref{sec:generic},
+  \S\ref{sec:mfinal}): if two compact models carry \texttt{ChartableR2}
+  boundary sensors and their boundary subspaces are not homeomorphic, the
+  ambient spaces are not homeomorphic. The cylinder vs.\ M\"obius strip is the
+  flagship witness (\textbf{M-FINAL}).
+\item \textbf{Extended master bundle} (\S\ref{sec:extended}):
+  \texttt{representational\_regress\_master\_extended} adjoins the $1$D
+  half-space obstruction and M-FINAL to the core master claim.
+\item \textbf{Named instantiations in Lean} (\S\ref{sec:instantiations}):
+  \texttt{SymbolSystem}, \texttt{LawvereRegressBridge},
+  \texttt{ChartableR2BoundaryModel} instances, and a hypothesis-only
+  \texttt{QuantumObserverChainHypothesis} schematic.
+\end{enumerate}
 
 \subsection{Contributions and Novelty Claims}
-% Enumerate explicitly:
-%   1. OntologicalSlot — first machine-checked formalization that Lawvere
-%      fixed points remain objects, do not dissolve the object/morphism wall.  [Novel]
-%   2. Boundary component count as the invariant separating the two
-%      topological models, formalized via ChartableR2.  [Novel application]
-%   3. Seam-chart technique at the Möbius equator (piecewise unfold map,
-%      quotient-descent continuity).  [Novel proof technique]
-%   4. The combination: regress + Lawvere wall + OntologicalSlot +
-%      non-homeomorphism in a single 0-sorry Lean library supporting a
-%      philosophical argument about AI and consciousness.  [Novel]
-%   5. NOT novel: the individual mathematical ingredients (Lawvere 1969,
-%      topology of surfaces, infinite regress).
+\begin{enumerate}[label=(\arabic*)]
+\item \textbf{\texttt{OntologicalSlot}} --- machine-checked tagging: morphism
+  slots vs.\ object slots; ``wall'' lemmas are definitional but mathematically
+  load-bearing for the paper's reading of Lawvere-style tallies. [\novel]
+\item \textbf{\texttt{ChartableR2} spine + seam--equator charts} --- intrinsic
+  $\mathbb{R}^2$ chartability as boundary sensor; piecewise unfolding at the
+  quotient equator. [\novel\ application / technique]
+\item \textbf{Generic obstruction lemma}
+  (\texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}) ---
+  reusable template beyond the cylinder/M\"obius pair. [\novel]
+\item \textbf{Instantation-facing API} --- \texttt{SymbolSystem},
+  \texttt{LawvereRegressBridge}, concrete boundary models, QM schematic;
+  supports multidisciplinary citation without duplicating proofs. [\novel]
+\item \textbf{Not novel:} Lawvere (1969), standard surface topology, Cantorian
+  regress; our contribution is verification, packaging, and application shape.
+\end{enumerate}
 
 \subsection{Paper Organization}
-% Section 2: Definitions and the categorical strand.
-% Section 3: Topological models (cylinder, Möbius).
-% Section 4: The ChartableR2 framework and boundary sensors.
-% Section 5: The seam-chart problem and equator resolution.
-% Section 6: M-FINAL — the non-homeomorphism.
-% Section 7: The extended master theorem and philosophical interpretation.
-% Section 8: Honest limits.
-% Section 9: Related work.
-% Section 10: Conclusion.
-% Appendix A: Lean module map.
-% Appendix B: Full theorem inventory.
-% Appendix C: Reproduction instructions.
+Section~\ref{sec:regress}: representational systems, regress, Lawvere,
+\texttt{OntologicalSlot}, core master theorem.
+Section~\ref{sec:models}--\ref{sec:mfinal}: cylinder and M\"obius models,
+\texttt{ChartableR2}, generic lemma, seam charts, M-FINAL.
+Section~\ref{sec:extended}: extended master and instantiations (consciousness,
+grounding, diagonal arguments, QM schematic).
+Sections~\ref{sec:limits}--\ref{sec:conclusion}: limits, related work, conclusion.
+Appendices: Lean module map, theorem index, reproduction.
 
 % ============================================================================
 % 2. CATEGORICAL STRAND: THE REPRESENTATIONAL REGRESS
@@ -551,12 +578,10 @@ incompatibility (Theorem~\ref{thm:boundary-contrast}).
 %   5. mobiusStrip_not_homeomorphic_closedCylinder (instantiates with interior_height)
 
 % ============================================================================
-% 7. THE EXTENDED MASTER THEOREM AND PHILOSOPHICAL INTERPRETATION
+% 7. THE EXTENDED MASTER THEOREM AND INSTANTIATIONS
 % ============================================================================
-\section{The Extended Master Theorem}
+\section{The Extended Master Theorem and Instantiations}
 \label{sec:extended}
-
-% ~3 pages.
 
 \subsection{Formal Statement}
 
@@ -569,54 +594,99 @@ For any representational system $R$:
 \]
 where this abbreviation expands to:
 \begin{enumerate}[label=(\roman*)]
-\item $\mathrm{representational\_regress\_master\_claim}(R)$,
-\item $\mathrm{IsEmpty}(H^1 \simeq_t \mathbb{R}^1)$,
-\item $\mathrm{IsEmpty}(\mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder})$.
+\item $\mathrm{representational\_regress\_master\_claim}(R)$ (regress + wall + $T_2$ transport),
+\item $\mathrm{IsEmpty}(H^1 \simeq_t \mathbb{R}^1)$ \quad (1D half-space vs.\ line; \leanref{representational\_regress\_topology\_halfLineModel}),
+\item $\mathrm{IsEmpty}(\mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder})$ (M-FINAL).
 \end{enumerate}
 \end{theorem}
 
-% Note: This is an extension of, not a successor to,
-% representational_regress_master. The core theorem remains the modular
-% SPEC_001 anchor. The extended theorem adds the topology punchline.
+\noindent
+This \emph{extends} \leanref{representational\_regress\_master}; it does not replace it.
 
-\subsection{Philosophical Interpretation}
+\subsection{Bundled boundary models}
 
-% Structure of the conditional argument:
-%
-%   FORMAL (machine-checked):
-%     - Representational self-reference generates infinite meta-levels (Thm 2.1).
-%     - Lawvere fixed points do not dissolve the object/morphism wall (Thm 2.3).
-%     - The cylinder (orientable, 2-component boundary) and the Möbius strip
-%       (non-orientable, 1-component boundary) are not homeomorphic (Thm 6.1).
-%     - No continuous deformation can bridge the two topological types.
-%
-%   PHILOSOPHICAL (not in Lean):
-%     - P2: Conscious self-presence has the topology of the Möbius strip.
-%       (Supported by four arguments: logical entailment, epistemic limits,
-%       contemplative convergence, awareness-of-awareness termination.)
-%
-%   CONCLUSION (conditional):
-%     - If P2, then no representational system (cylinder topology) can achieve
-%       conscious self-presence (Möbius topology). The gap is categorical
-%       (boundary component count: 2 ≠ 1), not quantitative. Scaling, iteration,
-%       and continuous deformation do not help.
+\begin{definition}[\leanref{ChartableR2Neighbor.lean}]
+A \emph{\texttt{ChartableR2} boundary model} on $X$ is a pair $(b_X,\beta_X)$ where
+$b_X \subseteq X$ and $\beta_X$ witnesses
+$\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$.
+\end{definition}
 
-\subsection{What This Means for AI}
+\noindent
+Lean provides \leanref{ChartableR2BoundaryModel} and
+\leanref{ChartableR2BoundaryModel.not\_homeomorphic}. Concrete instances
+\leanref{mobiusStripChartableR2BoundaryModel} and
+\leanref{closedCylinderChartableR2BoundaryModel} sit in
+\leanref{ChartableR2ConcreteBoundaryModels}; M-FINAL is recovered as
+\leanref{mobiusStrip\_closedCylinder\_boundary\_models\_not\_homeomorphic}.
 
-% Three concrete claims:
-%   1. More compute / more recursion / more self-models: does not change
-%      topological type (orientability is a homeomorphism invariant).
-%   2. The "hard problem" is sharpened: it is the question of why some systems
-%      have topology X rather than topology Y.
-%   3. The distinction is machine-checkable: Lean verifies the formal content.
+\subsection{Instantiations}
+\label{sec:instantiations}
 
-\subsection{Relationship to the Trans-Computational Processing (TP) Argument}
+Theorems below are either the same mathematics under paper-facing names or
+\emph{conditional} schemes: no alternative axioms and no quantum formalism.
 
-% The TP paper argues from computability theory (Halting, Gödel, infinite regress).
-% This paper argues from topological invariants. The two are independent lines
-% of evidence for the same conclusion.
-%
-% Table: TP Paper ↔ Lean Formalization (same structure, different math).
+\subsubsection{Consciousness and self-presence (conditional)}
+
+Premise \textbf{P2} (not in Lean): a target phenomenon of interest---call it
+\emph{conscious self-presence}---is modeled topologically by a space globally
+like $\mathrm{MobiusStrip}$ (non-orientable side collapse, one boundary band in
+our witness pair) rather than like $\mathrm{ClosedCylinder}$ (two-sided cut).
+
+\medskip
+\noindent\textbf{Formal content (unconditional).}
+Theorem~\ref{thm:mfinal}: cylinder and M\"obius strip are not homeomorphic;
+hence no homeomorphism identifies a ``cylinder-class'' model with a
+``M\"obius-class'' model \emph{if} boundary sensors and subspace data match the
+proved pattern.
+
+\medskip
+\noindent\textbf{Conditional gloss.}
+If one's philosophical story places representational iteration on the cylinder
+side of that contrast and self-presence on the M\"obius side, then the gap is
+\emph{topological}, not a deficit of compute, recursion depth, or training
+data. Rejecting P2 is coherent; Lean does not adjudicate P2.
+
+\subsubsection{Symbol grounding and semantic regress}
+
+\leanref{SymbolSystem} is definitionally \leanref{RepresentationalSystem}; lemmas
+\leanref{symbolGrounding\_metaRegressArrow\_injective} (etc.) restate that
+distinct meta-levels of ``interpretation'' are distinct morphisms. This makes
+the grounding--regress connection citeable without a parallel definition tree.
+
+\subsubsection{Diagonal arguments and self-interpretation}
+
+\leanref{LawvereRegressBridge} packages:
+\leanref{no\_universal\_parametric\_unary} /
+\leanref{no\_universal\_parametric\_unary\_nat} (no family $s : A \to A \to B$
+listing all $A \to B$ when $B$ has a fixed-point-free endomap---Cor.~to Lawvere
+in \texttt{Type}), and
+\leanref{lawvere\_fixed\_point\_stays\_representational}: iterates of
+\texttt{represent} never occupy the \texttt{obj} branch of \texttt{OntologicalSlot}.
+
+\subsubsection{Quantum measurement chains (schematic)}
+
+\leanref{QuantumObserverChainHypothesis} bundles exactly the hypotheses needed to
+apply Theorem~\ref{thm:generic}: a topological space of ``observers + readouts,''
+a boundary set with the \texttt{ChartableR2} biconditional, and subtype
+non-homeomorphism to $\mathrm{mobiusStripBoundary}$. Then
+\leanref{QuantumObserverChainHypothesis.not\_homeomorphic\_mobiusStrip} yields
+$\mathrm{IsEmpty}(\mathrm{Obs} \simeq_t \mathrm{MobiusStrip})$.
+\textbf{No physical axioms:} instantiating this requires a future formal model of
+the state space and boundary sensor.
+
+\subsection{What this means for AI and scaling}
+
+More parameters, longer context, richer self-models, and deeper recurrent stacks
+do not constitute a homeomorphism of a representational substrate onto a
+different global topology: homeomorphism invariance is the mathematical content
+behind ``scale does not change the invariant.''
+
+\subsection{Relationship to the Trans-Computational Processing (TP) argument}
+
+The TP line uses computability (Halting, G\"odel-style diagonalization). Here the
+independent spine is topological (\texttt{ChartableR2}, boundary components). Both
+support a \emph{limitative} moral about self-contained representation; the lemmas
+are not interchangeable but the narrative arcs rhyme.
 
 % ============================================================================
 % 8. HONEST LIMITS
@@ -640,6 +710,11 @@ where this abbreviation expands to:
 \item \textbf{No $\mathrm{IsManifold}$ polish.} The M\"obius strip is not given a full Mathlib $\mathrm{IsManifold}$ instance. The proof uses $\mathrm{ChartableR2}$ (open neighborhoods homeomorphic to $\mathbb{R}^2$) as a self-contained predicate, sidestepping the need for a full manifold-with-boundary atlas. This is sufficient for the non-homeomorphism but less elegant than a full atlas approach.
 
 \item \textbf{Route W is incomplete.} An alternative proof via circle-winding / doubling obstructions (Steps~1--4 in \leanref{CylinderMobiusNonhomeo.lean}) is partially formalized. Step~5 (transport under a hypothetical global homeomorphism) is not proved. The flagship proof via $\mathrm{ChartableR2}$ is complete and does not depend on Route~W.
+
+\item \textbf{\texttt{QuantumObserverChainHypothesis} is not physics.} It records a
+  \emph{pattern} of assumptions. No Hilbert space, operators, or measurement
+  axioms appear; any physical reading requires proving those assumptions in a
+  separate formalization.
 \end{enumerate}
 
 % ============================================================================
@@ -677,20 +752,19 @@ where this abbreviation expands to:
 \section{Conclusion}
 \label{sec:conclusion}
 
-% ~1 page.
+We presented a machine-checked library for representational regress, Lawvere
+packaging, a generic $\mathrm{ChartableR2}$ boundary obstruction, and the
+flagship non-homeomorphism $\mathrm{MobiusStrip} \not\simeq_t
+\mathrm{ClosedCylinder}$. The mathematics stands without phenomenology; the
+same lemmas support cited instantiations (consciousness under P2, symbol
+grounding, diagonal limitations, and a schematic measurement-chain interface)
+without widening proof obligations.
 
-% Summarize the three pillars. Restate M-FINAL. Restate the conditional.
-% Note: the formalization demonstrates that philosophical arguments about
-% consciousness can be stated with mathematical precision, verified by a
-% proof assistant, and defended against adversarial review at the formal level.
-% The philosophical premise (P2) remains open for debate.
-%
-% Future work:
-%   - Full IsManifold instance for MobiusStrip.
-%   - Route W completion (independent cross-check).
-%   - Abstract CCC Lawvere theorem.
-%   - Coinductive regress chain (if Lean ergonomics improve).
-%   - Deeper connection to IIT or other formal theories of consciousness.
+\medskip
+\noindent\textbf{Future work:} full $\mathrm{IsManifold}$ polish for
+$\mathrm{MobiusStrip}$; Route~W completion; abstract CCC Lawvere; deeper links
+to other formal theories where boundary data admit $\mathrm{ChartableR2}$
+sensors.
 
 % ============================================================================
 % APPENDICES
@@ -719,8 +793,11 @@ where this abbreviation expands to:
 \leanref{CylinderMobius} & Fundamental domain, quotient, compact Hausdorff, boundary band \\
 \leanref{CylinderBoundary} & Closed cylinder boundary: two disjoint connected faces \\
 \leanref{CylinderChartableBoundary} & Cylinder C4 biconditional \\
-\leanref{ChartableR2Neighbor} & \leanref{ChartableR2} predicate, openness, sequential stability \\
-\leanref{ChartableR2Bridge} & Invariance under homeomorphism; conditional M-FINAL \\
+\leanref{ChartableR2Neighbor} & \leanref{ChartableR2}, \leanref{ChartableR2BoundaryModel}; openness / stability \\
+\leanref{ChartableR2Bridge} & \leanref{Homeomorph.chartableR2\_iff}; \leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}; \leanref{ChartableR2BoundaryModel.not\_homeomorphic} \\
+\leanref{ChartableR2ConcreteBoundaryModels} & M\"obius/cylinder boundary models; conditional observer chain; \leanref{QuantumObserverChainHypothesis} \\
+\leanref{SymbolGrounding} & \leanref{SymbolSystem}; \leanref{symbolGrounding\_*} \\
+\leanref{LawvereRegressBridge} & \leanref{no\_universal\_parametric\_unary\_nat}; \leanref{lawvere\_fixed\_point\_stays\_representational} \\
 \leanref{ChartableR2Models} & Interior charts; cylinder interior \leanref{ChartableR2} \\
 \leanref{MobiusChartableBoundary} & Open-cell charts; boundary $\neg$\leanref{ChartableR2}; M\"obius C4 packaging \\
 \leanref{MobiusSeamChartable} & Saturated seam patches (open, saturated) \\
@@ -768,6 +845,8 @@ where this abbreviation expands to:
 \leanref{mobiusStrip\_not\_homeomorphic\_closedCylinder} & \textbf{M-FINAL} & \leanref{MobiusSeamChartableR2} \\
 \leanref{representational\_regress\_master} & Core master conjunction & \leanref{Main} \\
 \leanref{representational\_regress\_master\_extended} & Extended bundle (+ topology) & \leanref{Main} \\
+\leanref{QuantumObserverChainHypothesis.not\_homeomorphic\_mobiusStrip} & Conditional: obs.\ chain $\not\simeq_t$ M\"obius & \leanref{ChartableR2ConcreteBoundaryModels} \\
+\leanref{no\_universal\_parametric\_unary\_nat} & No universal $s : A \!\to\! A \!\to\! \mathbb{N}$ for all $g : A \!\to\! \mathbb{N}$ & \leanref{LawvereRegressBridge} \\
 \bottomrule
 \end{tabular}
 \end{table}

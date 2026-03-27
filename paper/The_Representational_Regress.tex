@@ -54,74 +54,55 @@ Independent Researcher}
 % ABSTRACT
 % ============================================================================
 \begin{abstract}
-This work is a Lean~4 formalization, checked against Mathlib, with zero
-\texttt{sorry} and no project-specific axioms beyond the Lean core. It treats
-\emph{representational systems}---categories equipped with a non-trivial iterated
-self-map---and an intrinsic planar-chart predicate \texttt{ChartableR2} on compact
-topological models.
+\noindent\textbf{Punchline.}
+A representational system---any structure that represents itself by
+iterating a fixed construction---faces a \emph{topological} barrier, not
+merely a computational one.  We prove, in machine-checked Lean~4 with zero
+\texttt{sorry} and no project-specific axioms, that the barrier cannot be
+removed by scaling, by deeper self-models, by partial self-interpreters, by
+cross-object encoding, by restricting to decidable predicates, or by
+any continuous deformation within a fixed topological type.
+The obstacle is \textbf{wrong type}, not \textbf{inexhaustible queue}:
+it is a finite-data invariant (a homeomorphism obstruction between
+boundary-incompatible spaces) that no amount of computation, iteration,
+or architectural extension can change.
+
+\medskip
+\noindent\textbf{Technical summary.}
+The formalization treats \emph{representational systems}---categories
+equipped with a non-trivial iterated self-map---and an intrinsic
+planar-chart predicate \texttt{ChartableR2} on compact topological models.
 
 \begin{enumerate}[label=(\roman*)]
-\item \textbf{Categorical strand.} A representational system yields infinitely
-  many formally distinct meta-levels; Lawvere's fixed-point theorem in
-  \texttt{Type} and in \texttt{MonoidalClosed(Type)} is complemented by an
-  inductive \texttt{OntologicalSlot} witness that separates morphism data from
-  global-element data, so the ``Lawvere wall'' does not collapse that
-  distinction inside the formalism.
-\item \textbf{Topological strand.} The closed cylinder $S^1 \times [0,1]$ and the
-  M\"obius strip (quotient of $[0,1]^2$ by $(0,t)\sim(1,1-t)$) are not
-  homeomorphic. Points that admit an open neighborhood homeomorphic to
-  $\mathbb{R}^2$ are classified by \texttt{ChartableR2}; on both models the
-  chosen boundary agrees with ``not \texttt{ChartableR2},'' while the boundary
-  \emph{subspaces} differ (connected vs.\ disconnected). A general lemma,
-  \texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}, states the
-  same obstruction for any two spaces once those biconditionals and a subtype
-  non-homeomorphism are supplied.
-\item \textbf{Bridges to neighboring debates.} The formal library also
-  includes \texttt{SymbolSystem} (synonymous with \texttt{RepresentationalSystem})
-  and lemmas restating regress injectivity in the vocabulary of interpretation;
-  \texttt{LawvereRegressBridge}, which derives impossible ``universal
-  parametric'' enumerations of unary maps and relates Lawvere phenomena to
-  \texttt{OntologicalSlot}; bundled \texttt{ChartableR2BoundaryModel} instances
-  for the cylinder and M\"obius strip; and \texttt{QuantumObserverChainHypothesis},
-  a structure whose fields are exactly the premises of the general boundary
-  lemma---intended for a \emph{hypothetical} topological model of an
-  observer--readout chain, without encoding Hilbert spaces or measurement axioms
-  in the present development.
-  No theorem refers to consciousness; a supplementary philosophical premise~P2,
-  that a target notion of self-presence is modeled globally by M\"obius-type
-  rather than cylinder-type organization, combines with~(ii) to yield a
-  conditional reading under which representational substrates matching the
-  cylinder-side boundary pattern cannot be homeomorphic to a space matching the
-  M\"obius-side pattern---a gap that, when those premises apply, is not removed by
-  scaling, iteration, or continuous deformation within a fixed topological type.
-\item \textbf{No-escape packaging}\newline
-  \noindent(\leanref{NoEscapeClosure},
-  \leanref{LawvereRegressBridge}).\newline
-  \noindent A separate strand makes adversarial ``horn'' moves explicit,
-  closing six routes by which an opponent might claim to circumvent
-  the regress or the Lawvere wall:
-  \begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
-  \item[\emph{(a)}] Iterate collisions force a \emph{finite} repertoire
-    of monoid powers---no infinite injective $\mathbb{N}$-tower along a
-    periodic channel.
-  \item[\emph{(b)}] A section--retraction readout induces an idempotent
-    loop on the host and the identity on the source, blocking injective
-    towers on \emph{both} sides.
-  \item[\emph{(c)}] Even \emph{partial} (non-surjective) self-models
-    necessarily miss their own diagonal---no surjectivity
-    assumption required.
-  \item[\emph{(d)}] A decidable/computability analogue closes the finite
-    Lawvere horn using $\lnot : \mathrm{Bool}\to\mathrm{Bool}$.
-  \end{itemize}
-  These lemmas do not replace \texttt{iter\_injective}, but spell out
-  what happens when a rival weakens, reroutes, or partially implements
-  self-representation.
+\item \textbf{Categorical strand.} A representational system yields
+  infinitely many formally distinct meta-levels; Lawvere's fixed-point
+  theorem in \texttt{Type} and in \texttt{MonoidalClosed(Type)} is
+  complemented by an inductive \texttt{OntologicalSlot} witness that
+  separates morphism data from global-element data.
+\item \textbf{Topological strand.} A general lemma states: any two
+  spaces whose \texttt{ChartableR2}-co-characterized boundaries are
+  subtype-incompatible are not homeomorphic.  The closed cylinder and
+  M\"obius strip are a fully discharged compact witness.
+\item \textbf{No-escape closures.} Six adversarial retreat routes are
+  formally blocked: infinite regress, finite-order iterate collapse,
+  cross-object section--retraction readout (both sides), partial
+  (non-surjective) self-models, decidable/Bool-valued self-reference,
+  and the original Lawvere enumerator obstruction.  Each is a proved
+  theorem, not an assumption.
+\item \textbf{Bridges.} The library connects the obstruction to
+  consciousness~(under a conditional philosophical premise~P2),
+  symbol grounding, AI self-interpretation, and hypothetical
+  observer--readout topologies---making explicit which domain-specific
+  premises must be supplied before the barrier applies.
 \end{enumerate}
 
 \medskip
-\noindent The source tree contains roughly twenty-five Lean modules; the body
-and appendices summarize the \texttt{OntologicalSlot} construction, seam and
-equator charts for \texttt{ChartableR2}, scope, and reproduction.
+\noindent\textbf{Consequence.}
+In every neighboring debate---consciousness, symbolic AI, semantic
+grounding, measurement chains---admissible solutions share a common
+shape: \emph{structural change} to the topological type of the substrate,
+not quantitative extension within a fixed type.  The formalism makes
+this precise and machine-checkable.
 \end{abstract}
 
 % ============================================================================

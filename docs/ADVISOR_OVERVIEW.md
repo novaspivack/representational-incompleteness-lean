@@ -108,7 +108,8 @@ The generic theorem means the **same obstruction applies to any compact surface 
 - **Mobius boundary sensor (conditional packaging):** `RepresentationalRegress.mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`.  
 - **Bundled boundary models:** `RepresentationalRegress.ChartableR2BoundaryModel`, concrete instances `mobiusStripChartableR2BoundaryModel`, `closedCylinderChartableR2BoundaryModel` (`ChartableR2ConcreteBoundaryModels`).  
 - **Symbol grounding (same math as `RepresentationalSystem`):** `RepresentationalRegress.SymbolSystem`, `symbolGrounding_*`.  
-- **Diagonal / no universal interpreter:** `RepresentationalRegress.no_universal_parametric_unary_nat`, `lawvere_fixed_point_stays_representational` (`LawvereRegressBridge`).  
+- **Diagonal / no universal interpreter:** `RepresentationalRegress.no_universal_parametric_unary_nat`, `no_universal_parametric_unary_bool`, `lawvere_diagonal_not_in_range`, `lawvere_fixed_point_stays_representational` (`LawvereRegressBridge`).  
+- **No-escape horn closures:** `RepresentationalRegress.IterateClosure.End.pow_iterate_dichotomy` (iterate collision → finite bound), `CrossObjectRepresentation.section_retraction_no_injective_tower_either_side` (retraction → no injective tower on either side) (`NoEscapeClosure`).  
 - **Schematic QM / measurement chain (hypotheses only, no axioms):** `RepresentationalRegress.QuantumObserverChainHypothesis`, `QuantumObserverChainHypothesis.not_homeomorphic_mobiusStrip`.
 
 For a full Lean name index, use **`THEOREM_INVENTORY.md`**.

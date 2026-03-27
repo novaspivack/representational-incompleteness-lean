@@ -170,6 +170,9 @@ Orthogonal to the main **`iter_injective`** hypothesis: records what follows if 
 | `theorem` | `lawvere_diagonal_not_in_range_bool` | Corollary for `Bool` / `not` |
 | `theorem` | `lawvere_fixed_point_stays_representational` | `endo (represent^n) ≠ obj c` for all `n`, `c` |
 | `theorem` | `ontological_wall_never_collapses_represent` | `endo represent ≠ obj c` |
+| **`theorem`** | **`representational_incompleteness`** | **SUMMIT: ∀ a₀, s a₀ ≠ fun a => f (s a a) AND ¬∃ total s covering all g — representational incompleteness for self-modeling systems** |
+| `theorem` | `representational_incompleteness_nat` | Instantiation for `ℕ` / `succ` |
+| `theorem` | `representational_incompleteness_bool` | Instantiation for `Bool` / `not` |
 
 ## Main
 

@@ -40,9 +40,9 @@
 % End `amsthm` head paragraph so the declaration tag is not merged into the header line.
 \newcommand{\AfterTheoremHead}{\mbox{}\par}
 
-\title{The Representational Regress:\\
-  Machine-Checked Topology, Diagonal Arguments,\\
-  and Boundary Obstructions for Representational Systems}
+\title{Representational Incompleteness:\\
+  A Machine-Checked Topological and Diagonal Barrier\\
+  for Self-Modeling Systems}
 \author{Nova Spivack\\
 Independent Researcher}
 \date{2026}
@@ -54,55 +54,51 @@ Independent Researcher}
 % ABSTRACT
 % ============================================================================
 \begin{abstract}
-\noindent\textbf{Punchline.}
-A representational system---any structure that represents itself by
-iterating a fixed construction---faces a \emph{topological} barrier, not
-merely a computational one.  We prove, in machine-checked Lean~4 with zero
-\texttt{sorry} and no project-specific axioms, that the barrier cannot be
-removed by scaling, by deeper self-models, by partial self-interpreters, by
-cross-object encoding, by restricting to decidable predicates, or by
-any continuous deformation within a fixed topological type.
-The obstacle is \textbf{wrong type}, not \textbf{inexhaustible queue}:
-it is a finite-data invariant (a homeomorphism obstruction between
-boundary-incompatible spaces) that no amount of computation, iteration,
-or architectural extension can change.
+\noindent\textbf{Summit theorem (\leanref{representational\_incompleteness}).}
+Any system that models itself---any $s : A \to A \to B$ whatsoever---is
+\emph{necessarily incomplete} with respect to its own diagonal behavior:
+the function $a \mapsto f(s\,a\,a)$ is never equal to any row $s\,a_0$
+of the self-model, for every fixed-point-free $f : B \to B$ and every
+$a_0 \in A$.  No surjectivity, totality, or cardinality assumption on
+$s$ is required.  If $s$ is claimed to be total/surjective, it simply
+cannot exist.
+
+This is \textbf{representational incompleteness}: the analogue of
+G\"odel incompleteness, not for formal theories and provability, but
+for any system that models itself via a parametric family of functions.
+The blind spot is structural---not a resource limitation---and
+persists for every codomain admitting a fixed-point-free endomorphism
+(including $\mathbb{N}$ with successor and $\mathrm{Bool}$ with
+negation).
 
 \medskip
-\noindent\textbf{Technical summary.}
-The formalization treats \emph{representational systems}---categories
-equipped with a non-trivial iterated self-map---and an intrinsic
-planar-chart predicate \texttt{ChartableR2} on compact topological models.
+\noindent\textbf{Topological reinforcement.}
+A second, independent strand proves that the barrier is not merely
+diagonal but \emph{topological}: a general lemma states that any two
+spaces whose intrinsic planar-chart boundaries are subtype-incompatible
+are not homeomorphic.  The obstacle is \textbf{wrong type}, not
+\textbf{inexhaustible queue}---a finite-data invariant that no amount
+of computation, scaling, or architectural extension can change.  The
+closed cylinder and M\"obius strip are a fully discharged compact
+witness; the lemma applies to \emph{any} pair satisfying the same
+hypotheses.
 
-\begin{enumerate}[label=(\roman*)]
-\item \textbf{Categorical strand.} A representational system yields
-  infinitely many formally distinct meta-levels; Lawvere's fixed-point
-  theorem in \texttt{Type} and in \texttt{MonoidalClosed(Type)} is
-  complemented by an inductive \texttt{OntologicalSlot} witness that
-  separates morphism data from global-element data.
-\item \textbf{Topological strand.} A general lemma states: any two
-  spaces whose \texttt{ChartableR2}-co-characterized boundaries are
-  subtype-incompatible are not homeomorphic.  The closed cylinder and
-  M\"obius strip are a fully discharged compact witness.
-\item \textbf{No-escape closures.} Six adversarial retreat routes are
-  formally blocked: infinite regress, finite-order iterate collapse,
-  cross-object section--retraction readout (both sides), partial
-  (non-surjective) self-models, decidable/Bool-valued self-reference,
-  and the original Lawvere enumerator obstruction.  Each is a proved
-  theorem, not an assumption.
-\item \textbf{Bridges.} The library connects the obstruction to
-  consciousness~(under a conditional philosophical premise~P2),
-  symbol grounding, AI self-interpretation, and hypothetical
-  observer--readout topologies---making explicit which domain-specific
-  premises must be supplied before the barrier applies.
-\end{enumerate}
+\medskip
+\noindent\textbf{No escape.}
+Six adversarial retreat routes are formally closed: infinite regress,
+finite-order iterate collapse, cross-object readout (both sides),
+partial self-models, decidable self-reference, and model substitution.
+Each is a proved theorem in Lean~4, checked against Mathlib, with zero
+\texttt{sorry} and no project-specific axioms.
 
 \medskip
 \noindent\textbf{Consequence.}
 In every neighboring debate---consciousness, symbolic AI, semantic
-grounding, measurement chains---admissible solutions share a common
-shape: \emph{structural change} to the topological type of the substrate,
-not quantitative extension within a fixed type.  The formalism makes
-this precise and machine-checkable.
+grounding, measurement chains, LLM scaling---admissible solutions share a
+common shape: \emph{structural change} to the topological type of the
+substrate, not quantitative extension within a fixed type.  Self-modeling
+systems are provably incomplete; the formalism makes this precise and
+machine-checkable.
 \end{abstract}
 
 % ============================================================================
@@ -111,8 +107,8 @@ this precise and machine-checkable.
 \section{Introduction}
 \label{sec:intro}
 
-\subsection{The Problem}
-When a system represents itself---by iterating a fixed construction, by
+\subsection{The Problem and the Summit Theorem}
+When a system models itself---by iterating a fixed construction, by
 encoding its own states, by interpreting its own symbols---a familiar worry
 arises: infinite regress, or diagonal limitations, or both.  But those
 concerns are usually framed \emph{computationally}: the regress does not
@@ -121,24 +117,54 @@ undecidable.  The implicit hope is that with enough resources---more
 compute, richer architectures, deeper self-models---the obstacle might
 shrink or be routed around.
 
-This paper shows, formally and machine-checkably, that the obstacle is
-not computational at all.  It is \textbf{topological}: a structural
-mismatch between the boundary organization of two types of space, which
-no amount of iteration, scaling, or continuous deformation within a fixed
-type can remove.  And we close, one by one, every standard adversarial
-route by which one might hope to circumvent it.
+This paper proves it cannot.  The headline result is:
 
-The technical development stays in categorical and topological language
-(Lean~4, checked against Mathlib, zero \texttt{sorry}, no project-specific
-axioms); \S\ref{sec:instantiations}--\S\ref{sec:admissibility} relate
-the results to consciousness, symbolic grounding, diagonal arguments,
+\begin{theorem}[\novel\ Representational Incompleteness]
+\label{thm:summit}
+\AfterTheoremHead
+\TheoremLeanTag{representational\_incompleteness}
+Let $B$ be a type with a fixed-point-free endomorphism $f : B \to B$.
+For \textbf{any} $s : A \to A \to B$ (no surjectivity, totality, or
+cardinality assumption):
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Diagonal exclusion:}
+  for every $a_0 \in A$,
+  $\;s\,a_0 \neq \lambda a.\,f(s\,a\,a)$.
+\item \textbf{Total coverage impossible:}
+  $\neg\!\left(\forall g : A \to B,\;\exists a,\;s\,a = g\right)$.
+\end{enumerate}
+\end{theorem}
+
+\noindent
+Every self-modeling system is \emph{necessarily incomplete}: its own
+diagonal behavior is precisely the information it cannot represent.  If
+$s$ is claimed to be total and surjective, it simply cannot exist.  This
+is \textbf{representational incompleteness}---the analogue of G\"odel
+incompleteness, not for formal theories and provability, but for any
+system that models itself via a parametric family of functions.  The
+blind spot is structural, not a resource limitation, and persists for
+$B = \mathbb{N}$ (successor), $B = \mathrm{Bool}$ (negation), and every
+other codomain admitting a fixed-point-free endomorphism.
+
+A second, independent strand reinforces this with a \textbf{topological}
+barrier: a homeomorphism obstruction between boundary-incompatible
+spaces that no amount of iteration, scaling, or continuous deformation
+within a fixed topological type can remove.  And we close, one by one,
+every standard adversarial route by which one might hope to circumvent
+either barrier.
+
+The technical development is in Lean~4, checked against Mathlib, with
+zero \texttt{sorry} and no project-specific axioms;
+\S\ref{sec:instantiations}--\S\ref{sec:admissibility} relate the
+results to consciousness, symbolic grounding, diagonal arguments,
 AI scaling, and observer--apparatus topologies.
 
 \subsection{Summary of Results}
 
-The core result is a \textbf{universal topological obstruction} for
-representational systems---and a proof that the six most natural
-adversarial attempts to evade it all fail.
+The core results are \textbf{representational incompleteness}
+(Theorem~\ref{thm:summit}) and a \textbf{universal topological
+obstruction}---reinforced by a proof that the six most natural
+adversarial attempts to evade them all fail.
 
 \paragraph{The obstruction.}
 A general lemma (Theorem~\ref{thm:generic}) states: if two spaces admit
@@ -1104,35 +1130,37 @@ generalization pattern is explicit.
 \section{Conclusion}
 \label{sec:conclusion}
 
-The formalization delivers three interlocking layers:
+The summit theorem (\leanref{representational\_incompleteness},
+Theorem~\ref{thm:summit}) states the central result:
+\emph{every self-modeling system is necessarily incomplete with respect
+to its own diagonal behavior}.  For any $s : A \to A \to B$ and any
+fixed-point-free $f : B \to B$, the diagonal function
+$a \mapsto f(s\,a\,a)$ is never equal to any row $s\,a_0$---and if $s$
+is claimed to be total and surjective, it cannot exist at all.  No
+assumption on the surjectivity, cardinality, or computability of $s$ is
+required.  This is \textbf{representational incompleteness}: the
+analogue of G\"odel incompleteness for self-modeling systems rather than
+formal theories.
+
+The formalization reinforces this with three supporting layers:
 
 \begin{enumerate}[label=(\roman*)]
-\item A machine-checked regress and Lawvere infrastructure (categorical strand),
-\item A general $\mathrm{ChartableR2}$ boundary-contrast lemma with a fully
-  discharged compact witness
-  $\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$
-  (topological strand), and
+\item A machine-checked categorical regress and Lawvere infrastructure,
+  including the \leanref{OntologicalSlot} wall that persists at every
+  iterate depth.
+\item A general topological obstruction
+  ($\mathrm{ChartableR2}$-boundary contrast) with a fully discharged
+  compact witness
+  ($\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$),
+  applicable to any pair of spaces with incompatible boundary
+  topology---the obstacle is \textbf{wrong type}, not
+  \textbf{inexhaustible queue}.
 \item A systematic no-escape analysis (Horns~1--6,
-  \S\ref{sec:noescape}) that formally closes
-  the principal adversarial retreat routes: infinite regress,
-  finite-order collapse, cross-object readout, partial self-models,
-  model substitution, and decidable self-reference.
+  \S\ref{sec:noescape}) that formally closes the principal adversarial
+  retreat routes: infinite regress, finite-order collapse, cross-object
+  readout, partial self-models, model substitution, and decidable
+  self-reference.
 \end{enumerate}
-
-\noindent
-The central insight is not that infinite regress is bad---that is widely
-acknowledged.  The insight is that the barrier is \textbf{topological and
-structural}, not computational or resource-bound.  The obstacle is
-\emph{wrong type}, not \emph{inexhaustible queue}.
-A homeomorphism obstruction is a finite-data invariant: two spaces are
-either homeomorphic or not, regardless of how many modeling steps one
-enumerates.  No amount of compute, no deeper self-model, no richer
-architecture changes the boundary pattern of a topological type.  And the
-Lawvere diagonal exclusion
-(\leanref{lawvere\_diagonal\_not\_in\_range})
-shows that even \emph{partial} self-models necessarily have a blind spot
-containing their own diagonal---the very information needed for
-self-capture is the information they cannot represent.
 
 \paragraph{What is not being claimed.}
 The theorems are unconditional mathematics; the \emph{application} to
@@ -1224,6 +1252,8 @@ and a full Turing-degree analogue of the decidable Lawvere horn.
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.85cm}>{\raggedright\arraybackslash}p{7.55cm}>{\raggedright\arraybackslash}p{3.15cm}@{}}
 \toprule
 \textbf{Lean name} & \textbf{Statement} & \textbf{Module} \\
+\midrule
+\leanref{representational\_incompleteness} & \textbf{Summit:} $\forall a_0$, $s\,a_0 \neq \lambda a.\,f(s\,a\,a)$; $\neg\exists$ total $s$ & \leanref{LawvereRegressBridge} \\
 \midrule
 \leanref{regress\_iterates\_unbounded} & $\forall B, \exists L > B$, distinct iterate & \leanref{Regress} \\
 \leanref{lawvere\_fixed\_point\_Type} & Universal enumerator $\Rightarrow$ every endo has fixed point & \leanref{Lawvere} \\

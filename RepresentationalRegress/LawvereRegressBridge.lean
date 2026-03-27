@@ -73,4 +73,46 @@ theorem ontological_wall_never_collapses_represent (R : RepresentationalSystem.{
     OntologicalSlot.endo R.represent ≠ OntologicalSlot.obj c :=
   lawvere_wall_is_not_dissolution R c
 
+/--
+  **Representational Incompleteness (summit theorem).**
+
+  Any self-modeling system `s : A → A → B` is necessarily incomplete with respect
+  to its own diagonal behavior, provided `B` admits a fixed-point-free
+  endomorphism `f`.  Concretely:
+
+  1. **Diagonal exclusion:** The function `fun a => f (s a a)` — the system's own
+     diagonal twisted by `f` — is *never* equal to any row `s a₀` of the self-model.
+     This holds for EVERY `a₀ : A`, with no surjectivity assumption on `s`.
+
+  2. **Total coverage impossible:** There is no `s` whatsoever (on any type `A`)
+     such that every `g : A → B` appears as some row `s a`.
+
+  Together these say: a self-modeling system either fails to model its own diagonal
+  behavior (if partial), or cannot exist at all (if claimed total).  The blind spot
+  is structural — not a resource limitation — and persists for every codomain `B`
+  with a fixed-point-free endomorphism (including `ℕ` with `succ` and `Bool` with `not`).
+
+  This is the representational analogue of Gödel incompleteness: not for formal
+  theories and provability, but for any system that models itself via a parametric
+  family of functions.
+-/
+theorem representational_incompleteness {A B : Type u} (f : B → B) (hf : ∀ b, f b ≠ b)
+    (s : A → A → B) :
+    (∀ a₀ : A, s a₀ ≠ fun a => f (s a a)) ∧
+    ¬(∀ g : A → B, ∃ a : A, s a = g) :=
+  ⟨fun a₀ => lawvere_diagonal_not_in_range f hf s a₀,
+   fun hU => lawvere_fixed_point_corollary_no_universal f hf s hU⟩
+
+/-- Representational incompleteness for `ℕ`-valued self-models. -/
+theorem representational_incompleteness_nat {A : Type} (s : A → A → ℕ) :
+    (∀ a₀ : A, s a₀ ≠ fun a => Nat.succ (s a a)) ∧
+    ¬(∀ g : A → ℕ, ∃ a : A, s a = g) :=
+  representational_incompleteness Nat.succ Nat.succ_ne_self s
+
+/-- Representational incompleteness for `Bool`-valued self-models (decidable predicates). -/
+theorem representational_incompleteness_bool {A : Type} (s : A → A → Bool) :
+    (∀ a₀ : A, s a₀ ≠ fun a => !(s a a)) ∧
+    ¬(∀ g : A → Bool, ∃ a : A, s a = g) :=
+  representational_incompleteness (fun b => !b) Bool.not_ne_self s
+
 end RepresentationalRegress

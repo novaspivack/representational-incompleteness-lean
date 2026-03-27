@@ -5,9 +5,25 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{array}
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{stmaryrd}
+
+% Allow line breaks in long Lean identifiers (\_, namespaces, CamelCase).
+\ExplSyntaxOn
+\tl_new:N \l__rr_leanref_tl
+\NewDocumentCommand \leanref { m }
+  {
+    \tl_set:Nn \l__rr_leanref_tl { #1 }
+    \regex_replace_all:nnN { \c{_} } { \c{_} \c{allowbreak} } \l__rr_leanref_tl
+    \regex_replace_all:nnN { \. } { . \c{allowbreak} } \l__rr_leanref_tl
+    % CamelCase / digit-boundary splits (Lean module and declaration names).
+    \regex_replace_all:nnN { ([a-z])([A-Z]) } { \1 \c{allowbreak} \2 } \l__rr_leanref_tl
+    \regex_replace_all:nnN { ([0-9])([A-Z]) } { \1 \c{allowbreak} \2 } \l__rr_leanref_tl
+    \texttt{\small \tl_use:N \l__rr_leanref_tl }
+  }
+\ExplSyntaxOff
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -16,9 +32,13 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\newcommand{\leanref}[1]{\texttt{\small #1}}
 \newcommand{\novel}{\textcolor{blue!70!black}{[Novel]}}
 \newcommand{\known}{\textcolor{gray}{[Known math]}}
+% Break `theorem`/`definition` head away from long \leanref tags (avoids overfull italic headers).
+\newcommand{\TheoremLeanTag}[1]{%
+  \noindent\textnormal{(\leanref{#1})}\par\noindent}
+% End `amsthm` head paragraph so the declaration tag is not merged into the header line.
+\newcommand{\AfterTheoremHead}{\mbox{}\par}
 
 \title{The Representational Regress:\\
   Machine-Checked Topology, Diagonal Arguments,\\
@@ -74,6 +94,14 @@ topological models.
   cylinder-side boundary pattern cannot be homeomorphic to a space matching the
   M\"obius-side pattern---a gap that, when those premises apply, is not removed by
   scaling, iteration, or continuous deformation within a fixed topological type.
+\item \textbf{No-escape packaging (\texttt{NoEscapeClosure}).} A separate
+  strand makes adversarial ``horn'' moves explicit: monoid collisions force
+  a \emph{finite} repertoire of iterate labels (no infinite injective
+  $\mathbb{N}$-tower along a periodic channel), while a section--retraction
+  readout of one object inside another induces an idempotent loop on the host,
+  which already identifies exponents $1$ and $2$. These lemmas do not replace
+  \texttt{iter\_injective}, but spell out what happens if a rival weakens or
+  reroutes self-representation.
 \end{enumerate}
 
 \medskip
@@ -130,11 +158,19 @@ from one global geometric type to another.
   \texttt{representational\_regress\_master\_extended} adjoins the $1$D
   half-space non-homeomorphism and M-FINAL to the core master conjunction.
 \item \textbf{Cross-domain bridges} (\S\ref{sec:instantiations}):
-  \texttt{SymbolSystem}, \texttt{LawvereRegressBridge},
-  concrete \texttt{ChartableR2BoundaryModel}s, and
-  \texttt{QuantumObserverChainHypothesis}, making the obstruction's
-  \emph{hypothesis shape} explicit for grounding, diagonal, and
-  observer--readout readings.
+  \begin{itemize}[leftmargin=1.75em,itemsep=0.15ex,topsep=0.5ex,parsep=0pt]
+  \item \texttt{SymbolSystem}
+  \item \texttt{LawvereRegressBridge}
+  \item concrete \texttt{ChartableR2BoundaryModel} instances
+  \item \texttt{QuantumObserverChainHypothesis}
+  \end{itemize}
+  \noindent These make the obstruction's \emph{hypothesis shape} explicit for
+  grounding, diagonal, and observer--readout readings.
+\item \textbf{Adversarial horn closures} (\S\ref{sec:regress}, module
+  \leanref{NoEscapeClosure}): iterate-level dichotomy (injective $\mathbb{N}$-tower
+  vs.\ finitely many distinct powers after a collision), and failure of injective
+  towers along section--retraction ``readout'' composites---complementing the
+  Lawvere enumerator obstructions in \leanref{LawvereRegressBridge}.
 \end{enumerate}
 
 \paragraph{Significance and what is \emph{not} being claimed.}
@@ -172,9 +208,10 @@ the mathematics honest while still delivering a \emph{portable} gate.
   $\mathbb{R}^2$ chartability as a definable ``planar interior vs.\ boundary''
   sensor; constructive charts through the quotient seam including the equator via
   piecewise unfolding. [\novel\ application / technique]
-\item \textbf{General boundary-contrast obstruction}
-  (\texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}) --- a
-  single theorem that \emph{packages} the logical move used in M-FINAL: any two
+\item \textbf{General boundary-contrast obstruction.}\newline
+  \texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}\newline
+  \noindent A single theorem that \emph{packages} the logical move used in
+  M-FINAL: any two
   spaces hit the same wall once their \texttt{ChartableR2}-co-characterized
   boundaries are topologically incompatible. Individual proofs of
   non-homeomorphism are classical; a \emph{reusable, machine-checked} lemma with
@@ -184,11 +221,21 @@ the mathematics honest while still delivering a \emph{portable} gate.
   metaphorically). We claim distinctiveness for the \textbf{integrated,
   checkable} template, not for the elementary fact that the M\"obius strip and
   the cylinder differ. [\novel]
-\item \textbf{Supplementary structures} --- \texttt{SymbolSystem},
-  \texttt{LawvereRegressBridge}, bundled boundary models, and
-  \texttt{QuantumObserverChainHypothesis} spell out which hypotheses must be
-  imported from a domain before the obstruction applies; they do not expand the
-  set of unconditional theorems but sharpen \emph{where} the gate sits. [\novel]
+\item \textbf{Supplementary structures:}
+  \begin{itemize}[leftmargin=1.75em,itemsep=0.15ex,topsep=0.5ex,parsep=0pt]
+  \item \texttt{SymbolSystem}
+  \item \texttt{LawvereRegressBridge}
+  \item bundled \texttt{ChartableR2BoundaryModel} data
+  \item \texttt{QuantumObserverChainHypothesis}
+  \end{itemize}
+  \noindent These spell out which hypotheses must be imported from a domain
+  before the obstruction applies; they do not expand the set of unconditional
+  theorems but sharpen \emph{where} the gate sits. [\novel]
+\item \textbf{\leanref{NoEscapeClosure}} --- packages two complementary
+  ``escape routes'': if iterate indices collapse, only finitely many monoid
+  powers are distinct; if ``self'' is encoded via a retraction--section pair on
+  a larger object, the induced host endomorphism is idempotent, so its positive
+  powers cannot be index-injective. [\novel]
 \item \textbf{Classical ingredients.} Lawvere's diagonal argument (1969),
   textbook topology of the cylinder and M\"obius strip, and Cantorian regress
   patterns precede this work. The contribution is a \textbf{unified,
@@ -218,6 +265,7 @@ Appendices: Lean module map, theorem index, reproduction.
 \label{sec:repsys}
 
 \begin{definition}[\leanref{Basic.lean}: \leanref{RepresentationalSystem}]
+\leavevmode\par\noindent
 A \emph{representational system} is a tuple $(C, A, \mathrm{represent}, \mathrm{iter\_injective})$ where:
 \begin{itemize}
 \item $C$ is a category,
@@ -331,7 +379,8 @@ The \emph{M\"obius strip} is $\mathrm{MobiusStrip} := [0,1]^2 / {\sim}$.
 
 \begin{theorem}[\leanref{MobiusCylinderBoundaryContrast.lean}]
 \label{thm:boundary-contrast}
-(\leanref{mobiusStripBoundary\_not\_homeomorphic\_closedCylinderBoundaryUnion})
+\AfterTheoremHead
+\TheoremLeanTag{mobiusStripBoundary\_not\_homeomorphic\_closedCylinderBoundaryUnion}
 \[
   \mathrm{IsEmpty}\!\left(\mathrm{Subtype}(\partial_{\mathrm{Mob}}) \simeq_t \mathrm{Subtype}(\partial_{\mathrm{Cyl}})\right).
 \]
@@ -365,7 +414,9 @@ A point $x$ of a topological space $X$ is \emph{$\mathrm{ChartableR2}$} if there
 
 \begin{theorem}[\leanref{ChartableR2Bridge.lean}]
 \label{thm:chartable-invar}
-(\leanref{Homeomorph.chartableR2\_iff}) If $h : X \simeq_t Y$ is a homeomorphism, then $\mathrm{ChartableR2}(x) \iff \mathrm{ChartableR2}(h(x))$.
+\AfterTheoremHead
+\TheoremLeanTag{Homeomorph.chartableR2\_iff}
+If $h : X \simeq_t Y$ is a homeomorphism, then $\mathrm{ChartableR2}(x) \iff \mathrm{ChartableR2}(h(x))$.
 \end{theorem}
 
 \subsection{The Generic Boundary-Contrast Obstruction}
@@ -373,7 +424,8 @@ A point $x$ of a topological space $X$ is \emph{$\mathrm{ChartableR2}$} if there
 
 \begin{theorem}[\novel\ \leanref{ChartableR2Bridge.lean}]
 \label{thm:generic}
-(\leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast})
+\AfterTheoremHead
+\TheoremLeanTag{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}
 Let $X$ and $Y$ be topological spaces with predicates $b_X \subseteq X$ and $b_Y \subseteq Y$ such that:
 \begin{enumerate}[label=(\roman*)]
 \item $\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$,
@@ -398,14 +450,16 @@ any other pair of spaces satisfying the same three hypotheses is also not homeom
 
 \begin{theorem}[\leanref{HalfPlaneVsPlane.lean}]
 \label{thm:halfplane}
-(\leanref{euclideanHalfSpace2\_not\_homeomorphic\_euclidean2})
+\AfterTheoremHead
+\TheoremLeanTag{euclideanHalfSpace2\_not\_homeomorphic\_euclidean2}
 $\mathrm{IsEmpty}(H^2 \simeq_t \mathbb{R}^2)$.
 Proof via punctured half-plane (star-convex $\Rightarrow$ simply connected) vs.\ punctured plane (not simply connected, from $\exp$ covering).
 \end{theorem}
 
 \begin{theorem}[\leanref{HalfSpaceNeighborVsPlane.lean}]
 \label{thm:halfspace-local}
-(\leanref{isEmpty\_homeomorph\_subtype\_openH2\_zero\_nbhd\_subtype\_openPlane})
+\AfterTheoremHead
+\TheoremLeanTag{isEmpty\_homeomorph\_subtype\_openH2\_zero\_nbhd\_subtype\_openPlane}
 For open $V \subseteq H^2$ with $0 \in V$ and open $O \subseteq \mathbb{R}^2$, there is no homeomorphism $V \cong_t O$.
 \end{theorem}
 
@@ -413,7 +467,8 @@ For open $V \subseteq H^2$ with $0 \in V$ and open $O \subseteq \mathbb{R}^2$, t
 
 \begin{theorem}[\leanref{CylinderChartableBoundary.lean}]
 \label{thm:cylinder-c4}
-(\leanref{closedCylinder\_boundaryUnion\_iff\_not\_chartableR2})
+\AfterTheoremHead
+\TheoremLeanTag{closedCylinder\_boundaryUnion\_iff\_not\_chartableR2}
 For all $x \in \mathrm{ClosedCylinder}$:
 \[
   x \in \partial_{\mathrm{Cyl}} \;\iff\; \neg\,\mathrm{ChartableR2}(x).
@@ -441,7 +496,8 @@ obtained by a piecewise Euclidean unfolding map (see below).
 
 \begin{theorem}[\leanref{MobiusChartableBoundary.lean}]
 \label{thm:open-cell}
-(\leanref{chartableR2\_mobiusQuotientMk\_of\_Ioo\_square})
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_Ioo\_square}
 If $p \in (0,1)^2$ (strict interior of the fundamental domain), then $\mathrm{ChartableR2}(\llbracket p \rrbracket)$.
 \end{theorem}
 
@@ -453,14 +509,18 @@ The \emph{saturated seam patch} $S(t_0, \varepsilon, \delta)$ is the union of th
 
 \begin{theorem}[\leanref{MobiusSeamTrigInject.lean}]
 \label{thm:trig-inject}
-(\leanref{onPatch\_mobiusFDTrigCoord\_eq\_iff\_mobiusRel0})
-When $\delta < |t_0 - \tfrac{1}{2}|$, the trigonometric FD coordinate map $\mathrm{mobiusFDTrigCoord}$ satisfies: $\mathrm{mobiusFDTrigCoord}(p) = \mathrm{mobiusFDTrigCoord}(q)$ on the saturated patch if and only if $p \sim q$.
+\AfterTheoremHead
+\TheoremLeanTag{onPatch\_mobiusFDTrigCoord\_eq\_iff\_mobiusRel0}
+When $\delta < |t_0 - \tfrac{1}{2}|$, the trigonometric FD coordinate map $\mathrm{mobiusFDTrigCoord}$ satisfies:\newline
+\noindent$\mathrm{mobiusFDTrigCoord}(p) = \mathrm{mobiusFDTrigCoord}(q)$ on the saturated patch if and only if $p \sim q$.
 \end{theorem}
 
 \begin{theorem}[\leanref{MobiusSeamChartableR2.lean}]
 \label{thm:seam-trig}
-(\leanref{chartableR2\_mobiusQuotientMk\_of\_mem\_mobiusSeamSaturatedPatch})
-For $t_0 \neq \tfrac{1}{2}$ and appropriate $\varepsilon, \delta$, every point in $\pi(S(t_0, \varepsilon, \delta))$ is $\mathrm{ChartableR2}$.
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_mem\_mobiusSeamSaturatedPatch}
+For $t_0 \neq \tfrac{1}{2}$ and appropriate $\varepsilon, \delta$, every point\newline
+\noindent in $\pi(S(t_0, \varepsilon, \delta))$ is $\mathrm{ChartableR2}$.
 \end{theorem}
 
 \subsection{The Equator Chart: Piecewise Unfolding}
@@ -468,12 +528,17 @@ For $t_0 \neq \tfrac{1}{2}$ and appropriate $\varepsilon, \delta$, every point i
 
 \begin{definition}[\leanref{MobiusSeamChartableR2.lean}]
 \label{def:unfold}
-The \emph{fundamental-domain unfolding map} $\mathrm{unfoldFD} : [0,1]^2 \to \mathbb{R}^2$ is:
+\leavevmode\par\noindent
+The \emph{fundamental-domain unfolding map}\newline
+\noindent$\mathrm{unfoldFD} : [0,1]^2 \to \mathbb{R}^2$ is:
 \[
   \mathrm{unfoldFD}(x, t) :=
   \begin{cases}
     \mathrm{mobiusPlaneCoord}(x, t) & \text{if } x \leq \tfrac{1}{2}, \\
-    \mathrm{mobiusPlaneTrigSeamPartnerSub}(\mathrm{mobiusPlaneCoord}(x, t)) & \text{if } x > \tfrac{1}{2}.
+    \begin{aligned}[t]
+      &\mathrm{mobiusPlaneTrigSeamPartnerSub}\\
+      &\quad\bigl(\mathrm{mobiusPlaneCoord}(x, t)\bigr)
+    \end{aligned} & \text{if } x > \tfrac{1}{2}.
   \end{cases}
 \]
 \end{definition}
@@ -484,7 +549,8 @@ $\mathrm{unfoldFD}$ is $\sim$-invariant: if $p \sim q$ then $\mathrm{unfoldFD}(p
 
 \begin{theorem}[\leanref{MobiusSeamChartableR2.lean}]
 \label{thm:equator}
-(\leanref{chartableR2\_mobiusQuotientMk\_of\_left\_seam\_half})
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_left\_seam\_half}
 $\mathrm{ChartableR2}(\llbracket (0, \tfrac{1}{2}) \rrbracket)$.
 \end{theorem}
 
@@ -492,7 +558,8 @@ $\mathrm{ChartableR2}(\llbracket (0, \tfrac{1}{2}) \rrbracket)$.
 
 \begin{theorem}[\leanref{MobiusSeamChartableR2.lean}]
 \label{thm:interior-height}
-(\leanref{chartableR2\_mobiusQuotientMk\_of\_interior\_height})
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_interior\_height}
 For every $p \in [0,1]^2$ with $0 < p_2 < 1$:
 \[
   \mathrm{ChartableR2}(\llbracket p \rrbracket).
@@ -503,7 +570,8 @@ For every $p \in [0,1]^2$ with $0 < p_2 < 1$:
 
 \begin{theorem}[\leanref{MobiusChartableBoundary.lean}]
 \label{thm:mobius-c4}
-(\leanref{mobiusStripBoundary\_iff\_not\_chartableR2\_of\_forall\_off\_edge\_chartable})
+\AfterTheoremHead
+\TheoremLeanTag{mobiusStripBoundary\_iff\_not\_chartableR2\_of\_forall\_off\_edge\_chartable}
 For all $x \in \mathrm{MobiusStrip}$:
 \[
   x \in \partial_{\mathrm{Mob}} \;\iff\; \neg\,\mathrm{ChartableR2}(x).
@@ -518,7 +586,8 @@ For all $x \in \mathrm{MobiusStrip}$:
 
 \begin{theorem}[\leanref{MobiusSeamChartableR2.lean}, \leanref{ChartableR2Bridge.lean}]
 \label{thm:mfinal}
-(\leanref{mobiusStrip\_not\_homeomorphic\_closedCylinder})
+\AfterTheoremHead
+\TheoremLeanTag{mobiusStrip\_not\_homeomorphic\_closedCylinder}
 \[
   \mathrm{IsEmpty}\!\left(\mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder}\right).
 \]
@@ -541,15 +610,18 @@ incompatibility (Theorem~\ref{thm:boundary-contrast}).
 
 \begin{theorem}[\leanref{Main.lean}]
 \label{thm:extended}
-(\leanref{representational\_regress\_master\_extended})
+\AfterTheoremHead
+\TheoremLeanTag{representational\_regress\_master\_extended}
 For any representational system $R$:
 \[
   \mathrm{RepresentationalRegressMasterExtended}(R)
 \]
 where this abbreviation expands to:
 \begin{enumerate}[label=(\roman*)]
-\item $\mathrm{representational\_regress\_master\_claim}(R)$ (regress + wall + $T_2$ transport),
-\item $\mathrm{IsEmpty}(H^1 \simeq_t \mathbb{R}^1)$ \quad (1D half-space vs.\ line; \leanref{representational\_regress\_topology\_halfLineModel}),
+\item $\mathrm{representational\_regress\_master\_claim}(R)$\newline
+\noindent (regress + wall + $T_2$ transport),
+\item $\mathrm{IsEmpty}(H^1 \simeq_t \mathbb{R}^1)$ (1D half-space vs.\ line;\newline
+\noindent\leanref{representational\_regress\_topology\_halfLineModel}),
 \item $\mathrm{IsEmpty}(\mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder})$ (M-FINAL).
 \end{enumerate}
 \end{theorem}
@@ -566,13 +638,17 @@ $\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$.
 \end{definition}
 
 \noindent
-The type \leanref{ChartableR2BoundaryModel} packages such data; the lemma
-\leanref{ChartableR2BoundaryModel.not\_homeomorphic} is Theorem~\ref{thm:generic}
-in bundled form. The development \leanref{ChartableR2ConcreteBoundaryModels}
-supplies \leanref{mobiusStripChartableR2BoundaryModel} and
-\leanref{closedCylinderChartableR2BoundaryModel}; the same-file theorem
-\leanref{mobiusStrip\_closedCylinder\_boundary\_models\_not\_homeomorphic}
-re-proves M-FINAL along that pipeline.
+\begin{itemize}[leftmargin=1.75em,itemsep=0.35ex,topsep=0.6ex,parsep=0pt]
+\item The type \leanref{ChartableR2BoundaryModel} packages such data; the lemma
+  \leanref{ChartableR2BoundaryModel.not\_homeomorphic} restates
+  Theorem~\ref{thm:generic} in bundled form.
+\item The development \leanref{ChartableR2ConcreteBoundaryModels} supplies\newline
+  \leanref{mobiusStripChartableR2BoundaryModel} and
+  \leanref{closedCylinderChartableR2BoundaryModel}.
+\item The same-file theorem\newline
+  \leanref{mobiusStrip\_closedCylinder\_boundary\_models\_not\_homeomorphic}\newline
+  re-proves M-FINAL along that pipeline.
+\end{itemize}
 
 \subsection{Instantiations}
 \label{sec:instantiations}
@@ -688,9 +764,14 @@ but neither formally entails the other.
 \label{sec:limits}
 
 \begin{enumerate}
-\item \textbf{Hypothesis, not derivation.} $\mathrm{iter\_injective}$ is bundled, not proved from minimal data. Not every $f : A \to A$ in every category satisfies it. The regress is conditional on this non-triviality hypothesis.
+\item \textbf{Hypothesis, not derivation.} $\mathrm{iter\_injective}$ is bundled,
+  not proved from minimal data. Not every $f : A \to A$ in every category satisfies it.
+  The regress is conditional on this non-triviality hypothesis.
 
-\item \textbf{Lawvere in \texttt{Type}, not abstract CCC.} The formalization uses $\mathrm{Type}\ u$ and $\mathrm{MonoidalClosed}(\mathrm{Type}\ u)$, not a general closed category over arbitrary $C$. A fully abstract CCC version remains future work.
+\item \textbf{Lawvere in \texttt{Type}, not abstract CCC.} The formalization uses
+  $\mathrm{Type}\ u$ and\newline
+  $\mathrm{MonoidalClosed}(\mathrm{Type}\ u)$, not a general closed category over arbitrary~$C$.
+  A fully abstract CCC version remains future work.
 
 \item \textbf{\texttt{OntologicalSlot} is definitional, not metaphysical.} The disjointness $\mathrm{endo} \neq \mathrm{obj}$ is trivially true by constructor discrimination. This is the point, but the triviality means the result is \emph{semantic} (about the structure of type theory) rather than a deep theorem.
 
@@ -704,7 +785,7 @@ but neither formally entails the other.
 
 \item \textbf{\texttt{QuantumObserverChainHypothesis}.} This definition only
   bundles topological assumptions (boundary set, \texttt{ChartableR2}
-  biconditional, subtype non-homeomorphism to the M\"obius boundary). It does not
+  biconditional,\newline subtype non-homeomorphism to the M\"obius boundary). It does not
   import Hilbert spaces, operators, or measurement axioms; a physical
   application would need a separate argument that a concrete model satisfies
   those fields.
@@ -729,7 +810,8 @@ category-internal tagging alongside the \texttt{Type}-level diagonal theorem.
 
 \subsection{Consciousness, G\"odel, and AI}
 G\"odel- and computability-based limits on mechanism (including Penrose-style
-arguments, discussions of strange loops, and information-theoretic theories of
+arguments, discussions of strange loops and self-reference in the sense of
+Hofstadter, and information-theoretic theories of
 consciousness) occupy a large literature orthogonal to the cylinder/M\"obius
 homeomorphism question, though informal exposition sometimes elides the
 difference.
@@ -745,13 +827,21 @@ generalization pattern is explicit.
 \section{Conclusion}
 \label{sec:conclusion}
 
-The formalization delivers machine-checked regress and Lawvere infrastructure, a
-general $\mathrm{ChartableR2}$ boundary-contrast lemma, and the non-homeomorphism
-$\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$. The main theorems
-are stated without phenomenological primitives; \S\ref{sec:instantiations}
-shows how separate premises connect that core to consciousness (under~P2),
-symbolic grounding, diagonal limitations, and hypothetical observer--readout
-topologies.
+The formalization delivers machine-checked regress and Lawvere infrastructure,\newline
+a general $\mathrm{ChartableR2}$ boundary-contrast lemma, and\newline
+the non-homeomorphism $\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$.
+\noindent It further records explicit \emph{horn closures}
+(\leanref{NoEscapeClosure}) for finite-order iterates and cross-object readouts,\newline
+alongside universal-enumerator obstructions (\leanref{LawvereRegressBridge})---so
+``another'' route of self-representation does not automatically restart a
+distinctness story unless it satisfies the same hypotheses.
+
+\medskip
+\noindent
+The main theorems are stated without phenomenological primitives;
+\S\ref{sec:instantiations} shows how separate premises connect that core to
+consciousness~(under~P2), symbolic grounding, diagonal limitations, and\newline
+hypothetical observer--readout topologies.
 
 \medskip
 \noindent\textbf{Future work.} A full $\mathrm{IsManifold}$ instance for
@@ -769,8 +859,9 @@ models where $\mathrm{ChartableR2}$ boundary data can be established.
 
 \begin{table}[h]
 \centering
-\small
-\begin{tabular}{@{}lp{8cm}@{}}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.95cm}>{\raggedright\arraybackslash}p{11.45cm}@{}}
 \toprule
 \textbf{Module} & \textbf{Role} \\
 \midrule
@@ -788,6 +879,7 @@ models where $\mathrm{ChartableR2}$ boundary data can be established.
 \leanref{ChartableR2ConcreteBoundaryModels} & M\"obius/cylinder boundary models; conditional observer chain; \leanref{QuantumObserverChainHypothesis} \\
 \leanref{SymbolGrounding} & \leanref{SymbolSystem}; \leanref{symbolGrounding\_*} \\
 \leanref{LawvereRegressBridge} & \leanref{no\_universal\_parametric\_unary\_nat}; \leanref{lawvere\_fixed\_point\_stays\_representational} \\
+\leanref{NoEscapeClosure} & Iterate collisions vs.\ injective towers; section--retraction idempotent readout \\
 \leanref{ChartableR2Models} & Interior charts; cylinder interior \leanref{ChartableR2} \\
 \leanref{MobiusChartableBoundary} & Open-cell charts; boundary $\neg$\leanref{ChartableR2}; M\"obius C4 packaging \\
 \leanref{MobiusSeamChartable} & Saturated seam patches (open, saturated) \\
@@ -811,8 +903,9 @@ models where $\mathrm{ChartableR2}$ boundary data can be established.
 
 \begin{table}[h]
 \centering
-\small
-\begin{tabular}{@{}lp{6.5cm}l@{}}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.85cm}>{\raggedright\arraybackslash}p{7.55cm}>{\raggedright\arraybackslash}p{3.15cm}@{}}
 \toprule
 \textbf{Lean name} & \textbf{Statement} & \textbf{Module} \\
 \midrule
@@ -833,6 +926,8 @@ models where $\mathrm{ChartableR2}$ boundary data can be established.
 \leanref{representational\_regress\_master\_extended} & Extended bundle (+ topology) & \leanref{Main} \\
 \leanref{QuantumObserverChainHypothesis.not\_homeomorphic\_mobiusStrip} & Conditional: obs.\ chain $\not\simeq_t$ M\"obius & \leanref{ChartableR2ConcreteBoundaryModels} \\
 \leanref{no\_universal\_parametric\_unary\_nat} & No universal $s : A \!\to\! A \!\to\! \mathbb{N}$ for all $g : A \!\to\! \mathbb{N}$ & \leanref{LawvereRegressBridge} \\
+\leanref{IterateClosure.End.pow\_iterate\_dichotomy} & Injective iterate powers vs.\ finite index bound & \leanref{NoEscapeClosure} \\
+\leanref{CrossObjectRepresentation.End.not\_injective\_pow\_section\_retraction} & Section--retraction readout: $\neg$ injective $\mathbb{N}$-powers & \leanref{NoEscapeClosure} \\
 \bottomrule
 \end{tabular}
 \end{table}

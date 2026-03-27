@@ -27,6 +27,7 @@ import RepresentationalRegress.MobiusSeamChart
 import RepresentationalRegress.MobiusSeamChartable
 import RepresentationalRegress.MobiusSeamTrigInject
 import RepresentationalRegress.MobiusSeamChartableR2
+import RepresentationalRegress.NoEscapeClosure
 import RepresentationalRegress.Main
 
 namespace RepresentationalRegress

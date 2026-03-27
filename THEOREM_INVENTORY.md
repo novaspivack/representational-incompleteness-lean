@@ -1,6 +1,6 @@
 # Representational Regress — theorem inventory (Lean names)
 
-**Last updated:** 2026-03-27 — **0** `sorry` in `RepresentationalRegress/`; **M-FINAL** **`mobiusStrip_not_homeomorphic_closedCylinder`**; **`ChartableR2BoundaryModel`**, **`SymbolGrounding`**, **`LawvereRegressBridge`**, **`ChartableR2ConcreteBoundaryModels`** (incl. **`QuantumObserverChainHypothesis`** schematic). Paired with `MANIFEST.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, `docs/ADVISOR_OVERVIEW.md`, and `lake build RepresentationalRegress`.  
+**Last updated:** 2026-03-27 — **0** `sorry` in `RepresentationalRegress/`; **M-FINAL** **`mobiusStrip_not_homeomorphic_closedCylinder`**; **`NoEscapeClosure`** (iterate collision vs.\ cross-object readout); **`ChartableR2BoundaryModel`**, **`SymbolGrounding`**, **`LawvereRegressBridge`**, **`ChartableR2ConcreteBoundaryModels`** (incl. **`QuantumObserverChainHypothesis`** schematic). Paired with `MANIFEST.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, `docs/ADVISOR_OVERVIEW.md`, and `lake build RepresentationalRegress`.  
 **Purpose:** Index of principal `def`s / `theorem`s by module.
 
 ---
@@ -14,6 +14,7 @@
 | `FixedPoints` | `EndoVsPoint`, `endo_ne_point`, `fixed_point_preserves_distinction`, `uncurry_injective_on`, `lawvere_wall_is_not_dissolution` |
 | `Lawvere` | `lawvere_fixed_point_Type`, `lawvere_fixed_point_corollary_no_universal` |
 | `LawvereRegressBridge` | **`no_universal_parametric_unary`**, **`no_universal_parametric_unary_nat`**, **`lawvere_fixed_point_stays_representational`**, **`ontological_wall_never_collapses_represent`** |
+| `NoEscapeClosure` | **`IterateClosure`**: collision ⇒ bounded iterate labels; **`CrossObjectRepresentation`**: section--retraction readout ⇒ non-injective iterate indices on the host object |
 | `SymbolGrounding` | **`SymbolSystem`** (abbrev `RepresentationalSystem`), **`symbolGrounding_*`** alias lemmas for semantic-regress citation |
 | `LawvereCCCType` | `lawvereBinary`, `curry_lawvereBinary`, `lawvere_universal_iff_surjective_curry`, `lawvere_fixed_point_MonoidalClosedType` |
 | `Orientability` | `RepresentationalSeparationInvariant`, T₂ homeomorphism invariance, `surjective_continuous_maps_need_not_preserve_t2` |
@@ -36,7 +37,7 @@
 | `MobiusSeamChart` | **Vertical seam local model** on `R²`: **`mobiusSeamSlidingCoord`**, **strict window** **`mobiusSeamSlidingStrictCoordSet`**, **`homeomorph_subtype_mobiusSeamSlidingCoord_preimage`**; **`mobiusSeamLocalMap*`** / IFT **`mobiusSeamLocalMapOpenPartialHomeomorph`**; **`mobiusStripTrigCoord`** / **`continuous_mobiusStripTrigCoord`**. Consumed by **`MobiusSeamChartableR2`** (trig charts, sliding windows). |
 | `MobiusSeamChartable` | **`mobiusSeamLeftPatchGluePartners`**, **`mobiusSeamLeftPatch_mk_preimage_image_eq`**. Saturated patches **`mobiusSeamSaturatedPatch`**, **`isOpen_mobiusSeamSaturatedPatch`**, **`isOpen_mobiusSeamLeftPatch`**, **`isOpen_mobiusSeamRightPatch`**, **`mobiusSeamSaturatedPatch_sat`**, sheet interior **`mobiusSeamSaturatedPatchSheetInterior`**, **`mobiusSeamSaturatedPatchSheetInterior_sat`**, **`mobiusQuotientMk_injective_on_mobiusSeamSaturatedPatchSheetInterior`**. |
 | `MobiusSeamTrigInject` | Away from `t = ½` on saturated seam patches: **`sub_half_ne_zero_of_mem_mobiusSeamSaturatedPatch`**, **`mobiusRel₀_of_eq_mobiusFDTrigCoord_of_seamPatch`**, **`onPatch_mobiusFDTrigCoord_eq_iff_mobiusRel₀`**, **`injective_mobiusStripTrigCoord_on_image_quotient_mk_mobiusSeamSaturatedPatch`**, **`image_mobiusStripTrigCoord_quotient_mk_image_mobiusSeamSaturatedPatch`**. Inputs: `MobiusSeamChart` / `MobiusSeamChartable` patch hypotheses + `δ < |t₀ - ½|` where needed. |
-| `Main` | Re-exports: `SymbolGrounding`, `LawvereRegressBridge`, `ChartableR2ConcreteBoundaryModels`; `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterExtended`, `representational_regress_master_extended`, `representational_regress_topology_halfLineModel` |
+| `Main` | Re-exports: `SymbolGrounding`, `LawvereRegressBridge`, `ChartableR2ConcreteBoundaryModels`; `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterExtended`, `representational_regress_master_extended`, `representational_regress_topology_halfLineModel`. Root `RepresentationalRegress.lean` also imports `NoEscapeClosure`. |
 
 ---
 
@@ -136,6 +137,24 @@
 | `theorem` | `isConnected_closedCylinderBotFace`, `isConnected_closedCylinderTopFace` | Each face connected (image of connected `Circle`) |
 | `theorem` | `closedCylinder_boundary_faces_disjoint` | The two faces are disjoint |
 | `lemma` | `circleExp_surjective`, `isConnected_univ_circle` | Auxiliary connectivity of `Circle` |
+
+## No-escape packaging (`NoEscapeClosure`)
+
+Orthogonal to the main **`iter_injective`** hypothesis: records what follows if monoid powers collide, or if “self” is read out through a section--retraction channel onto a host object.
+
+| Kind | Lean name | Notes |
+|------|-----------|--------|
+| `theorem` | `IterateClosure.End.pow_tail_periodic` | From `e^(n+d)=e^n` with `d>0`, tail shifts by `+d` are stable |
+| `theorem` | `IterateClosure.End.exists_lt_of_pow_collision` | Every `e^k` agrees with some `e^i` for `i < n+d` |
+| `theorem` | `IterateClosure.End.exists_pow_collision_of_not_injective` | Failure of injective ℕ-powers ⇒ some `e^(n+d)=e^n` |
+| `theorem` | `IterateClosure.End.exists_bound_of_pow_collision` | Finite bound `B` on indices labeling powers |
+| `theorem` | `IterateClosure.End.pow_iterate_dichotomy` | Either injective monoid ℕ-tower or bounded power repertoire (classical) |
+| `theorem` | `IterateClosure.representIter_exists_bound_of_not_iter_injective` | Same dichotomy for `representIter R` when **`iter_injective`** is absent |
+| `theorem` | `CrossObjectRepresentation.idemComp_section_retraction` | `s ≫ r = 𝟙` ⇒ `(r ≫ s) ≫ (r ≫ s) = r ≫ s` on the host |
+| `theorem` | `CrossObjectRepresentation.End.mul_self_section_retraction` | Idempotence in `End B` for the readout composite |
+| `theorem` | `CrossObjectRepresentation.End.pow_pos_eq_self_of_mul_self` | Idempotent `e` has `e^n=e` for all `n>0` |
+| `theorem` | `CrossObjectRepresentation.End.not_injective_pow_of_mul_self` | Idempotent ⇒ `e^1=e^2`, so ℕ-powers are not all distinct |
+| `theorem` | `CrossObjectRepresentation.End.not_injective_pow_section_retraction` | No injective infinite ℕ-tower along that cross-object channel |
 
 ## Main
 

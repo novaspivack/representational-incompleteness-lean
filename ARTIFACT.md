@@ -2,9 +2,16 @@
 
 **Lean:** `leanprover/lean4:v4.29.0-rc6`  
 **Mathlib:** `v4.29.0-rc6` — use **`lake exe cache get`** after `lake update`  
-**Build:** `lake build RepresentationalRegress` from this directory (`RepresentationalRegress/` has no `sorry`)  
+**Build:** `lake build RepresentationalRegress` from this directory (`RepresentationalRegress/` has **0** `sorry`)  
 **Lake deps:** Mathlib only (`lakefile.lean`, `lake-manifest.json`)  
-**Workspace handoff:** `../specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md`
+**Workspace handoff:** `../specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md`  
+**Topology punchline (Möbius vs cylinder):** `../specs/IN-PROCESS/SPEC_002_K7P_TOPOLOGY_PUNCHLINE_AND_PAPER.md`
+
+---
+
+## M-FINAL (closed)
+
+**Theorem:** **`mobiusStrip_not_homeomorphic_closedCylinder`** — `IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)` (**`MobiusSeamChartableR2`**, instantiating **`ChartableR2Bridge`**). **Spine:** cylinder **C4** vs Möbius interior **`ChartableR2`** (**`chartableR2_mobiusQuotientMk_of_interior_height`**, including seam + equator charts) → boundary biconditional → contradiction with boundary-subspace contrast. **MANIFEST.md** / **`docs/ADVISOR_OVERVIEW.md`** summarize the dependency graph. **Route W** in **`CylinderMobiusNonhomeo`** remains an optional cross-check.
 
 ---
 
@@ -39,4 +46,4 @@ One-shot from workspace root: `scripts/verify-lean-build.sh`.
 
 ## Key theorem summary
 
-See `THEOREM_INVENTORY.md` and `MANIFEST.md`.
+See `THEOREM_INVENTORY.md`, `MANIFEST.md`, and **`docs/ADVISOR_OVERVIEW.md`** (advisor-facing narrative). Topology punchline: **SPEC_002** / **M-FINAL** above.

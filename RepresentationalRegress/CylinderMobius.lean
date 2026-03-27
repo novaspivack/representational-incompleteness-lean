@@ -275,6 +275,28 @@ theorem mobiusSeamPartner_involutive {p q : MobiusFundamentalDomain}
 def mobiusClass (p : MobiusFundamentalDomain) : Set MobiusFundamentalDomain :=
   { q | mobiusRel₀ p q }
 
+/-- Off the vertical seams `x ∈ {0, 1}`, nontrivial `mobiusGlueStep` is impossible, so the class is a
+  singleton. Used for one-sided seam windows (`0 < x < 1` on a single Euclidean sheet) where
+  `π ⁻¹' (π '' W) = W` and hence `π '' W` is open without enlarging `W` through glue partners. -/
+theorem mobiusClass_eq_singleton_of_Ioo_fx {p : MobiusFundamentalDomain}
+    (h : 0 < p.1.val ∧ p.1.val < 1) : mobiusClass p = {p} := by
+  ext q
+  simp only [mobiusClass, mem_singleton_iff, Set.mem_setOf_eq, mobiusRel₀]
+  constructor
+  · intro hr
+    rcases hr with rfl | hglue
+    · rfl
+    · rcases hglue with ⟨hp0, _, _⟩ | ⟨_, hp1, _⟩
+      · rcases h with ⟨hgt, _⟩
+        rw [hp0] at hgt
+        exact False.elim (lt_irrefl (0 : ℝ) hgt)
+      · rcases h with ⟨_, hlt⟩
+        rw [hp1] at hlt
+        exact False.elim (lt_irrefl (1 : ℝ) hlt)
+  · intro heq
+    subst heq
+    exact Or.inl rfl
+
 theorem mobiusClass_eq_orPair (p : MobiusFundamentalDomain) :
     mobiusClass p =
       insert p

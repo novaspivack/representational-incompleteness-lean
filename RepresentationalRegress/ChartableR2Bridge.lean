@@ -3,17 +3,24 @@
 
   A global homeomorphism preserves existence of such charts. Together with lemmas identifying
   `mobiusStripBoundary` / `closedCylinderBoundaryUnion` with the complement of this predicate
-  (still to be proved — see SPEC_002), this yields `Homeomorph.subtype` and contradicts
-  `mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion`.
+  (cylinder side is proved; Möbius **`mobiusStripBoundary → ¬ ChartableR2`** in `MobiusChartableBoundary`;
+  full **`↔`** reduces via   **`mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`** to
+  **`∀ p, 0 < p.2 ∧ p.2 < 1 → ChartableR2 ⟦p⟧`**, now discharged in **`MobiusSeamChartableR2`** by
+  **`chartableR2_mobiusQuotientMk_of_interior_height`**. The unconditional theorem
+  **`mobiusStrip_not_homeomorphic_closedCylinder`** is also in **`MobiusSeamChartableR2`**.
 
-  This file proves the **invariance** and the **conditional** Möbius vs cylinder conclusion.
+  This file proves **`ChartableR2`** invariance and the **conditional** packaging
+  **`mobiusStrip_not_homeomorphic_closedCylinder_of_*`**; the fully instantiated M-FINAL lives in **`MobiusSeamChartableR2`**.
 -/
 
 import Mathlib.Topology.Homeomorph.Lemmas
+import Mathlib.Topology.Maps.Basic
 
+import RepresentationalRegress.ChartableR2Neighbor
 import RepresentationalRegress.CylinderBoundary
+import RepresentationalRegress.CylinderChartableBoundary
 import RepresentationalRegress.CylinderMobius
-import RepresentationalRegress.HalfPlaneVsPlane
+import RepresentationalRegress.MobiusChartableBoundary
 import RepresentationalRegress.MobiusCylinderBoundaryContrast
 
 noncomputable section
@@ -21,17 +28,10 @@ noncomputable section
 namespace RepresentationalRegress
 
 open scoped Topology
+open Topology
 open Set
 
 variable {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-
-/-- There is an **open** neighborhood of `x` homeomorphic to the plane `R2`. -/
-def ChartableR2 (x : X) : Prop :=
-  ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ Nonempty (Subtype U ≃ₜ R2)
-
-theorem chartableR2_of_open_embeds_plane (x : X) {U : Set X} (hUo : IsOpen U) (hx : x ∈ U)
-    (h : Nonempty (Subtype U ≃ₜ R2)) : ChartableR2 x :=
-  ⟨U, hUo, hx, h⟩
 
 /-- Homeomorphisms preserve `ChartableR2`. -/
 theorem Homeomorph.chartableR2_iff (e : X ≃ₜ Y) (x : X) :
@@ -73,6 +73,24 @@ theorem mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary
   have hsub : (Subtype mobiusStripBoundary) ≃ₜ (Subtype closedCylinderBoundaryUnion) :=
     h.subtype hbij
   exact mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion.false hsub
+
+/-- Same as `mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary` with the cylinder side
+discharged by `closedCylinder_boundaryUnion_iff_not_chartableR2`. -/
+theorem mobiusStrip_not_homeomorphic_closedCylinder_of_mobius_boundary_chartable
+    (hM : ∀ x : MobiusStrip, x ∈ mobiusStripBoundary ↔ ¬ ChartableR2 x) :
+    IsEmpty (MobiusStrip ≃ₜ ClosedCylinder) :=
+  mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary hM
+    closedCylinder_boundaryUnion_iff_not_chartableR2
+
+/-- **M-FINAL from height–interior `ChartableR2`** once **`∀ p, 0 < p.2 ∧ p.2 < 1 → ChartableR2 ⟦p⟧`**
+  is proved (see **`chartableR2_mobiusQuotientMk_of_interior_height`** in **`MobiusSeamChartableR2`**). -/
+theorem mobiusStrip_not_homeomorphic_closedCylinder_of_forall_off_edge_chartable
+    (h :
+      ∀ p : MobiusFundamentalDomain, 0 < p.2.val ∧ p.2.val < 1 →
+        ChartableR2 (Quotient.mk mobiusSetoid p)) :
+    IsEmpty (MobiusStrip ≃ₜ ClosedCylinder) :=
+  mobiusStrip_not_homeomorphic_closedCylinder_of_mobius_boundary_chartable
+    (mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable h)
 
 end RepresentationalRegress
 

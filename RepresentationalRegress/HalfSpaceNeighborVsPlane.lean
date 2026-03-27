@@ -14,6 +14,8 @@ import Mathlib.Topology.MetricSpace.Basic
 import Mathlib.Topology.Constructions
 import Mathlib.Topology.Homotopy.Contractible
 import Mathlib.Topology.Separation.Basic
+import Mathlib.Topology.Homeomorph.Lemmas
+import Mathlib.Analysis.Normed.Module.Ball.Homeomorph
 
 import RepresentationalRegress.HalfPlaneVsPlane
 
@@ -255,6 +257,135 @@ theorem isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2 {V : Set H2} (hV : IsOpen
       ψ.toHomotopyEquiv.simplyConnectedSpace
     exact φ.symm.toHomotopyEquiv.simplyConnectedSpace
   exact notSimplyConnected_punctured_open_neighborhood_zero_R2 hU_open h0U sc_punct
+
+/-- **Open** `O ⊆ R2` **and** **open** `V ⊆ H2` **with** **`0 ∈ V`**: **`Subtype V` ** **is not**
+homeomorphic to **`Subtype O`** (same local obstruction as global `R²`, via a small ball in `O`).
+-/
+theorem isEmpty_homeomorph_subtype_openH2_zero_nbhd_subtype_openPlane {V : Set H2}
+    (hV : IsOpen V) (h0 : (0 : H2) ∈ V) {O : Set R2} (hO : IsOpen O) :
+    IsEmpty (Subtype V ≃ₜ Subtype O) := by
+  classical
+  refine ⟨fun e => ?_⟩
+  rcases exists_rnBall_nhds_subset_halfspace_open hV h0 with ⟨ε, hε, hball⟩
+  let z0 : Subtype V := ⟨(0 : H2), h0⟩
+  let p : R2 := (e z0).val
+  have hpO : p ∈ O := (e z0).property
+  obtain ⟨δ, hδpos, hballδ⟩ :=
+    (nhds_basis_ball (x := p)).mem_iff.mp (IsOpen.mem_nhds hO hpO)
+  let B : Set R2 := Metric.ball p δ
+  have hBO : B ⊆ O := hballδ
+  have hB_open : IsOpen B := Metric.isOpen_ball
+  let W : Set (Subtype V) :=
+    { w : Subtype V | (e w).val ∈ B }
+  have hW_open : IsOpen (W : Set (Subtype V)) := by
+    let BO : Set (Subtype O) := Subtype.val ⁻¹' B
+    have hBO_open : IsOpen BO := IsOpen.preimage continuous_subtype_val hB_open
+    have hWe : W = e ⁻¹' BO := by ext w; simp [W, BO, preimage, Set.mem_setOf_eq]
+    rw [hWe]; exact continuous_def.mp e.continuous BO hBO_open
+  have hz0W : z0 ∈ W := by simp [W, B, hδpos, p]
+  let U_H : Set H2 := Subtype.val '' W
+  have hU_op : IsOpen (U_H : Set H2) :=
+    (IsOpen.isOpenEmbedding_subtypeVal hV).isOpenMap W hW_open
+  have h0U : (0 : H2) ∈ U_H := ⟨z0, hz0W, rfl⟩
+  let φ : Subtype W → H2 := fun w => (w.val.val : H2)
+  have hφ_open : IsOpenEmbedding φ :=
+    (IsOpen.isOpenEmbedding_subtypeVal hV).comp (IsOpen.isOpenEmbedding_subtypeVal hW_open)
+  have hφ_range : Set.range φ = U_H := by
+    ext h
+    constructor
+    · rintro ⟨w, rfl⟩
+      exact ⟨w.val, w.property, rfl⟩
+    · rintro ⟨v, hvW, heq⟩
+      exact ⟨⟨v, hvW⟩, heq⟩
+  have χSW : Subtype (Set.range φ) ≃ₜ Subtype W :=
+    (Topology.IsEmbedding.toHomeomorph hφ_open.isEmbedding).symm
+  have χ_congr : Subtype (Set.range φ) ≃ₜ Subtype U_H :=
+    Homeomorph.setCongr (by simp [hφ_range] : (Set.range φ : Set H2) = U_H)
+  have χUH_W : Subtype U_H ≃ₜ Subtype W :=
+    χ_congr.symm.trans χSW
+  let BO : Set (Subtype O) := Subtype.val ⁻¹' B
+  have hW_eq : W = e ⁻¹' BO := by
+    ext w
+    simp [W, BO, mem_preimage, Set.mem_setOf_eq]
+  have hW_BO : Subtype W ≃ₜ Subtype BO := e.sets hW_eq.symm
+  have hBO_SubB : Subtype BO ≃ₜ Subtype B :=
+    Homeomorph.mk
+      (Equiv.mk
+        (fun x => ⟨(x.val : R2), x.property⟩)
+        (fun x => ⟨⟨x.val, hBO x.property⟩, by simpa [BO, mem_preimage] using x.property⟩)
+        (fun x => by ext1; rfl)
+        (fun x => by ext1; rfl))
+      (Continuous.subtype_mk
+        (continuous_subtype_val.comp continuous_subtype_val) fun x => x.property)
+      (Continuous.subtype_mk
+        (Continuous.subtype_mk continuous_subtype_val fun x => hBO x.property)
+        fun x : Subtype B =>
+          show BO ⟨x.val, hBO x.property⟩ from x.property)
+  let uball := OpenPartialHomeomorph.univBall (E := R2) (P := R2) (c := p) δ
+  have hBall_target : uball.target = B := by
+    simpa [B] using OpenPartialHomeomorph.univBall_target (c := p) (E := R2) (P := R2) hδpos
+  have hBall_source : uball.source = (univ : Set R2) := by
+    dsimp [uball]
+    exact OpenPartialHomeomorph.univBall_source (c := p) (E := R2) (P := R2) δ
+  let ιB : Subtype B ≃ₜ R2 :=
+    (Homeomorph.setCongr hBall_target.symm).trans uball.toHomeomorphSourceTarget.symm
+      |>.trans (Homeomorph.setCongr hBall_source)
+      |>.trans (Homeomorph.Set.univ R2)
+  have hW_R2 : Nonempty (Subtype W ≃ₜ R2) := ⟨hW_BO.trans (hBO_SubB.trans ιB)⟩
+  rcases hW_R2 with ⟨ξ⟩
+  have hUH_R2 : Nonempty (Subtype U_H ≃ₜ R2) := ⟨χUH_W.trans ξ⟩
+  have hE : IsEmpty (Subtype U_H ≃ₜ R2) :=
+    isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2 hU_op h0U
+  exact hE.false hUH_R2.some
+
+/-- `s ⊆ Subtype V` is homeomorphic to its coercion image in `H2`. -/
+noncomputable def homeomorph_subtypeVal_image {V : Set H2} (s : Set (Subtype V)) :
+    s ≃ₜ Subtype ((Subtype.val : Subtype V → H2) '' s) :=
+  IsEmbedding.subtypeVal.homeomorphImage s
+
+/--
+  **Disjointness of a half-space patch and a global `ℝ²` patch at one point.**
+
+  If `x ∈ U` with `Subtype U ≃ Subtype V` (`V ⊆ H2` open, `0 ∈ V`) sending `x` to `0`, and
+  `x ∈ W` with `Subtype W ≃ₜ R2`, we contradict `isEmpty_homeomorph_subtype_openH2_zero_nbhd_subtype_openPlane`.
+-/
+theorem false_of_open_halfspace_plane_charts_intersect {X : Type*} [TopologicalSpace X] {U W : Set X}
+    (hU : IsOpen U) (hW : IsOpen W) {x : X} (hxU : x ∈ U) (hxW : x ∈ W) {V : Set H2}
+    (hV : IsOpen V) (_h0 : (0 : H2) ∈ V) (φ : Subtype U ≃ₜ Subtype V)
+    (hφx : (φ ⟨x, hxU⟩).val = (0 : H2)) (ξ : Subtype W ≃ₜ R2) : False := by
+  classical
+  let sU : Set (Subtype U) := { u : Subtype U | u.val ∈ W }
+  let sW : Set (Subtype W) := { w : Subtype W | w.val ∈ U }
+  have hsUo : IsOpen (sU : Set (Subtype U)) := IsOpen.preimage continuous_subtype_val hW
+  have hsWo : IsOpen (sW : Set (Subtype W)) := IsOpen.preimage continuous_subtype_val hU
+  let β : sU ≃ₜ sW :=
+    Homeomorph.mk
+      (Equiv.mk
+        (fun u => ⟨⟨u.val.val, u.property⟩, u.val.property⟩)
+        (fun w => ⟨⟨w.val.val, w.property⟩, w.val.property⟩)
+        (fun u => Subtype.ext (Subtype.ext rfl))
+        (fun w => Subtype.ext (Subtype.ext rfl)))
+      (by
+        refine Continuous.subtype_mk (Continuous.subtype_mk ?_ fun u => u.property) fun u => u.val.property
+        exact continuous_subtype_val.comp continuous_subtype_val)
+      (by
+        refine Continuous.subtype_mk (Continuous.subtype_mk ?_ fun w => w.property) fun w => w.val.property
+        exact continuous_subtype_val.comp continuous_subtype_val)
+  have φimg : IsOpen (φ '' sU : Set (Subtype V)) := φ.isOpenMap sU hsUo
+  have ξimg : IsOpen (ξ '' sW : Set R2) := ξ.isOpenMap sW hsWo
+  let φs : sU ≃ₜ φ '' sU := Homeomorph.image φ sU
+  let ξs : sW ≃ₜ ξ '' sW := Homeomorph.image ξ sW
+  let η : φ '' sU ≃ₜ ξ '' sW := φs.symm.trans (β.trans ξs)
+  let VH : Set H2 := Subtype.val '' (φ '' sU : Set (Subtype V))
+  have hVHo : IsOpen (VH : Set H2) :=
+    (IsOpen.isOpenEmbedding_subtypeVal hV).isOpenMap _ φimg
+  have hxsU : (⟨x, hxU⟩ : Subtype U) ∈ sU := hxW
+  have hφmem : φ ⟨x, hxU⟩ ∈ φ '' sU := ⟨⟨x, hxU⟩, hxsU, rfl⟩
+  have h0VH : (0 : H2) ∈ VH := ⟨φ ⟨x, hxU⟩, hφmem, hφx⟩
+  let OR : Set R2 := ξ '' sW
+  have η' : Subtype VH ≃ₜ Subtype OR :=
+    (homeomorph_subtypeVal_image (φ '' sU)).symm.trans η
+  exact (isEmpty_homeomorph_subtype_openH2_zero_nbhd_subtype_openPlane hVHo h0VH ξimg).false η'
 
 end RepresentationalRegress
 

@@ -48,8 +48,10 @@ theorem representational_regress_master_v2_halfLineModel :
   euclideanHalfSpace1_not_homeomorphic_euclidean1
 
 /-- Bundled “v2” claims for citation (`SPEC_002` P2-2): master + 1D half-space obstruction.
-`MobiusStrip ≄ₜ ClosedCylinder` is intentionally **omitted** until the winding / boundary lemma
-chain is complete (see `CylinderMobiusNonhomeo.lean` for a proved `AddCircle` sublemma). -/
+Closed cylinder **C4** is **`closedCylinder_boundaryUnion_iff_not_chartableR2`** (`CylinderChartableBoundary`).
+Möbius **C4** and unconditional **M-FINAL** (**`mobiusStrip_not_homeomorphic_closedCylinder`**) are proved in
+**`MobiusSeamChartableR2`** (**`chartableR2_mobiusQuotientMk_of_interior_height`**) with packaging from **`ChartableR2Bridge`**.
+See **`CylinderMobiusNonhomeo.lean`** for optional Route W lemmas. -/
 abbrev RepresentationalRegressMasterV2 (R : RepresentationalSystem.{u}) : Prop :=
   representational_regress_master_claim R ∧
     IsEmpty (EuclideanHalfSpace 1 ≃ₜ EuclideanSpace ℝ (Fin 1))

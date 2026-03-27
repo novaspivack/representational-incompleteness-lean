@@ -1,6 +1,6 @@
 # Representational Regress — theorem inventory (Lean names)
 
-**Last updated:** 2026-03-25 — paired with `MANIFEST.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, and `lake build RepresentationalRegress`.  
+**Last updated:** 2026-03-27 — **0** `sorry` in `RepresentationalRegress/`; **M-FINAL** **`mobiusStrip_not_homeomorphic_closedCylinder`**; seam charts + **`chartableR2_mobiusQuotientMk_of_interior_height`** (incl. equator **`chartableR2_mobiusQuotientMk_of_left_seam_half`**). Counterexamples **`not_mem_image_mobiusFDTrigCoord_*`**, **`ne_image_mobiusFDTrigCoord_mobiusSeamSaturatedPatch_sheetInterior`** remain documented. Paired with `MANIFEST.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, `docs/ADVISOR_OVERVIEW.md`, and `lake build RepresentationalRegress`.  
 **Purpose:** Index of principal `def`s / `theorem`s by module.
 
 ---
@@ -15,16 +15,24 @@
 | `Lawvere` | `lawvere_fixed_point_Type`, `lawvere_fixed_point_corollary_no_universal` |
 | `LawvereCCCType` | `lawvereBinary`, `curry_lawvereBinary`, `lawvere_universal_iff_surjective_curry`, `lawvere_fixed_point_MonoidalClosedType` |
 | `Orientability` | `RepresentationalSeparationInvariant`, T₂ homeomorphism invariance, `surjective_continuous_maps_need_not_preserve_t2` |
-| `CylinderMobius` | Models + relation: `mobiusRel₀`, compact Hausdorff `MobiusStrip`, closed graph, connected boundary; see table below |
+| `CylinderMobius` | Models + relation: `mobiusRel₀`, compact Hausdorff `MobiusStrip`, closed graph, connected boundary; **`mobiusClass_eq_singleton_of_Ioo_fx`** (vertical interior off seam); see table below |
 | `CylinderMobiusNonhomeo` | Toward punchline: `two_zsmul_not_injective_addCircle_twoPi` |
 | `PuncturedPlaneNotSimplyConnected` | `notSimplyConnected_complex_ne_zero`, `notSimplyConnected_punctured_open_unit_ball`, `puncturedBall_loop_not_homotopic_const`; **scaled loop** `puncturedBallLoopOfReal` / `puncturedBall_loopOfReal_not_homotopic_const` (`exp` covering + path lifting) |
 | `CylinderBoundary` | `ClosedCylinder`, `closedCylinder_boundary`, `closedCylinder_boundary_eq_union`, connected faces, disjoint faces, `not_isConnected_closedCylinderBoundaryUnion` (two circles disconnect) |
 | `HalfLineVsLine` | 1D half-space vs line: `euclideanHalfSpace1_not_homeomorphic_euclidean1`, `euclideanFinOneHomeoReal`, plumbing lemmas |
 | `HalfPlaneVsPlane` | 2D half-space vs plane: `euclideanHalfSpace2_not_homeomorphic_euclidean2` (punctured half-plane vs punctured `ℝ²` / simple connectivity); `complexNeZeroHomeoPuncturedE2`, `puncturedHalfPlaneHomeoH2NeZero`, `notSimplyConnected_punctured_E2`; **`tendsto_norm_complexHomeoE2_nhds_zero`** (shrink `‖complexHomeoE2 z‖` as `z → 0`, for half-ball vs `ℝ²` chart obstruction) |
-| `HalfSpaceNeighborVsPlane` | Local model: `isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2` (open `V ⊆ H2`, `0 ∈ V` ⇒ no `Subtype V ≃ₜ R2`); supporting `puncturedRNBallInVHomeoPuncturedHalfBallR2`, star-convex punctured half-ball |
+| `HalfSpaceNeighborVsPlane` | Local model: `isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2` (open `V ⊆ H2`, `0 ∈ V` ⇒ no `Subtype V ≃ₜ R2`); **`isEmpty_homeomorph_subtype_openH2_zero_nbhd_subtype_openPlane`** (same for `Subtype V ≃ₜ Subtype O` with `O ⊆ R2` open — small ball in `O`); supporting `puncturedRNBallInVHomeoPuncturedHalfBallR2`, star-convex punctured half-ball |
 | `OpenCompactChartObstruction` | Compact nonempty patch of `ℝ²` not homeomorphic to all of `ℝ²` (`not_compactSpace_euclidean_two`, `isEmpty_homeomorph_euclideanClosedSquare_euclidean_two`) |
 | `MobiusCylinderBoundaryContrast` | `mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion` (connected vs disconnected boundary union) |
-| `ChartableR2Bridge` | `ChartableR2`, `Homeomorph.chartableR2_iff`, conditional `mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary` |
+| `ChartableR2Neighbor` | `ChartableR2`, `chartableR2_of_open_embeds_plane`, **`not_chartableR2_of_isOpenEmbedding_H2`**; **`isOpen_setOf_chartableR2`**, **`isClosed_setOf_not_chartableR2`**, **`not_chartableR2_of_tendsto_seq_atTop`** |
+| `ChartableR2Bridge` | `Homeomorph.chartableR2_iff`, **`mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary`**, **`mobiusStrip_not_homeomorphic_closedCylinder_of_mobius_boundary_chartable`**, **`mobiusStrip_not_homeomorphic_closedCylinder_of_forall_off_edge_chartable`**. Unconditional **`mobiusStrip_not_homeomorphic_closedCylinder`**: **`MobiusSeamChartableR2`**. |
+| `CylinderChartableBoundary` | Closed cylinder **C4:** `closedCylinder_boundaryUnion_iff_not_chartableR2`, `openEmbedding_H2_chartAt_center`, `homeomorph_closedCylinder_model_to_H2`, boundary-face `not_chartableR2_*` lemmas |
+| `ChartableR2Models` | `chartableR2_of_isInteriorPoint_finTwo`, `homeomorph_subtype_extChartAt_ball`; cylinder: `isInteriorPoint_closedCylinder_iff`, `chartableR2_closedCylinder_of_Ioo`, `closedCylinder_boundaryUnion_iff_Ioo` |
+| `MobiusChartableBoundary` | **Open cell** `ChartableR2` (**`chartableR2_mobiusQuotientMk_of_planeOpenBox`**, **`chartableR2_mobiusQuotientMk_of_Ioo_square`**, **`chartableR2_mobiusQuotientMk_of_mobiusRel₀`**, **`chartableR2_mobiusQuotientMk_of_mobiusRel₀_chartable_left`**); saturated quotient / plane-box homeomorph toolkit (**`mobiusQuotientMk_subtype_homeomorph`**, **`mobiusQuotientMk_subtype_homeomorph_of_openMap`**); **vertical interior (`0 < x < 1`):** **`mobiusQuot_mk_preimage_image_eq_of_forall_mem_Ioo_fx`**, **`isOpen_mobiusQuotient_image_of_forall_mem_Ioo_fx`**, **`mobiusRel₀_sat_of_forall_mem_Ioo_fx`**, **`injective_mobiusQuotientMk_subtype_of_forall_mem_Ioo_fx`**, **`isOpenMap_mobiusQuotientMk_subtype_of_forall_mem_Ioo_fx`**, **`mobiusQuotientMk_subtype_homeomorph_of_forall_mem_Ioo_fx`** (with **`mobiusClass_eq_singleton_of_Ioo_fx`** in **`CylinderMobius`**); SPEC_003 **B2:** **`injective_mobiusPlaneCoord`**, **`isClosedEmbedding_mobiusPlaneCoord`**, **`exists_isOpen_preimage_mobiusPlaneCoord_of_isOpen`**; **boundary** `H2` strips; **`not_chartableR2_mobiusQuotientMk_of_bot_edge*`**, **`not_chartableR2_mobiusQuotientMk_of_top_edge*`**, **`not_chartableR2_of_mem_mobiusStripBoundary`**; **C4 packaging:** **`quot_mk_not_mem_mobiusStripBoundary_iff`**, **`mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`**. Hypothesis discharged in **`MobiusSeamChartableR2`** via **`chartableR2_mobiusQuotientMk_of_interior_height`**. |
+| `MobiusSeamChartableR2` | SPEC_003 seam **`ChartableR2`**: **trig** **`isOpen_image_mobiusFDTrigCoord_mobiusSeamSaturatedPatch`**, **`chartableR2_mobiusQuotientMk_of_mem_mobiusSeamSaturatedPatch`** (needs **`δ < |t₀-½|`** — excludes equator-center for that window); **left seam** **`chartableR2_mobiusQuotientMk_of_left_seam`** = **`chartableR2_mobiusQuotientMk_of_left_seam_half`** (equator unfold) ∪ **`chartableR2_mobiusQuotientMk_of_left_seam_ne_half`** (trig); **right seam** **`chartableR2_mobiusQuotientMk_of_right_seam`**; **global interior height** **`chartableR2_mobiusQuotientMk_of_interior_height`**; **M-FINAL** **`mobiusStrip_not_homeomorphic_closedCylinder`**. Helper (private): **`continuous_quotientLift_unfold_on_saturatedImage`** (quotient descent for unfold chart). Counterexamples: **`not_mem_image_mobiusFDTrigCoord_mobiusSeamSaturatedPatchSheetInterior_of_horiz_ne`**, **`ne_image_mobiusFDTrigCoord_mobiusSeamSaturatedPatch_sheetInterior`**. |
+| `MobiusSeamChart` | **Vertical seam local model** on `R²`: **`mobiusSeamSlidingCoord`**, **strict window** **`mobiusSeamSlidingStrictCoordSet`**, **`homeomorph_subtype_mobiusSeamSlidingCoord_preimage`**; **`mobiusSeamLocalMap*`** / IFT **`mobiusSeamLocalMapOpenPartialHomeomorph`**; **`mobiusStripTrigCoord`** / **`continuous_mobiusStripTrigCoord`**. Consumed by **`MobiusSeamChartableR2`** (trig charts, sliding windows). |
+| `MobiusSeamChartable` | **`mobiusSeamLeftPatchGluePartners`**, **`mobiusSeamLeftPatch_mk_preimage_image_eq`**. Saturated patches **`mobiusSeamSaturatedPatch`**, **`isOpen_mobiusSeamSaturatedPatch`**, **`isOpen_mobiusSeamLeftPatch`**, **`isOpen_mobiusSeamRightPatch`**, **`mobiusSeamSaturatedPatch_sat`**, sheet interior **`mobiusSeamSaturatedPatchSheetInterior`**, **`mobiusSeamSaturatedPatchSheetInterior_sat`**, **`mobiusQuotientMk_injective_on_mobiusSeamSaturatedPatchSheetInterior`**. |
+| `MobiusSeamTrigInject` | Away from `t = ½` on saturated seam patches: **`sub_half_ne_zero_of_mem_mobiusSeamSaturatedPatch`**, **`mobiusRel₀_of_eq_mobiusFDTrigCoord_of_seamPatch`**, **`onPatch_mobiusFDTrigCoord_eq_iff_mobiusRel₀`**, **`injective_mobiusStripTrigCoord_on_image_quotient_mk_mobiusSeamSaturatedPatch`**, **`image_mobiusStripTrigCoord_quotient_mk_image_mobiusSeamSaturatedPatch`**. Inputs: `MobiusSeamChart` / `MobiusSeamChartable` patch hypotheses + `δ < |t₀ - ½|` where needed. |
 | `Main` | `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterV2`, `representational_regress_master_v2`, `representational_regress_master_v2_halfLineModel` |
 
 ---
@@ -110,7 +118,8 @@
 | `theorem` | `isConnected_univ_Icc01` | `Icc 0 1` subtype connected from `Set.Icc` connected |
 | `theorem` | `isConnected_mobiusBotEdge`, `isConnected_mobiusTopEdge` | `univ ×ˢ {corner}` |
 | `theorem` | `isConnected_mobiusStripBoundary` | Connected images of edges + `Quotient.sound` at corners |
-| *Open* | — | **`IsManifold` with boundary** on `MobiusStrip`; **`IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)`** (`SPEC_002` M-FINAL): **conditional** closure via `ChartableR2Bridge` once boundary `↔ ¬ChartableR2` is proved on both models; **done:** Route W steps 1–4 + subtype boundary contrast (`MobiusCylinderBoundaryContrast`) |
+| `theorem` | **`mobiusStrip_not_homeomorphic_closedCylinder`** | **`SPEC_002` M-FINAL** — in **`MobiusSeamChartableR2`** (see **`ChartableR2Bridge`** for conditional packaging) |
+| *Open* | — | **`IsManifold` with boundary** on `MobiusStrip` as a separate Mathlib-style polish (not required for M-FINAL here) |
 
 ## Closed cylinder / manifold boundary (`CylinderBoundary`)
 
@@ -192,13 +201,35 @@
 | `theorem` | `Homeomorph.chartableR2_iff` | `ChartableR2` is invariant under homeomorphisms |
 | `theorem` | `mobiusStrip_homeomorph_boundary_iff_closedCylinderBoundaryUnion` | From boundary `↔ ¬ChartableR2` on both sides: images match under any `MobiusStrip ≃ₜ ClosedCylinder` |
 | `theorem` | `mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary` | **Conditional M-FINAL:** `IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)` once the two boundary `↔ ¬ChartableR2` lemmas hold |
+| `theorem` | `mobiusStrip_not_homeomorphic_closedCylinder_of_mobius_boundary_chartable` | Cylinder biconditional discharged (**`closedCylinder_boundaryUnion_iff_not_chartableR2`**) |
+| `theorem` | `mobiusStrip_not_homeomorphic_closedCylinder_of_forall_off_edge_chartable` | From **`∀ p, 0 < t < 1 → ChartableR2 ⟦p⟧`** + **`mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`** |
+| `theorem` | **`mobiusStrip_not_homeomorphic_closedCylinder`** | **Unconditional M-FINAL** — see **`MobiusSeamChartableR2`** |
+
+## Chartable ℝ² neighbor toolkit (`ChartableR2Neighbor`)
+
+| Kind | Lean name | Notes |
+|------|-----------|--------|
+| `theorem` | `isOpen_setOf_chartableR2`, `isClosed_setOf_not_chartableR2` | Complement of plane-chartable points is closed |
+| `theorem` | `not_chartableR2_of_tendsto_seq_atTop` | A seq of **`¬ ChartableR2`** points tending to `x` ⇒ **`¬ ChartableR2 x`** |
+
+## Möbius `ChartableR2` / boundary (`MobiusChartableBoundary`)
+
+| Kind | Lean name | Notes |
+|------|-----------|--------|
+| `theorem` | `chartableR2_mobiusQuotientMk_of_planeOpenBox`, `chartableR2_mobiusQuotientMk_of_Ioo_square` | Strict planar cell / open box quotient charts |
+| `theorem` | `chartableR2_mobiusQuotientMk_of_mobiusRel₀`, `chartableR2_mobiusQuotientMk_of_mobiusRel₀_chartable_left` | `ChartableR2 ⟦·⟧` constant on `mobiusRel₀` classes (either quoted side) |
+| `def` / `theorem` | `mobiusPlaneOpenBox`, `mobiusPlaneCoord`, `continuous_mobiusPlaneCoord`, `injective_mobiusPlaneCoord`, `isClosedEmbedding_mobiusPlaneCoord`, `exists_isOpen_preimage_mobiusPlaneCoord_of_isOpen`, `isOpen_mobiusQuotient_image_of_saturated`, `mobiusQuotientMk_subtype_homeomorph` | Saturated-open quotient toolbox |
+| `def` / `theorem` | `mobiusBotHStrip*`, `mobiusTopHStrip*`, `mobiusBotHStripHomeomorph`, `mobiusTopHStripHomeomorph` | Boundary collars modeled in **`H2`** (height `t` or `1-t`); bot/top **saturation** + injectivity on strips interior in `x` |
+| `theorem` | `not_chartableR2_mobiusQuotientMk_of_bot_edge_Ioo`, `not_chartableR2_mobiusQuotientMk_of_top_edge_Ioo` | Interior edge points (`0<t<1` in `x`, `t=0` or `1`) |
+| `theorem` | `not_chartableR2_mobiusQuotientMk_of_bot_edge`, `not_chartableR2_mobiusQuotientMk_of_top_edge` | Full edges including **corners** (via **`not_chartableR2_of_tendsto_seq_atTop`**) |
+| `theorem` | `not_chartableR2_of_mem_mobiusStripBoundary` | **`mobiusStripBoundary → ¬ ChartableR2`** |
 
 ---
 
 ## Not machine-checked in this artifact (philosophy / gaps)
 
 - **Deriving `iter_injective`** from minimal data about `represent` alone (in general false — bundled hypothesis).
-- **Cylinder vs Möbius (geometry track):** `CylinderBoundary` proves the **closed** cylinder’s **manifold boundary** is **two disjoint connected** faces and that **their union is not connected** as a subspace (`not_isConnected_closedCylinderBoundaryUnion`). `CylinderMobius` gives **compact Hausdorff** `MobiusStrip` and **connected** `mobiusStripBoundary`. `HalfLineVsLine` proves **`EuclideanHalfSpace 1` ≄ₜ `EuclideanSpace ℝ (Fin 1)`**. **`HalfPlaneVsPlane` proves `EuclideanHalfSpace 2` ≄ₜ `EuclideanSpace ℝ (Fin 2)`** (half-space vs plane contrast). `OpenCompactChartObstruction` gives compact **vs** all of `ℝ²`. `ChartableR2Bridge` gives **conditional** **`IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)`** from boundary `↔ ¬ChartableR2` on both models. `CylinderMobiusNonhomeo` proves **Route W** Steps **1–4**. `MobiusCylinderBoundaryContrast` proves **`mobiusStripBoundary_not_homeomorphic_closedCylinderBoundaryUnion`**. `PuncturedPlaneNotSimplyConnected` proves **`¬ SimplyConnectedSpace`** for **`ℂ \\ {0}`** and the **punctured open unit disk**. **Still open for unconditional M-FINAL:** prove **`∀ x, x ∈ mobiusStripBoundary ↔ ¬ ChartableR2 x`** and the cylinder analogue, then apply `mobiusStrip_not_homeomorphic_closedCylinder_of_chartable_boundary`; or complete Route **W** Steps **5–6**. See **`SPEC_002`**.
+- **Cylinder vs Möbius (geometry track):** `CylinderBoundary` proves the **closed** cylinder’s **manifold boundary** is **two disjoint connected** faces and that **their union is not connected** as a subspace (`not_isConnected_closedCylinderBoundaryUnion`). `CylinderMobius` gives **compact Hausdorff** `MobiusStrip` and **connected** `mobiusStripBoundary`. **`MobiusChartableBoundary`** proves **`mobiusStripBoundary → ¬ ChartableR2`**; **`MobiusSeamChartableR2`** proves interior-height **`ChartableR2`** and **`mobiusStrip_not_homeomorphic_closedCylinder`**. Cylinder **C4**: **`closedCylinder_boundaryUnion_iff_not_chartableR2`**. `HalfLineVsLine`, **`HalfPlaneVsPlane`**, **`HalfSpaceNeighborVsPlane`**, **`OpenCompactChartObstruction`**, **`ChartableR2Bridge`**, **`CylinderMobiusNonhomeo`** (Route W 1–4), **`MobiusCylinderBoundaryContrast`**, **`PuncturedPlaneNotSimplyConnected`**. See **`SPEC_002`**, **`docs/ADVISOR_OVERVIEW.md`**.
 - **HEq / cross-sort:** library uses tagged `OntologicalSlot` for object vs endomorphism contrast; fully general `¬ HEq (hom) (obj)` for arbitrary categories is not a single named deliverable here.
 - **Bundled CCC Lawvere:** concrete theorem is in `Type`; the master package still uses `MonoidalClosed` fragments + `OntologicalSlot`.
 </think>

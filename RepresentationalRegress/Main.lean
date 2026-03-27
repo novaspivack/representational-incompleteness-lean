@@ -6,6 +6,9 @@ import Mathlib.Data.Nat.Basic
 import RepresentationalRegress.Basic
 import RepresentationalRegress.Regress
 import RepresentationalRegress.FixedPoints
+import RepresentationalRegress.SymbolGrounding
+import RepresentationalRegress.LawvereRegressBridge
+import RepresentationalRegress.ChartableR2ConcreteBoundaryModels
 import RepresentationalRegress.Orientability
 import RepresentationalRegress.HalfLineVsLine
 import RepresentationalRegress.MobiusSeamChartableR2

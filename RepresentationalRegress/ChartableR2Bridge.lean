@@ -84,6 +84,13 @@ theorem not_homeomorphic_of_chartableR2_boundary_contrast
     IsEmpty (X ≃ₜ Y) :=
   ⟨fun e => hincompat.false (e.subtype (homeomorph_boundary_iff_of_chartableR2 e hX hY))⟩
 
+theorem ChartableR2BoundaryModel.not_homeomorphic {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+    (MX : ChartableR2BoundaryModel X) (MY : ChartableR2BoundaryModel Y)
+    (h : IsEmpty (Subtype MX.boundary ≃ₜ Subtype MY.boundary)) :
+    IsEmpty (X ≃ₜ Y) :=
+  not_homeomorphic_of_chartableR2_boundary_contrast MX.boundary_iff_not_chartableR2
+    MY.boundary_iff_not_chartableR2 h
+
 -- ═══════════════════════════════════════════════════════════════════
 -- Concrete Möbius / cylinder packaging (corollaries of the generic theorem)
 -- ═══════════════════════════════════════════════════════════════════

@@ -105,6 +105,10 @@ The generic theorem means the **same obstruction applies to any compact surface 
 - **Mobius vs cylinder:** `RepresentationalRegress.mobiusStrip_not_homeomorphic_closedCylinder`.  
 - **Interior charts:** `RepresentationalRegress.chartableR2_mobiusQuotientMk_of_interior_height`.  
 - **Cylinder boundary sensor:** `RepresentationalRegress.closedCylinder_boundaryUnion_iff_not_chartableR2`.  
-- **Mobius boundary sensor (conditional packaging):** `RepresentationalRegress.mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`.
+- **Mobius boundary sensor (conditional packaging):** `RepresentationalRegress.mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`.  
+- **Bundled boundary models:** `RepresentationalRegress.ChartableR2BoundaryModel`, concrete instances `mobiusStripChartableR2BoundaryModel`, `closedCylinderChartableR2BoundaryModel` (`ChartableR2ConcreteBoundaryModels`).  
+- **Symbol grounding (same math as `RepresentationalSystem`):** `RepresentationalRegress.SymbolSystem`, `symbolGrounding_*`.  
+- **Diagonal / no universal interpreter:** `RepresentationalRegress.no_universal_parametric_unary_nat`, `lawvere_fixed_point_stays_representational` (`LawvereRegressBridge`).  
+- **Schematic QM / measurement chain (hypotheses only, no axioms):** `RepresentationalRegress.QuantumObserverChainHypothesis`, `QuantumObserverChainHypothesis.not_homeomorphic_mobiusStrip`.
 
 For a full Lean name index, use **`THEOREM_INVENTORY.md`**.

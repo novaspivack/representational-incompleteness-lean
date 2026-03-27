@@ -67,6 +67,16 @@ theorem not_chartableR2_of_isOpenEmbedding_H2 {X : Type*} [TopologicalSpace X] {
   exact false_of_open_halfspace_plane_charts_intersect (U := U) (W := W) hU hWo hxU hxW hVo h0V φ
       hφx ξ
 
+/-! ## Bundled boundary sensors (`ChartableR2Bridge`, applications) -/
+
+/-- A **ChartableR2 boundary model**: the chosen subset is exactly the complement of `ChartableR2`.
+
+  Use with `RepresentationalRegress.ChartableR2BoundaryModel.not_homeomorphic` and concrete
+  instances in `ChartableR2ConcreteBoundaryModels`. -/
+structure ChartableR2BoundaryModel (X : Type*) [TopologicalSpace X] where
+  boundary : Set X
+  boundary_iff_not_chartableR2 : ∀ x, x ∈ boundary ↔ ¬ ChartableR2 x
+
 end RepresentationalRegress
 
 end

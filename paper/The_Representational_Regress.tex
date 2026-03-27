@@ -104,45 +104,98 @@ symbolic grounding, diagonal arguments, and a template for observer--apparatus
 topologies.
 
 \subsection{Summary of Results}
-The formalization proves, with zero \texttt{sorry} and no custom axioms:
+The formalization proves, with zero \texttt{sorry} and no custom axioms, a
+\textbf{layered} constraint on representational systems. The layers are
+logically independent: one can accept the topological results without leaning on
+an infinite tower, and one can study the tower without the cylinder/M\"obius
+contrast. Together they imply that ``more representation'' is not a generic path
+from one global geometric type to another.
+
 \begin{enumerate}[label=(\alph*)]
 \item \textbf{Categorical regress and Lawvere wall} (\S\ref{sec:regress}):
-  unbounded distinct iterates of \texttt{represent}; Lawvere in \texttt{Type} /
-  CCC flavor; \texttt{OntologicalSlot} disjointness so the wall does not
-  dissolve into a bare object witness.
-\item \textbf{Generic boundary obstruction} (\S\ref{sec:generic},
-  \S\ref{sec:mfinal}): if two compact models carry \texttt{ChartableR2}
-  boundary sensors and their boundary subspaces are not homeomorphic, the
-  ambient spaces are not homeomorphic. The cylinder vs.\ M\"obius strip is the
-  flagship witness (\textbf{M-FINAL}).
+  under a bundled non-collapse hypothesis on iterates of \texttt{represent},
+  there are infinitely many formally distinct meta-levels; Lawvere's theorem in
+  \texttt{Type} / CCC form is complemented by \texttt{OntologicalSlot}, so a
+  fixed-point tally cannot erase the morphism-vs-global-element typing.
+\item \textbf{Universal topological obstruction} (\S\ref{sec:generic},
+  \S\ref{sec:mfinal}): Theorem~\ref{thm:generic} states a \emph{template}---if two
+  spaces admit subsets characterized as exactly the non-\texttt{ChartableR2}
+  points, and if those boundary \emph{subspaces} are not homeomorphic, then the
+  ambient spaces are not homeomorphic. \textbf{M-FINAL} is a fully worked
+  compact witness (cylinder vs.\ M\"obius strip). Any future domain whose
+  state space can be modeled with the same sensor pattern and an incompatible
+  boundary subtype imports the same conclusion; no separate bridge argument is
+  required.
 \item \textbf{Extended master bundle} (\S\ref{sec:extended}):
   \texttt{representational\_regress\_master\_extended} adjoins the $1$D
-  half-space obstruction and M-FINAL to the core master claim.
+  half-space non-homeomorphism and M-FINAL to the core master conjunction.
 \item \textbf{Cross-domain bridges} (\S\ref{sec:instantiations}):
   \texttt{SymbolSystem}, \texttt{LawvereRegressBridge},
   concrete \texttt{ChartableR2BoundaryModel}s, and
-  \texttt{QuantumObserverChainHypothesis}.
+  \texttt{QuantumObserverChainHypothesis}, making the obstruction's
+  \emph{hypothesis shape} explicit for grounding, diagonal, and
+  observer--readout readings.
 \end{enumerate}
+
+\paragraph{Significance and what is \emph{not} being claimed.}
+Much informal discussion stops at \emph{infinite regress}: every
+meta-representation invites another, so a desired ``closure'' fails. That
+phenomenon is real in the formalism (item~(a)), but it is not the deepest
+punchline. The topological strand (item~(b)) is \textbf{not} a complaint about
+non-termination: homeomorphism obstructions are \emph{finite-data invariants} in
+spirit---two spaces are either homeomorphic or not, regardless of whether one
+enumerates infinitely many modeling steps. The barrier is that \emph{no}
+continuous global identification (a homeomorphism) can exist between disparate
+types once the \texttt{ChartableR2}-boundary pattern and subtype mismatch are in
+place. In particular, the obstacle is not removed by ``more compute,'' longer
+iterates, richer self-models, or architectural reparameterization if those
+changes do not alter the underlying topological type of the modeled substrate.
+Infinity can distract from the point; the point is \textbf{wrong type}, not
+\textbf{inexhaustible queue}.
+
+\paragraph{Utility.}
+For any application---symbolic AI, formal theories, measurement chains, or
+philosophical models---the workflow is: (1)~encode the system (or its
+state space) in sufficient topological detail to verify the boundary biconditionals,
+(2)~compare boundary subspaces up to homeomorphism, (3)~invoke the general
+lemma or a bundled model. If the premises hold, the obstruction applies; if they
+fail, the obstacle was never licensed. That conditional structure is what keeps
+the mathematics honest while still delivering a \emph{portable} gate.
 
 \subsection{Contributions and Novelty Claims}
 \begin{enumerate}[label=(\arabic*)]
 \item \textbf{\texttt{OntologicalSlot}} --- inductive tagging of morphism
-  slots versus global-element slots; ``wall'' lemmas follow from constructor
-  disjointness yet encode the categorical moral often read off Lawvere-style
-  constructions. [\novel]
+  slots versus global-element slots; wall lemmas follow from constructor
+  disjointness yet make the Lawvere-adjacent moral explicit inside the type
+  discipline. [\novel]
 \item \textbf{\texttt{ChartableR2} spine + seam--equator charts} --- intrinsic
-  $\mathbb{R}^2$ chartability as boundary sensor; piecewise unfolding at the
-  quotient equator. [\novel\ application / technique]
-\item \textbf{Generic obstruction lemma}
-  (\texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}) ---
-  factors the cylinder/M\"obius argument for reuse. [\novel]
-\item \textbf{Supplementary lemmas and structures} --- \texttt{SymbolSystem},
+  $\mathbb{R}^2$ chartability as a definable ``planar interior vs.\ boundary''
+  sensor; constructive charts through the quotient seam including the equator via
+  piecewise unfolding. [\novel\ application / technique]
+\item \textbf{General boundary-contrast obstruction}
+  (\texttt{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}) --- a
+  single theorem that \emph{packages} the logical move used in M-FINAL: any two
+  spaces hit the same wall once their \texttt{ChartableR2}-co-characterized
+  boundaries are topologically incompatible. Individual proofs of
+  non-homeomorphism are classical; a \emph{reusable, machine-checked} lemma with
+  this generality, wired to a concrete compact witness and to a categorical
+  regress bundle, is---to our knowledge---\emph{not} standard in the
+  philosophy-of-mind or AI-safety literatures (where topology more often appears
+  metaphorically). We claim distinctiveness for the \textbf{integrated,
+  checkable} template, not for the elementary fact that the M\"obius strip and
+  the cylinder differ. [\novel]
+\item \textbf{Supplementary structures} --- \texttt{SymbolSystem},
   \texttt{LawvereRegressBridge}, bundled boundary models, and
-  \texttt{QuantumObserverChainHypothesis} make the dependence of downstream
-  claims on the generic obstruction explicit. [\novel]
-\item \textbf{Classical core:} Lawvere (1969), standard facts about the cylinder
-  and M\"obius strip, and Cantorian regress patterns; what is new here is
-  machine-checking and their integration in one library.
+  \texttt{QuantumObserverChainHypothesis} spell out which hypotheses must be
+  imported from a domain before the obstruction applies; they do not expand the
+  set of unconditional theorems but sharpen \emph{where} the gate sits. [\novel]
+\item \textbf{Classical ingredients.} Lawvere's diagonal argument (1969),
+  textbook topology of the cylinder and M\"obius strip, and Cantorian regress
+  patterns precede this work. The contribution is a \textbf{unified,
+  adversarially checked} landscape in which (i)~regress and Lawvere infrastructure,
+  (ii)~a \emph{general} topological obstruction, and (iii)~a discharged witness
+  and extension hooks coexist in one artifact, so that ``compute harder'' is
+  not confusable with ``change homeomorphism type.''
 \end{enumerate}
 
 \subsection{Paper Organization}

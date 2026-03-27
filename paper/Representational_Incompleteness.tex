@@ -2351,8 +2351,6 @@ structural change to the topological type of the substrate.
 
 \item \textbf{No $\mathrm{IsManifold}$ polish.} The M\"obius strip is not given a full Mathlib $\mathrm{IsManifold}$ instance. The proof uses $\mathrm{ChartableR2}$ (open neighborhoods homeomorphic to $\mathbb{R}^2$) as a self-contained predicate, sidestepping the need for a full manifold-with-boundary atlas. This is sufficient for the non-homeomorphism but less elegant than a full atlas approach.
 
-\item \textbf{Route W is incomplete.} An alternative proof via circle-winding / doubling obstructions (Steps~1--4 in \leanref{CylinderMobiusNonhomeo.lean}) is partially formalized. Step~5 (transport under a hypothetical global homeomorphism) is not proved. The flagship proof via $\mathrm{ChartableR2}$ is complete and does not depend on Route~W.
-
 \item \textbf{\texttt{QuantumObserverChainHypothesis}.} This definition only
   bundles topological assumptions (boundary set, \texttt{ChartableR2}
   biconditional,\newline subtype non-homeomorphism to an incompatible target
@@ -2623,7 +2621,6 @@ fixed standard rather than debated informally.
   the general obstruction class.
 \item A full $\mathrm{IsManifold}$ instance for
   $\mathrm{MobiusStrip}$.
-\item Completion of the optional Route~W winding track.
 \item A more abstract Lawvere statement for general cartesian closed
   categories.
 \item Native higher-categorical horn closures ($2$-category and
@@ -2670,7 +2667,6 @@ fixed standard rather than debated informally.
 \leanref{MobiusSeamTrigInject} & Trig injectivity on quotient windows \\
 \leanref{MobiusSeamChartableR2} & Seam charts (trig + unfold); interior-height; \textbf{M-FINAL} \\
 \leanref{MobiusCylinderBoundaryContrast} & Boundary subspaces not homeomorphic \\
-\leanref{CylinderMobiusNonhomeo} & Route W (optional; Steps 1--4) \\
 \leanref{HalfLineVsLine} & 1D half-space $\neq$ line \\
 \leanref{HalfPlaneVsPlane} & 2D half-space $\neq$ plane \\
 \leanref{HalfSpaceNeighborVsPlane} & Local half-space $\neq$ open plane patch \\
@@ -2806,7 +2802,7 @@ lemma or hypothesis.''  The three pillars are shaded.
 
 \noindent
 \textbf{Summary statistics.}
-The Lean development contains 382 theorems and 105 lemmas across 31
+The Lean development contains 361 theorems and 98 lemmas across 30
 source files, with zero \texttt{sorry} and no axioms beyond Lean~4's
 standard foundation (propositional extensionality, quotients, choice).
 The Key Theorem Index (Appendix~\ref{app:theorems}) lists the 35

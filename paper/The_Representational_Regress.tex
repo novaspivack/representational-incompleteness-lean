@@ -682,30 +682,55 @@ defaults a controversial premise to true.
 Some accounts distinguish representational self-reference from a stronger notion
 of \emph{self-presence} (first-person givenness, non-representational
 acquaintance, etc.). Premise~\textbf{P2} is \emph{not} a theorem in the library:
-it says only that, for the purposes of a topological comparison, one class of
-phenomena is modeled by a space globally akin to $\mathrm{MobiusStrip}$ (here:
-one connected boundary band in the witness pair, quotient non-orientability in
-the usual informal picture) and another class by a space akin to
-$\mathrm{ClosedCylinder}$ (two disjoint boundary components, ``two-sided''
-organization in the model).
+it says only that, for the purposes of a topological comparison, the
+representational substrate is modeled by a space whose
+\texttt{ChartableR2}-detected boundary has one connectivity pattern (e.g.\
+the cylinder's two disjoint components), while the target phenomenon is modeled
+by a space whose boundary has a different, incompatible pattern (e.g.\ the
+M\"obius strip's single connected band---but the argument is
+\emph{not specific to the M\"obius strip}: Theorem~\ref{thm:generic} applies
+to \emph{any} pair of spaces with incompatible
+\texttt{ChartableR2}-co-characterized boundaries, including Klein bottles,
+higher-genus non-orientable surfaces, or any other topological witness that
+satisfies the three hypotheses).
 
 \paragraph{What is proved.}
 Theorem~\ref{thm:mfinal} is unconditional:
-$\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$. The proof
-localizes ``boundary'' via \texttt{ChartableR2} and compares boundary
-subspaces. Any other pair of compact spaces that admit the same pattern of
-biconditionals and subtype incompatibility is also not homeomorphic, by
-Theorem~\ref{thm:generic}.
+$\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$, as a concrete
+discharged witness.  But the engine is
+Theorem~\ref{thm:generic}: any two spaces whose
+\texttt{ChartableR2}-co-characterized boundaries are subtype-incompatible
+are not homeomorphic.  Substituting a different target (Klein bottle,
+projective plane, etc.)\ for the M\"obius strip does not evade the
+argument; it merely changes which boundary incompatibility is invoked.
+The adversary cannot escape by choosing a different non-orientable model.
 
-\paragraph{Conditional consequence.}
-If~(i)~one treats iterative representation as living on a substrate whose
-\texttt{ChartableR2}-detected boundary matches the \emph{cylinder} side of the
-development, and~(ii)~one accepts~P2 for a target phenomenon modeled on the
-\emph{M\"obius} side, then no global homeomorphism can identify that substrate
-with the target: the obstruction is topological. Under those assumptions,
-resource limits (compute, context length, training data) address a different
-question; they do not alter homeomorphism type. Whether~P2 is acceptable is a
-separate philosophical issue; the formal work neither proves nor assumes it.
+\paragraph{Closed routes and admissibility.}
+Multiple adversarial moves are blocked (see \S\ref{sec:noescape}
+for full detail):
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item \emph{Iterate deeper} (Horn~1): the regress is infinite, the Lawvere
+  wall persists at every depth---more meta-levels do not close the gap.
+\item \emph{Use a finite loop} (Horn~2): the iterate dichotomy shows
+  bounded depth cannot host injective self-representation.
+\item \emph{Represent via a different object} (Horn~3): section--retraction
+  readout collapses to an idempotent on the host and the identity on the
+  source; no injective tower on either side.
+\item \emph{Use a partial self-model} (Horn~4): the diagonal blind spot
+  means the information needed for self-capture is precisely the
+  information the partial model cannot represent.
+\item \emph{Restrict to decidable predicates} (Horn~6): the $\mathrm{Bool}$
+  Lawvere horn is closed; finite cardinality does not help.
+\item \emph{Choose a different topological model} (Horn~5): the general
+  lemma applies to any incompatible pair, not just cylinder/M\"obius.
+\end{itemize}
+What remains \textbf{admissible} under P2: the relevant substrate must
+\emph{already} have the target topological type (in which case it was
+never purely representational in the cylinder sense), or the account
+must invoke a discontinuous or non-topological bridge not modeled in
+this formalism.  Scaling, iteration, richer self-models, or architectural
+reparameterization within a fixed topological type are \emph{inadmissible}
+routes to the target.
 
 \subsubsection{Symbol grounding and semantic regress}
 
@@ -717,65 +742,124 @@ type alias \leanref{SymbolSystem} is definitionally identical to
 \leanref{RepresentationalSystem}; lemmas such as
 \leanref{symbolGrounding\_metaRegressArrow\_injective} record that distinct
 natural-number depths correspond to \emph{distinct} endomorphisms of the
-awareness object. Thus semantic ``levels of interpretation'' inherit the same
-non-collapse facts as the categorical tower---not because the formalism defines
-``meaning,'' but because the regress of \emph{structured} interpretation steps is
-what \texttt{metaRegressArrow} tracks.
+awareness object.
+
+\paragraph{Closed routes and admissibility.}
+The horn closures constrain the symbol system on multiple fronts:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item If iterate indices are injective (Horn~1), interpretation levels
+  form an infinite regress with the Lawvere wall intact at every stage.
+\item If iterates collide (Horn~2), the system has only finitely many
+  distinct interpretation levels---a loop too shallow for full
+  self-interpretation.
+\item If the system tries a \emph{partial} interpretation function
+  (Horn~4), the diagonal exclusion
+  (\leanref{lawvere\_diagonal\_not\_in\_range}) guarantees a blind
+  spot: the interpretation cannot represent its own diagonal behavior.
+\item Restricting to decidable predicates (Horn~6) does not help:
+  the $\mathrm{Bool}$-valued Lawvere horn is closed.
+\end{itemize}
+Admissible grounding must therefore come from \emph{outside} the
+representational loop: the system cannot ground itself by iterating
+its own interpretive machinery, whether totally or partially, whether
+with infinite depth or finite.
 
 \subsubsection{Diagonal arguments and self-interpretation}
 
 Lawvere's theorem in \texttt{Type} implies that there is no family
 $s : A \to A \to B$ that realizes every unary $g : A \to B$ as $s(a)$ for some
-parameter $a$, once $B$ carries an endomorphism without fixed points
-(e.g.\ \leanref{no\_universal\_parametric\_unary\_nat} for $B = \mathbb{N}$,
-or \leanref{no\_universal\_parametric\_unary\_bool} for $B = \mathrm{Bool}$
-with $\lnot$---the decidable/computability analogue).
+parameter $a$, once $B$ carries an endomorphism without fixed points.
+\leanref{LawvereRegressBridge} collects the instances and connects them to
+the categorical presentation;
+\leanref{lawvere\_fixed\_point\_stays\_representational} says the
+\texttt{OntologicalSlot} wall persists at every iterate depth.
 
-Crucially, the diagonal obstruction does not require the adversary's
-self-model to be surjective.
-\leanref{lawvere\_diagonal\_not\_in\_range} shows
-that for \emph{any} $s : A \to A \to B$ and any fixed-point-free $f : B \to B$,
-the diagonal function $a \mapsto f(s\,a\,a)$ is \emph{never} equal to $s\,a_0$
-for any $a_0$. In other words, even a \emph{partial} self-interpreter
-necessarily has a blind spot containing its own diagonal---the adversary
-cannot circumvent the obstruction by abandoning totality.
-
-\leanref{LawvereRegressBridge} collects such statements and connects them to the
-categorical presentation: in particular,
-\leanref{lawvere\_fixed\_point\_stays\_representational} says that for every
-$n$ and every object witness $c$, the iterate
-$\mathrm{OntologicalSlot.endo}(\mathrm{represent}^n)$ is unequal to
-$\mathrm{OntologicalSlot.obj}(c)$. So however high the tower of self-applicative
-coding rises inside the type discipline, the formalism still distinguishes the
-morphism-slot tag from the global-element tag---a different statement from
-Lawvere's pointwise fixed-point existence for $B \to B$, but the intended hinge
-between diagonal phenomena and the \texttt{OntologicalSlot} reading of the wall.
+\paragraph{Closed routes and admissibility.}
+The diagonal closures are cumulative:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item \emph{Total self-interpreter} $s : A \to A \to B$: blocked by
+  Lawvere for any $B$ with a fixed-point-free endo
+  (\leanref{no\_universal\_parametric\_unary\_nat} for $\mathbb{N}$,
+  \leanref{no\_universal\_parametric\_unary\_bool} for $\mathrm{Bool}$).
+\item \emph{Partial self-interpreter}: abandoning surjectivity does not
+  help.  \leanref{lawvere\_diagonal\_not\_in\_range} shows that for
+  \emph{any} $s : A \to A \to B$---not necessarily surjective---the
+  diagonal $a \mapsto f(s\,a\,a)$ is never $s\,a_0$ for any $a_0$.
+  The blind spot is exactly the system's own diagonal behavior.
+\item \emph{Restrict to finite / decidable predicates} (Horn~6):
+  $\lnot : \mathrm{Bool} \to \mathrm{Bool}$ is fixed-point-free, so the
+  two-valued case is no easier.
+\item \emph{Climb the tower}: however high the self-applicative coding
+  rises, the $\mathrm{endo} \neq \mathrm{obj}$ distinction persists at
+  every iterate depth.
+\end{itemize}
+Admissible self-interpreters must therefore be \emph{incomplete}: they
+cannot model their own diagonal behavior.  This is not a resource
+limitation (compute, training data, context length) but a structural
+one; it holds for every codomain $B$ admitting a fixed-point-free
+endomorphism, and for every cardinality of $A$.
 
 \subsubsection{Quantum measurement and observer chains}
 
 Talk of apparatus, environment, and Wigner's-friend hierarchies suggests a chain of
 systems, each described relative to a larger ``observer.'' If one ever gives such
 a chain a \emph{topological} state space $\mathrm{Obs}$, together with a subset
-$\partial_{\mathrm{obs}}$ such that membership agrees with
-$\neg\,\mathrm{ChartableR2}$ as in the cylinder/M\"obius story, and if one shows
-that $\partial_{\mathrm{obs}}$ is not homeomorphic to
-$\mathrm{mobiusStripBoundary}$ as a subspace, then
-Theorem~\ref{thm:generic} applies immediately:
-\leanref{QuantumObserverChainHypothesis} is only this data packaged as
-assumptions, and \leanref{QuantumObserverChainHypothesis.not\_homeomorphic\_mobiusStrip}
-is the conclusion $\mathrm{IsEmpty}(\mathrm{Obs} \simeq_t \mathrm{MobiusStrip})$.
-The present library does \emph{not} define Hilbert spaces, observables, or
-projection postulates; any use of the hypothesis structure in physics requires an
-independent argument that the modeled readout topology satisfies its fields.
+$\partial_{\mathrm{obs}}$ whose membership agrees with
+$\neg\,\mathrm{ChartableR2}$, then Theorem~\ref{thm:generic} applies to any
+target space whose boundary subspace is not homeomorphic to
+$\partial_{\mathrm{obs}}$---the M\"obius strip is one such target, but the
+argument works for \emph{any} space with incompatible boundary topology (Klein
+bottle, projective plane, higher non-orientable models, etc.).
+\leanref{QuantumObserverChainHypothesis} packages exactly this data as
+assumptions; the conclusion
+$\mathrm{IsEmpty}(\mathrm{Obs} \simeq_t \mathrm{Target})$ follows for
+any target satisfying the hypotheses.
+
+\paragraph{Closed routes and admissibility.}
+The same horn closures apply to the observer chain:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item Iterating the measurement chain (stacking more
+  apparatus/environment layers) does not change the topological type of
+  the state space (Horns~1--2).
+\item Encoding the observer inside a larger system via
+  section--retraction does not produce an injective tower (Horn~3).
+\item Partial models of the observer--readout process still miss their
+  own diagonal (Horn~4).
+\item Choosing a different non-orientable target does not evade
+  Theorem~\ref{thm:generic} (Horn~5).
+\end{itemize}
+The chain must either introduce genuinely new topological structure at
+some level---not representational iteration of the same type---or
+accept that its boundary organization differs from the target.  The
+library does \emph{not} define Hilbert spaces, observables, or
+projection postulates; any physical application requires an independent
+argument that a concrete model satisfies the hypothesis fields.
 
 \subsection{Scaling of language models and similar systems}
 
 Training larger models extends a representational architecture; it does not, by
 itself, produce a homeomorphism between a given topological model of that
-architecture and a different global model. If the relevant state space is
-modeled with cylinder-type boundary data and a target phenomenon demands
-M\"obius-type data, Theorem~\ref{thm:generic} encodes the sense in which the gap
-is not closed by parameter count or depth alone.
+architecture and a different global model.  Theorem~\ref{thm:generic} is
+indifferent to the choice of target: the cylinder/M\"obius pair is one
+witness, but any target space with incompatible
+\texttt{ChartableR2}-detected boundary is equally blocked.
+
+\paragraph{Closed routes and admissibility.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item More parameters, deeper layers, longer context windows: these
+  extend the architecture \emph{within} a fixed topological type (Horn~1).
+\item Finer-grained self-models built during training: partial
+  self-interpreters still miss their own diagonal (Horn~4).
+\item Switching from infinite-depth to finite-depth loops (e.g.\
+  fixed-iteration transformers): the iterate dichotomy (Horn~2) shows
+  bounded depth cannot host injective self-representation.
+\item Choosing a different target topology does not help: the general
+  lemma covers any pair (Horn~5).
+\end{itemize}
+Admissible paths to a topological type with different boundary
+organization require \emph{structural} change---a different topology
+of the underlying state space---not quantitative extension of the same
+architecture.
 
 \subsection{Relationship to the Trans-Computational Processing argument}
 

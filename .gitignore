@@ -13,3 +13,11 @@ lake-packages/
 **/paper/*.out
 **/paper/*.toc
 **/paper/*.synctex.gz
+
+# LaTeX artifacts if built from repo root by mistake
+/*.aux
+/*.fdb_latexmk
+/*.fls
+/*.log
+/*.out
+/*.synctex.gz

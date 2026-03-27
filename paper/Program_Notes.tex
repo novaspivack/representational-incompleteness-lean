@@ -9,8 +9,8 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 
-\title{Program Notes: A Machine-Checked Formalization of the\\
-Representational Regress and the Topology of Self-Reference}
+\title{Program Notes: A Machine-Checked Formalization of\\
+Representational Incompleteness and the Topology of Self-Reference}
 \author{Working Draft — Not For Distribution}
 \date{\today}
 
@@ -40,7 +40,7 @@ The paper has three audiences:
 
 \section{What The Artifact Proves}
 
-The Lean library \texttt{RepresentationalRegress/} contains the following, with 0 \texttt{sorry}
+The Lean library \texttt{RepresentationalIncompleteness/} contains the following, with 0 \texttt{sorry}
 and 0 custom axioms beyond Lean's logical core + Mathlib:
 
 \subsection{The Regress (known math, cleanly formalized)}
@@ -98,7 +98,7 @@ invariant in a proof assistant for this purpose.
 
 \texttt{representational\_regress\_master}: the conjunction of unbounded distinct meta-levels, Lawvere wall non-dissolution, and $T_2$ homeomorphism invariance.
 
-\texttt{representational\_regress\_master\_extended} (abbrev \texttt{RepresentationalRegressMasterExtended}): extends the above with
+\texttt{representational\_regress\_master\_extended} (abbrev \texttt{RepresentationalIncompletenessMasterExtended}): extends the above with
 \begin{enumerate}
 \item \texttt{IsEmpty (EuclideanHalfSpace 1 $\simeq_t$ EuclideanSpace $\mathbb{R}$ (Fin 1))} (1D boundary-chart obstruction),
 \item \texttt{IsEmpty (MobiusStrip $\simeq_t$ ClosedCylinder)} (\textbf{M-FINAL}).

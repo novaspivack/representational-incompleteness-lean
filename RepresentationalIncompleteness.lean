@@ -1,0 +1,38 @@
+/-
+  Representational Incompleteness — root import (scaffold; see `REPRESENTATIONAL_INCOMPLETENESS_FORMALIZATION_MAP.md`).
+-/
+
+import RepresentationalIncompleteness.Basic
+import RepresentationalIncompleteness.Regress
+import RepresentationalIncompleteness.FixedPoints
+import RepresentationalIncompleteness.Orientability
+import RepresentationalIncompleteness.Lawvere
+import RepresentationalIncompleteness.LawvereCCCType
+import RepresentationalIncompleteness.QuotientHausdorff
+import RepresentationalIncompleteness.CylinderMobius
+import RepresentationalIncompleteness.CylinderMobiusNonhomeo
+import RepresentationalIncompleteness.CylinderBoundary
+import RepresentationalIncompleteness.CylinderChartableBoundary
+import RepresentationalIncompleteness.MobiusCylinderBoundaryContrast
+import RepresentationalIncompleteness.PuncturedPlaneNotSimplyConnected
+import RepresentationalIncompleteness.HalfLineVsLine
+import RepresentationalIncompleteness.HalfPlaneVsPlane
+import RepresentationalIncompleteness.HalfSpaceNeighborVsPlane
+import RepresentationalIncompleteness.OpenCompactChartObstruction
+import RepresentationalIncompleteness.ChartableR2Neighbor
+import RepresentationalIncompleteness.ChartableR2Bridge
+import RepresentationalIncompleteness.ChartableR2Models
+import RepresentationalIncompleteness.MobiusChartableBoundary
+import RepresentationalIncompleteness.MobiusSeamChart
+import RepresentationalIncompleteness.MobiusSeamChartable
+import RepresentationalIncompleteness.MobiusSeamTrigInject
+import RepresentationalIncompleteness.MobiusSeamChartableR2
+import RepresentationalIncompleteness.NoEscapeClosure
+import RepresentationalIncompleteness.Main
+
+namespace RepresentationalIncompleteness
+
+/-- Root anchor for the library. -/
+def programRoot : Unit := ()
+
+end RepresentationalIncompleteness

@@ -1,8 +1,8 @@
-# representational-regress-lean — artifact documentation
+# representational-incompleteness-lean — artifact documentation
 
 **Lean:** `leanprover/lean4:v4.29.0-rc6`  
 **Mathlib:** `v4.29.0-rc6` — use **`lake exe cache get`** after `lake update`  
-**Build:** `lake build RepresentationalRegress` from this directory (`RepresentationalRegress/` has **0** `sorry`)  
+**Build:** `lake build RepresentationalIncompleteness` from this directory (`RepresentationalIncompleteness/` has **0** `sorry`)  
 **Lake deps:** Mathlib only (`lakefile.lean`, `lake-manifest.json`)  
 **Workspace handoff:** `../specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md`  
 **Topology punchline (Möbius vs cylinder):** `../specs/IN-PROCESS/SPEC_002_K7P_TOPOLOGY_PUNCHLINE_AND_PAPER.md`
@@ -38,7 +38,7 @@ Explicitly **not** in scope for Lean: phenomenological immediacy premises, philo
 ## Reproduction
 
 ```bash
-cd representational-regress-lean
+cd representational-incompleteness-lean
 lake update
 lake exe cache get
 lake build

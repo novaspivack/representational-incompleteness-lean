@@ -1,0 +1,1404 @@
+% Representational Incompleteness — LaTeX source (Lean 4 / Mathlib companion library)
+
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{stmaryrd}
+
+% Allow line breaks in long Lean identifiers (\_, namespaces, CamelCase).
+\ExplSyntaxOn
+\tl_new:N \l__rr_leanref_tl
+\NewDocumentCommand \leanref { m }
+  {
+    \tl_set:Nn \l__rr_leanref_tl { #1 }
+    \regex_replace_all:nnN { \c{_} } { \c{_} \c{allowbreak} } \l__rr_leanref_tl
+    \regex_replace_all:nnN { \. } { . \c{allowbreak} } \l__rr_leanref_tl
+    % CamelCase / digit-boundary splits (Lean module and declaration names).
+    \regex_replace_all:nnN { ([a-z])([A-Z]) } { \1 \c{allowbreak} \2 } \l__rr_leanref_tl
+    \regex_replace_all:nnN { ([0-9])([A-Z]) } { \1 \c{allowbreak} \2 } \l__rr_leanref_tl
+    \texttt{\small \tl_use:N \l__rr_leanref_tl }
+  }
+\ExplSyntaxOff
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\novel}{\textcolor{blue!70!black}{[Novel]}}
+\newcommand{\known}{\textcolor{gray}{[Known math]}}
+% Break `theorem`/`definition` head away from long \leanref tags (avoids overfull italic headers).
+\newcommand{\TheoremLeanTag}[1]{%
+  \noindent\textnormal{(\leanref{#1})}\par\noindent}
+% End `amsthm` head paragraph so the declaration tag is not merged into the header line.
+\newcommand{\AfterTheoremHead}{\mbox{}\par}
+
+\title{Representational Incompleteness:\\
+  No Self-Modeling System Can Capture Its Own Diagonal\\[0.3em]
+  {\large A Machine-Checked Barrier with Six Closed Escape Routes}}
+\author{Nova Spivack\\
+Independent Researcher}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+% ============================================================================
+% ABSTRACT
+% ============================================================================
+\begin{abstract}
+\noindent\textbf{Summit theorem (\leanref{representational\_incompleteness}).}
+Any system that models itself---any $s : A \to A \to B$ whatsoever---is
+\emph{necessarily incomplete} with respect to its own diagonal behavior:
+the function $a \mapsto f(s\,a\,a)$ is never equal to any row $s\,a_0$
+of the self-model, for every fixed-point-free $f : B \to B$ and every
+$a_0 \in A$.  No surjectivity, totality, or cardinality assumption on
+$s$ is required.  If $s$ is claimed to be total/surjective, it simply
+cannot exist.
+
+This is \textbf{representational incompleteness}: the analogue of
+G\"odel incompleteness, not for formal theories and provability, but
+for any system that models itself via a parametric family of functions.
+The blind spot is structural---not a resource limitation---and
+persists for every codomain admitting a fixed-point-free endomorphism
+(including $\mathbb{N}$ with successor and $\mathrm{Bool}$ with
+negation).
+
+\medskip
+\noindent\textbf{Topological reinforcement.}
+A second, independent strand proves that the barrier is not merely
+diagonal but \emph{topological}: a general lemma states that any two
+spaces whose intrinsic planar-chart boundaries are subtype-incompatible
+are not homeomorphic.  The obstacle is \textbf{wrong type}, not
+\textbf{inexhaustible queue}---a finite-data invariant that no amount
+of computation, scaling, or architectural extension can change.  The
+lemma applies to an \emph{open-ended class} of target spaces (M\"obius
+strip, Klein bottle, projective plane, or any non-orientable surface
+with incompatible boundary); the closed cylinder and M\"obius strip are
+the minimal fully discharged compact witness.
+
+\medskip
+\noindent\textbf{No escape.}
+Six adversarial retreat routes are formally closed: infinite regress,
+finite-order iterate collapse, cross-object readout (both sides),
+partial self-models, decidable self-reference, and model substitution.
+Each is a proved theorem in Lean~4, checked against Mathlib, with zero
+\texttt{sorry} and no project-specific axioms.
+
+\medskip
+\noindent\textbf{Consequence.}
+In every neighboring debate---consciousness, symbolic AI, semantic
+grounding, measurement chains, LLM scaling---the six closed escape routes
+leave only one admissible shape for solutions: \emph{structural change}
+to the topological type of the substrate, not quantitative extension
+within a fixed type.  Scaling, iterating, partial modeling, cross-object
+readout, finite-depth loops, and decidable restriction are all formally
+inadmissible.  Self-modeling systems are provably incomplete; the
+formalism makes this precise and machine-checkable.
+\end{abstract}
+
+% ============================================================================
+% 1. INTRODUCTION
+% ============================================================================
+\section{Introduction}
+\label{sec:intro}
+
+\subsection{The Problem and the Summit Theorem}
+When a system models itself---by iterating a fixed construction, by
+encoding its own states, by interpreting its own symbols---a familiar worry
+arises: infinite regress, or diagonal limitations, or both.  But those
+concerns are usually framed \emph{computationally}: the regress does not
+terminate, the self-interpreter cannot be total, the G\"odel sentence is
+undecidable.  The implicit hope is that with enough resources---more
+compute, richer architectures, deeper self-models---the obstacle might
+shrink or be routed around.
+
+This paper proves it cannot.  The headline result is:
+
+\begin{theorem}[\novel\ Representational Incompleteness]
+\label{thm:summit}
+\AfterTheoremHead
+\TheoremLeanTag{representational\_incompleteness}
+Let $B$ be a type with a fixed-point-free endomorphism $f : B \to B$.
+For \textbf{any} $s : A \to A \to B$ (no surjectivity, totality, or
+cardinality assumption):
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Diagonal exclusion:}
+  for every $a_0 \in A$,
+  $\;s\,a_0 \neq \lambda a.\,f(s\,a\,a)$.
+\item \textbf{Total coverage impossible:}
+  $\neg\!\left(\forall g : A \to B,\;\exists a,\;s\,a = g\right)$.
+\end{enumerate}
+\end{theorem}
+
+\noindent
+Every self-modeling system is \emph{necessarily incomplete}: its own
+diagonal behavior is precisely the information it cannot represent.  If
+$s$ is claimed to be total and surjective, it simply cannot exist.  This
+is \textbf{representational incompleteness}---the analogue of G\"odel
+incompleteness, not for formal theories and provability, but for any
+system that models itself via a parametric family of functions.  The
+blind spot is structural, not a resource limitation, and persists for
+$B = \mathbb{N}$ (successor), $B = \mathrm{Bool}$ (negation), and every
+other codomain admitting a fixed-point-free endomorphism.
+
+A second, independent strand reinforces this with a
+\textbf{topological} barrier: a general lemma showing that
+\emph{any} two spaces whose intrinsic planar-chart boundaries
+are subtype-incompatible are not homeomorphic---an open-ended
+class of obstructions that no amount of iteration, scaling, or
+continuous deformation within a fixed topological type can
+remove.  And we close, one by one, every standard adversarial
+route by which one might hope to circumvent either barrier.
+
+The technical development is in Lean~4, checked against Mathlib, with
+zero \texttt{sorry} and no project-specific axioms;
+\S\ref{sec:instantiations}--\S\ref{sec:admissibility} relate the
+results to consciousness, symbolic grounding, diagonal arguments,
+AI scaling, and observer--apparatus topologies.
+
+\subsection{Summary of Results}
+
+The core results are \textbf{representational incompleteness}
+(Theorem~\ref{thm:summit}) and a \textbf{universal topological
+obstruction}---reinforced by a proof that the six most natural
+adversarial attempts to evade them all fail.
+
+\paragraph{The topological obstruction.}
+A general lemma (Theorem~\ref{thm:generic}) states: if two spaces admit
+subsets characterized as exactly the non-\texttt{ChartableR2} points, and
+if those boundary \emph{subspaces} are not homeomorphic, then the ambient
+spaces are not homeomorphic.  This is a \emph{finite-data invariant}: two
+spaces are either homeomorphic or not, regardless of how many modeling
+steps one enumerates.  The lemma defines an \emph{open-ended class} of
+obstructed pairs---any two spaces meeting the three hypotheses, regardless
+of genus, orientability, or dimension---rather than a single hard-wired
+example.  The closed cylinder and M\"obius strip serve as the
+\textbf{minimal-case witness} (\textbf{M-FINAL}); Klein bottles,
+projective planes, higher-genus non-orientable surfaces, etc., would
+equally suffice.  Any future domain whose state space matches the same
+boundary pattern imports the same conclusion with no new proof.
+
+\paragraph{Why this is not ``just'' infinite regress.}
+The categorical strand (\S\ref{sec:regress}) does yield infinitely many
+distinct meta-levels under the bundled hypothesis
+\texttt{iter\_injective}, with Lawvere's wall and
+\texttt{OntologicalSlot} preventing collapse of the endo/obj distinction.
+But infinity is not the deepest point.  The topological obstruction is
+independent: it says the barrier is \textbf{wrong type}, not
+\textbf{inexhaustible queue}.  No amount of compute, no deeper
+self-model, no richer architecture changes the boundary pattern of a
+topological type.
+
+\paragraph{No escape.}
+Six adversarial retreat routes are formally closed
+(\S\ref{sec:noescape}):
+\begin{enumerate}[label=(\roman*),leftmargin=2em,itemsep=0.15ex,topsep=0.5ex,parsep=0pt]
+\item Infinite injective tower $\Rightarrow$ full regress + Lawvere wall.
+\item Finite-order iterate collapse $\Rightarrow$ bounded depth, no
+  injective tower.
+\item Cross-object readout via section--retraction $\Rightarrow$
+  idempotent on host, identity on source; no injective tower on
+  \emph{either} side.
+\item Partial (non-surjective) self-model $\Rightarrow$ diagonal blind
+  spot---the very information needed for self-capture is the information
+  it cannot represent.
+\item Decidable / $\mathrm{Bool}$-valued self-reference $\Rightarrow$
+  Lawvere obstruction persists in the finite, two-valued setting.
+\item Different topological model $\Rightarrow$ the general lemma
+  applies to \emph{any} pair with incompatible \texttt{ChartableR2}
+  boundaries, not just cylinder/M\"obius.
+\end{enumerate}
+Together these leave an adversary with a clean dichotomy: either an
+infinite injective regress with the Lawvere wall intact, or a finite
+loop too shallow for full self-capture---and in either case the
+topological barrier stands.
+
+\paragraph{Bridges and conditional readings.}
+Cross-domain structures
+(\leanref{SymbolSystem},
+\leanref{LawvereRegressBridge},
+bundled \leanref{ChartableR2BoundaryModel} instances,
+\leanref{QuantumObserverChainHypothesis})
+make the obstruction's \emph{hypothesis shape} explicit for grounding,
+diagonal, consciousness~(under premise~P2), and observer--readout
+readings.  Because the topological obstruction is a general lemma over
+a class of space-pairs, each bridge inherits the full generality
+automatically.  An extended master theorem adjoins all three layers
+(diagonal, topological, categorical) in one checkable bundle.
+
+\paragraph{Utility.}
+For any application the workflow is:
+(1)~encode the system's state space in sufficient topological detail to
+verify the boundary biconditionals,
+(2)~compare boundary subspaces up to homeomorphism,
+(3)~invoke the general lemma or a bundled model.
+If the premises hold, the obstruction applies; if they fail, the
+obstacle was never licensed.  That conditional structure is what keeps
+the mathematics honest while delivering a \emph{portable} gate.
+
+\subsection{Contributions and Novelty Claims}
+
+Individual ingredients are classical: Lawvere's diagonal (1969), textbook
+topology of surfaces, Cantorian regress patterns.
+The contribution is a \textbf{unified, adversarially checked, machine-verified}
+landscape in which representational incompleteness, topological obstruction,
+and six closed escape routes coexist in one artifact, so that ``compute
+harder'' is never confusable with ``change homeomorphism type.''  Specific
+novel elements:
+
+\begin{enumerate}[label=(\arabic*),itemsep=0.4ex]
+\item \textbf{\texttt{OntologicalSlot}} --- inductive tagging of morphism
+  vs.\ global-element slots; makes the Lawvere wall explicit inside the
+  type discipline. [\novel]
+\item \textbf{\texttt{ChartableR2} spine + seam--equator charts} ---
+  intrinsic $\mathbb{R}^2$ chartability as a definable boundary sensor;
+  constructive charts through the M\"obius quotient seam including the
+  equator via piecewise unfolding.  The M\"obius strip serves as the
+  minimal proof witness; the predicate applies uniformly to all
+  surfaces. [\novel\ technique]
+\item \textbf{General boundary-contrast obstruction} ---
+  a single reusable, machine-checked lemma defining an
+  \emph{open-ended class} of obstructed pairs: any two spaces
+  with incompatible \leanref{ChartableR2}-co-characterized
+  boundaries are not homeomorphic---regardless of genus,
+  orientability, or dimension.  To our knowledge, \emph{not}
+  standard in the philosophy-of-mind or AI-safety
+  literatures. [\novel]
+\item \textbf{Cross-domain bridge structures} ---
+  \texttt{SymbolSystem}, \texttt{LawvereRegressBridge},
+  bundled \texttt{ChartableR2BoundaryModel} data,
+  \texttt{QuantumObserverChainHypothesis}: these make the obstruction's
+  hypothesis shape explicit per domain. [\novel]
+\item \textbf{No-escape horn closures} --- six formally blocked
+  adversarial escape routes (iterate collision, section--retraction on
+  both sides, partial-model diagonal exclusion, decidable Lawvere,
+  wall persistence at every depth).  The integrated closure package is,
+  to our knowledge, new. [\novel]
+\end{enumerate}
+
+\subsection{Paper Organization}
+The paper is structured around three layers that build toward a single
+conclusion.
+
+\textbf{Layer~1: Diagonal \& categorical}
+(\S\ref{sec:regress})---representational systems, regress, Lawvere wall,
+\texttt{OntologicalSlot}, iterate dichotomy, core master theorem.
+
+\textbf{Layer~2: Topological obstruction}
+(\S\S\ref{sec:models}--\ref{sec:mfinal})---minimal-case witnesses
+(cylinder, M\"obius strip), \texttt{ChartableR2} boundary sensor, general
+obstruction lemma, seam charts, M-FINAL.
+
+\textbf{Layer~3: Integration \& closure}
+(\S\ref{sec:extended})---extended master theorem, instantiations
+(consciousness, grounding, diagonal arguments, QM, LLM scaling),
+horn-by-horn no-escape analysis~(\S\ref{sec:noescape}),
+admissibility~(\S\ref{sec:admissibility}).
+
+\S\S\ref{sec:limits}--\ref{sec:conclusion}: limitations, related work,
+conclusion.  Appendices: Lean module map, key theorem index, reproduction.
+
+% ============================================================================
+% 2. CATEGORICAL STRAND: THE REPRESENTATIONAL REGRESS
+% ============================================================================
+\section{The Representational Regress}
+\label{sec:regress}
+
+This section builds the categorical machinery that feeds into the summit
+theorem: the endomorphism tower, the Lawvere wall, and the
+\texttt{OntologicalSlot} distinction.  Together they establish that
+self-representation via iterated endomorphisms either produces an
+infinite regress with the endo/obj wall intact, or collapses to a finite
+loop too shallow for injective self-capture---setting the stage for the
+diagonal exclusion of Theorem~\ref{thm:summit}.
+
+\subsection{The \texttt{RepresentationalSystem} Structure}
+\label{sec:repsys}
+
+\begin{definition}[\leanref{Basic.lean}: \leanref{RepresentationalSystem}]
+\leavevmode\par\noindent
+A \emph{representational system} is a tuple $(C, A, \mathrm{represent}, \mathrm{iter\_injective})$ where:
+\begin{itemize}
+\item $C$ is a category,
+\item $A$ is an object of $C$,
+\item $\mathrm{represent} : A \to A$ is an endomorphism,
+\item $\mathrm{iter\_injective}$: for all $n \neq m$, $\mathrm{represent}^n \neq \mathrm{represent}^m$ in $\mathrm{End}(A)$.
+\end{itemize}
+\end{definition}
+
+\subsection{Non-Termination and Unboundedness}
+
+\begin{theorem}[\known\ \leanref{Regress.lean}]
+\label{thm:regress}
+For any representational system $R$:
+\begin{enumerate}[label=(\alph*)]
+\item (\leanref{regress\_no\_termination}) Distinct indices $n \neq m$ yield distinct meta-level arrows.
+\item (\leanref{regress\_iterates\_unbounded}) For every bound $B$, there exists a level $L > B$ with a distinct iterate.
+\item (\leanref{regress\_is\_infinite}, \leanref{meta\_range\_infinite}) The set of meta-levels is infinite.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[What if \texttt{iter\_injective} fails?]
+\label{rem:dichotomy}
+The hypothesis $\mathrm{iter\_injective}$ is \emph{bundled}, not derivable from
+a bare endomorphism. An adversary might weaken it: suppose
+$\mathrm{represent}^n = \mathrm{represent}^m$ for some $n \neq m$.
+\leanref{NoEscapeClosure} formalizes the consequence: let
+$e := \mathrm{End.of}(\mathrm{represent})$; if $e^{n+d}=e^n$ with $d>0$ then
+every power $e^k$ equals some $e^i$ with $i < n+d$
+(\leanref{IterateClosure.End.exists\_lt\_of\_pow\_collision}).
+\leanref{IterateClosure.End.pow\_iterate\_dichotomy}
+records the \textbf{dichotomy}: for every monoid element~$e$, either
+(i)~distinct natural-number powers are all distinct (an infinite injective
+$\mathbb{N}$-tower), or (ii)~the set of \emph{distinct} powers is bounded by a
+finite index.  In case~(ii) the system has only finitely many representational
+layers---it loops.  Either route blocks ``just enough'' self-representation: one
+gives an infinite regress; the other gives a finite loop too impoverished to
+host injective iterate depth.
+\end{remark}
+
+\subsection{The Lawvere Wall}
+\label{sec:lawvere}
+
+\begin{theorem}[\known\ \leanref{Lawvere.lean}]
+\label{thm:lawvere}
+(\leanref{lawvere\_fixed\_point\_Type}) If $s : A \to (A \to B)$ is surjective, then every $f : B \to B$ has a fixed point.
+\end{theorem}
+
+\begin{theorem}[\known\ \leanref{LawvereCCCType.lean}]
+\label{thm:lawvere-ccc}
+(\leanref{lawvere\_fixed\_point\_MonoidalClosedType}) The same conclusion holds when the universal-enumerator hypothesis is recast as surjectivity of $\mathrm{curry}(\mathrm{lawvereBinary}\ s)$ in $\mathrm{MonoidalClosed}(\mathrm{Type}\ u)$.
+\end{theorem}
+
+\subsection{The \texttt{OntologicalSlot} Construction}
+\label{sec:ontoslot}
+
+\begin{definition}[\novel\ \leanref{Basic.lean}: \leanref{OntologicalSlot}]
+\label{def:ontoslot}
+For a category $C$ with terminal object and an object $A$:
+\[
+\mathrm{OntologicalSlot}(C, A) \;:=\;
+  \mathrm{endo}(f : A \to A) \;\mid\; \mathrm{obj}(g : \top_C \to A)
+\]
+an inductive type with two constructors, disjoint by definition.
+\end{definition}
+
+\begin{theorem}[\novel\ \leanref{FixedPoints.lean}]
+\label{thm:wall}
+(\leanref{lawvere\_wall\_is\_not\_dissolution}) For any representational system $R$ and any global element $\mathrm{fp} : \top_C \to A$,
+\[
+  \mathrm{OntologicalSlot.endo}(R.\mathrm{represent}) \;\neq\; \mathrm{OntologicalSlot.obj}(\mathrm{fp}).
+\]
+\end{theorem}
+
+\subsection{The Core Master Theorem}
+
+\begin{theorem}[\leanref{Main.lean}]
+\label{thm:master}
+(\leanref{representational\_regress\_master}) For any representational system $R$:
+\[
+  \mathrm{representational\_regress\_master\_claim}(R)
+\]
+i.e., the conjunction of unbounded regress, Lawvere wall non-dissolution, and $T_2$ invariance under homeomorphism.
+\end{theorem}
+
+% ============================================================================
+% 3. TOPOLOGICAL MODELS
+% ============================================================================
+\section{Topological Models: Minimal-Case Witnesses}
+\label{sec:models}
+
+The general obstruction (Theorem~\ref{thm:generic}) applies to
+any pair of spaces with incompatible
+\leanref{ChartableR2}-detected boundaries.  This section
+establishes the closed cylinder and M\"obius strip as the
+\textbf{simplest fully discharged witness pair}: two compact
+surfaces whose boundary subtypes are topologically incompatible.
+
+\subsection{The Closed Cylinder}
+\label{sec:cylinder}
+
+\begin{definition}[\leanref{CylinderBoundary.lean}]
+$\mathrm{ClosedCylinder} := S^1 \times [0,1]$ with the product topology and manifold structure $\mathfrak{R}_1 \times \mathfrak{R}_1^\partial$.
+\end{definition}
+
+\begin{theorem}[\known\ \leanref{CylinderBoundary.lean}]
+\label{thm:cyl-boundary}
+The manifold boundary of \emph{ClosedCylinder} decomposes as:
+\[
+  \partial(\mathrm{ClosedCylinder}) = F_{\mathrm{bot}} \sqcup F_{\mathrm{top}}
+\]
+where $F_{\mathrm{bot}} = S^1 \times \{0\}$ and $F_{\mathrm{top}} = S^1 \times \{1\}$ are each connected, and their union is \emph{disconnected}.
+\end{theorem}
+
+\subsection{The M\"obius Strip}
+\label{sec:mobius}
+
+\begin{definition}[\leanref{CylinderMobius.lean}]
+\label{def:mobius-rel}
+The \emph{M\"obius equivalence} $\sim$ on $[0,1]^2$ is the equivalence relation generated by
+$(0, t) \sim (1, 1-t)$ for $t \in [0,1]$, extended by reflexivity, symmetry, and transitivity.
+The \emph{M\"obius strip} is $\mathrm{MobiusStrip} := [0,1]^2 / {\sim}$.
+\end{definition}
+
+\begin{theorem}[\leanref{CylinderMobius.lean}]
+\label{thm:mobius-props}
+\leavevmode
+\begin{enumerate}[label=(\alph*)]
+\item (\leanref{mobiusRel0Graph\_isClosed}) The graph of $\sim$ is closed in $[0,1]^2 \times [0,1]^2$.
+\item (\leanref{CompactSpace MobiusStrip}) $\mathrm{MobiusStrip}$ is compact (quotient of compact).
+\item (\leanref{instT2SpaceMobiusStrip}) $\mathrm{MobiusStrip}$ is Hausdorff (closed graph + compact domain).
+\item (\leanref{isConnected\_mobiusStripBoundary}) The boundary band $\partial_{\mathrm{model}} := \pi(\{t = 0\} \cup \{t = 1\})$ is connected (one component).
+\end{enumerate}
+\end{theorem}
+
+\subsection{Boundary Subspace Contrast}
+
+\begin{theorem}[\leanref{MobiusCylinderBoundaryContrast.lean}]
+\label{thm:boundary-contrast}
+\AfterTheoremHead
+\TheoremLeanTag{mobiusStripBoundary\_not\_homeomorphic\_closedCylinderBoundaryUnion}
+\[
+  \mathrm{IsEmpty}\!\left(\mathrm{Subtype}(\partial_{\mathrm{Mob}}) \simeq_t \mathrm{Subtype}(\partial_{\mathrm{Cyl}})\right).
+\]
+The M\"obius boundary band (connected) and the cylinder boundary union (disconnected) are not homeomorphic as subspaces.
+\end{theorem}
+
+% ============================================================================
+% 4. THE CHARTABLER2 FRAMEWORK
+% ============================================================================
+\section{The \texttt{ChartableR2} Framework}
+\label{sec:chartable}
+
+The previous sections established diagonal and categorical barriers.
+This section introduces the topological layer: a boundary sensor based on
+intrinsic $\mathbb{R}^2$-chartability, together with the general
+obstruction lemma (Theorem~\ref{thm:generic}) that will deliver the
+class-level topological barrier.
+
+\subsection{Definition and Basic Properties}
+
+\begin{definition}[\leanref{ChartableR2Neighbor.lean}]
+\label{def:chartable}
+A point $x$ of a topological space $X$ is \emph{$\mathrm{ChartableR2}$} if there exists an open set $U \ni x$ such that $U \cong_t \mathbb{R}^2$.
+\end{definition}
+
+\begin{theorem}[\leanref{ChartableR2Neighbor.lean}]
+\label{thm:chartable-props}
+\leavevmode
+\begin{enumerate}[label=(\alph*)]
+\item (\leanref{isOpen\_setOf\_chartableR2}) The set of \texttt{ChartableR2} points is open.
+\item (\leanref{isClosed\_setOf\_not\_chartableR2}) Its complement is closed.
+\item (\leanref{not\_chartableR2\_of\_tendsto\_seq\_atTop}) Sequential stability: limits of non-chartable points are non-chartable.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Invariance Under Homeomorphism}
+
+\begin{theorem}[\leanref{ChartableR2Bridge.lean}]
+\label{thm:chartable-invar}
+\AfterTheoremHead
+\TheoremLeanTag{Homeomorph.chartableR2\_iff}
+If $h : X \simeq_t Y$ is a homeomorphism, then $\mathrm{ChartableR2}(x) \iff \mathrm{ChartableR2}(h(x))$.
+\end{theorem}
+
+\subsection{The Generic Boundary-Contrast Obstruction}
+\label{sec:generic}
+
+\begin{theorem}[\novel\ \leanref{ChartableR2Bridge.lean}]
+\label{thm:generic}
+\AfterTheoremHead
+\TheoremLeanTag{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}
+Let $X$ and $Y$ be topological spaces with predicates $b_X \subseteq X$ and $b_Y \subseteq Y$ such that:
+\begin{enumerate}[label=(\roman*)]
+\item $\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$,
+\item $\forall y,\; y \in b_Y \iff \neg\,\mathrm{ChartableR2}(y)$,
+\item $\mathrm{IsEmpty}(\mathrm{Subtype}(b_X) \simeq_t \mathrm{Subtype}(b_Y))$.
+\end{enumerate}
+Then $\mathrm{IsEmpty}(X \simeq_t Y)$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Any homeomorphism $e : X \simeq_t Y$ preserves $\mathrm{ChartableR2}$
+(Theorem~\ref{thm:chartable-invar}), hence maps $b_X$ to $b_Y$ pointwise.
+By $e.\mathrm{subtype}$, we get a homeomorphism
+$\mathrm{Subtype}(b_X) \simeq_t \mathrm{Subtype}(b_Y)$, contradicting~(iii).
+\end{proof}
+
+Theorem~\ref{thm:generic} subsumes the non-homeomorphism strategy of \S\ref{sec:mfinal}:
+any other pair of spaces satisfying the same three hypotheses is also not homeomorphic.
+
+\subsection{Half-Space Obstructions}
+\label{sec:halfspace}
+
+\begin{theorem}[\leanref{HalfPlaneVsPlane.lean}]
+\label{thm:halfplane}
+\AfterTheoremHead
+\TheoremLeanTag{euclideanHalfSpace2\_not\_homeomorphic\_euclidean2}
+$\mathrm{IsEmpty}(H^2 \simeq_t \mathbb{R}^2)$.
+Proof via punctured half-plane (star-convex $\Rightarrow$ simply connected) vs.\ punctured plane (not simply connected, from $\exp$ covering).
+\end{theorem}
+
+\begin{theorem}[\leanref{HalfSpaceNeighborVsPlane.lean}]
+\label{thm:halfspace-local}
+\AfterTheoremHead
+\TheoremLeanTag{isEmpty\_homeomorph\_subtype\_openH2\_zero\_nbhd\_subtype\_openPlane}
+For open $V \subseteq H^2$ with $0 \in V$ and open $O \subseteq \mathbb{R}^2$, there is no homeomorphism $V \cong_t O$.
+\end{theorem}
+
+\subsection{Cylinder C4: Boundary Biconditional}
+
+\begin{theorem}[\leanref{CylinderChartableBoundary.lean}]
+\label{thm:cylinder-c4}
+\AfterTheoremHead
+\TheoremLeanTag{closedCylinder\_boundaryUnion\_iff\_not\_chartableR2}
+For all $x \in \mathrm{ClosedCylinder}$:
+\[
+  x \in \partial_{\mathrm{Cyl}} \;\iff\; \neg\,\mathrm{ChartableR2}(x).
+\]
+\end{theorem}
+
+% ============================================================================
+% 5. THE SEAM-CHART PROBLEM
+% ============================================================================
+\section{Interior Charts on the M\"obius Witness: The Seam Problem}
+\label{sec:seam}
+
+\subsection{Why the Seam Is Hard}
+\label{sec:seam-why}
+
+Interior-height points of the fundamental domain fall into three regimes: strict
+interior $0<x<1$, where the quotient is injective on small boxes; the vertical
+seam $x\in\{0,1\}$ with $t\neq\tfrac{1}{2}$, where trigonometric coordinates can
+separate fibers when the height window avoids the equator; and the seam at
+$t=\tfrac{1}{2}$, where $(0,\tfrac{1}{2})\sim(1,\tfrac{1}{2})$ and a trigonometric
+chart degenerates. $\mathrm{ChartableR2}$ at the equator quotient class is
+obtained by a piecewise Euclidean unfolding map (see below).
+
+\subsection{Open-Cell Charts}
+
+\begin{theorem}[\leanref{MobiusChartableBoundary.lean}]
+\label{thm:open-cell}
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_Ioo\_square}
+If $p \in (0,1)^2$ (strict interior of the fundamental domain), then $\mathrm{ChartableR2}(\llbracket p \rrbracket)$.
+\end{theorem}
+
+\subsection{Seam Trig Charts (Away from Equator)}
+
+\begin{definition}[\leanref{MobiusSeamChart.lean}, \leanref{MobiusSeamChartable.lean}]
+The \emph{saturated seam patch} $S(t_0, \varepsilon, \delta)$ is the union of the left and right $\varepsilon$-thickened seam strips at height window $(t_0 - \delta, t_0 + \delta)$, saturated under $\sim$.
+\end{definition}
+
+\begin{theorem}[\leanref{MobiusSeamTrigInject.lean}]
+\label{thm:trig-inject}
+\AfterTheoremHead
+\TheoremLeanTag{onPatch\_mobiusFDTrigCoord\_eq\_iff\_mobiusRel0}
+When $\delta < |t_0 - \tfrac{1}{2}|$, the trigonometric FD coordinate map $\mathrm{mobiusFDTrigCoord}$ satisfies:\newline
+\noindent$\mathrm{mobiusFDTrigCoord}(p) = \mathrm{mobiusFDTrigCoord}(q)$ on the saturated patch if and only if $p \sim q$.
+\end{theorem}
+
+\begin{theorem}[\leanref{MobiusSeamChartableR2.lean}]
+\label{thm:seam-trig}
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_mem\_mobiusSeamSaturatedPatch}
+For $t_0 \neq \tfrac{1}{2}$ and appropriate $\varepsilon, \delta$, every point\newline
+\noindent in $\pi(S(t_0, \varepsilon, \delta))$ is $\mathrm{ChartableR2}$.
+\end{theorem}
+
+\subsection{The Equator Chart: Piecewise Unfolding}
+\label{sec:equator}
+
+\begin{definition}[\leanref{MobiusSeamChartableR2.lean}]
+\label{def:unfold}
+\leavevmode\par\noindent
+The \emph{fundamental-domain unfolding map}\newline
+\noindent$\mathrm{unfoldFD} : [0,1]^2 \to \mathbb{R}^2$ is:
+\[
+  \mathrm{unfoldFD}(x, t) :=
+  \begin{cases}
+    \mathrm{mobiusPlaneCoord}(x, t) & \text{if } x \leq \tfrac{1}{2}, \\
+    \begin{aligned}[t]
+      &\mathrm{mobiusPlaneTrigSeamPartnerSub}\\
+      &\quad\bigl(\mathrm{mobiusPlaneCoord}(x, t)\bigr)
+    \end{aligned} & \text{if } x > \tfrac{1}{2}.
+  \end{cases}
+\]
+\end{definition}
+
+\begin{lemma}[\leanref{MobiusSeamChartableR2.lean}]
+$\mathrm{unfoldFD}$ is $\sim$-invariant: if $p \sim q$ then $\mathrm{unfoldFD}(p) = \mathrm{unfoldFD}(q)$.
+\end{lemma}
+
+\begin{theorem}[\leanref{MobiusSeamChartableR2.lean}]
+\label{thm:equator}
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_left\_seam\_half}
+$\mathrm{ChartableR2}(\llbracket (0, \tfrac{1}{2}) \rrbracket)$.
+\end{theorem}
+
+\subsection{Assembly: All Interior Points Are ChartableR2}
+
+\begin{theorem}[\leanref{MobiusSeamChartableR2.lean}]
+\label{thm:interior-height}
+\AfterTheoremHead
+\TheoremLeanTag{chartableR2\_mobiusQuotientMk\_of\_interior\_height}
+For every $p \in [0,1]^2$ with $0 < p_2 < 1$:
+\[
+  \mathrm{ChartableR2}(\llbracket p \rrbracket).
+\]
+\end{theorem}
+
+\subsection{M\"obius C4: Boundary Biconditional}
+
+\begin{theorem}[\leanref{MobiusChartableBoundary.lean}]
+\label{thm:mobius-c4}
+\AfterTheoremHead
+\TheoremLeanTag{mobiusStripBoundary\_iff\_not\_chartableR2\_of\_forall\_off\_edge\_chartable}
+For all $x \in \mathrm{MobiusStrip}$:
+\[
+  x \in \partial_{\mathrm{Mob}} \;\iff\; \neg\,\mathrm{ChartableR2}(x).
+\]
+\end{theorem}
+
+% ============================================================================
+% 6. M-FINAL: THE NON-HOMEOMORPHISM
+% ============================================================================
+\section{M-FINAL: Minimal-Case Witness for the General Obstruction}
+\label{sec:mfinal}
+
+The general lemma (Theorem~\ref{thm:generic}) applies to \emph{any} pair of
+spaces with incompatible \texttt{ChartableR2}-co-characterized boundaries.
+The M\"obius strip and closed cylinder serve as the \textbf{simplest fully
+discharged witness}: a concrete compact pair for which all three hypotheses
+are proved.  The argument is not specific to these two surfaces; a Klein
+bottle vs.\ torus, a projective plane vs.\ a sphere, or any other pair
+meeting the same three conditions would yield the same conclusion.
+
+\begin{theorem}[\leanref{MobiusSeamChartableR2.lean}, \leanref{ChartableR2Bridge.lean}]
+\label{thm:mfinal}
+\AfterTheoremHead
+\TheoremLeanTag{mobiusStrip\_not\_homeomorphic\_closedCylinder}
+\[
+  \mathrm{IsEmpty}\!\left(\mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder}\right).
+\]
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Instantiate Theorem~\ref{thm:generic} with $b_X = \partial_{\mathrm{Mob}}$,
+$b_Y = \partial_{\mathrm{Cyl}}$, the biconditionals
+(Theorems~\ref{thm:cylinder-c4} and~\ref{thm:mobius-c4}), and the boundary
+incompatibility (Theorem~\ref{thm:boundary-contrast}).
+\end{proof}
+
+% ============================================================================
+% 7. THE EXTENDED MASTER THEOREM AND INSTANTIATIONS
+% ============================================================================
+\section{The Extended Master Theorem and Instantiations}
+\label{sec:extended}
+
+The summit theorem (Theorem~\ref{thm:summit}) establishes representational
+incompleteness as a pure diagonal result.  This section bundles it with the
+topological strand and the horn closures into a single verifiable package,
+then draws out the consequences for five neighboring debates.
+
+\subsection{Formal Statement}
+
+\begin{theorem}[\leanref{Main.lean}]
+\label{thm:extended}
+\AfterTheoremHead
+\TheoremLeanTag{representational\_regress\_master\_extended}
+For any representational system $R$:
+\[
+  \mathrm{RepresentationalIncompletenessMasterExtended}(R)
+\]
+where this abbreviation expands to:
+\begin{enumerate}[label=(\roman*)]
+\item $\mathrm{representational\_regress\_master\_claim}(R)$\newline
+\noindent (regress + wall + $T_2$ transport),
+\item $\mathrm{IsEmpty}(H^1 \simeq_t \mathbb{R}^1)$ (1D half-space vs.\ line;\newline
+\noindent\leanref{representational\_regress\_topology\_halfLineModel}),
+\item $\mathrm{IsEmpty}(\mathrm{MobiusStrip} \simeq_t \mathrm{ClosedCylinder})$ (M-FINAL; the minimal-case witness for the general obstruction class).
+\end{enumerate}
+\end{theorem}
+
+\noindent
+This \emph{extends} \leanref{representational\_regress\_master}; it does not replace it.
+
+\subsection{Bundled boundary models}
+
+\begin{definition}[\leanref{ChartableR2Neighbor.lean}]
+A \emph{\texttt{ChartableR2} boundary model} on $X$ is a subset $b_X \subseteq X$
+together with a proof that
+$\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$.
+\end{definition}
+
+\noindent
+\begin{itemize}[leftmargin=1.75em,itemsep=0.35ex,topsep=0.6ex,parsep=0pt]
+\item The type \leanref{ChartableR2BoundaryModel} packages such data; the lemma
+  \leanref{ChartableR2BoundaryModel.not\_homeomorphic} restates
+  Theorem~\ref{thm:generic} in bundled form.
+\item The development \leanref{ChartableR2ConcreteBoundaryModels} supplies\newline
+  \leanref{mobiusStripChartableR2BoundaryModel} and
+  \leanref{closedCylinderChartableR2BoundaryModel}.
+\item The same-file theorem\newline
+  \leanref{mobiusStrip\_closedCylinder\_boundary\_models\_not\_homeomorphic}\newline
+  re-proves M-FINAL along that pipeline.
+\end{itemize}
+
+\subsection{Instantiations}
+\label{sec:instantiations}
+
+Theorems earlier in the paper are unconditional. This subsection records how the
+same statements bear on four debates outside pure mathematics. Where an extra
+premise is required, it is stated explicitly; nothing in the formalization
+defaults a controversial premise to true.
+
+\subsubsection{Consciousness and self-presence}
+
+\paragraph{Philosophical bridge (premise P2).}
+Some accounts distinguish representational self-reference from a stronger notion
+of \emph{self-presence} (first-person givenness, non-representational
+acquaintance, etc.). Premise~\textbf{P2} is \emph{not} a theorem in the library:
+it says only that, for the purposes of a topological comparison, the
+representational substrate is modeled by a space whose
+\texttt{ChartableR2}-detected boundary has one connectivity pattern (e.g.\
+the cylinder's two disjoint components), while the target phenomenon is modeled
+by a space whose boundary has a different, incompatible pattern (e.g.\ the
+M\"obius strip's single connected band---but the argument is
+\emph{not specific to the M\"obius strip}: Theorem~\ref{thm:generic} applies
+to \emph{any} pair of spaces with incompatible
+\texttt{ChartableR2}-co-characterized boundaries, including Klein bottles,
+higher-genus non-orientable surfaces, or any other topological witness that
+satisfies the three hypotheses).
+
+\paragraph{What is proved.}
+The engine is Theorem~\ref{thm:generic}: \emph{any} two spaces
+whose \leanref{ChartableR2}-co-characterized boundaries are
+subtype-incompatible are not homeomorphic.  This defines an
+open-ended class of obstructed pairs.
+Theorem~\ref{thm:mfinal}
+($\mathrm{MobiusStrip} \not\simeq_t \mathrm{ClosedCylinder}$)
+is the \textbf{minimal-case fully discharged witness}: it
+instantiates the general lemma with the simplest compact
+example.  Substituting a Klein bottle, projective plane, or
+higher-genus non-orientable surface would equally satisfy the
+hypotheses; the adversary cannot escape by choosing a different
+target.
+
+\paragraph{Closed routes and admissibility.}
+Multiple adversarial moves are blocked (see \S\ref{sec:noescape}
+for full detail):
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item \emph{Iterate deeper} (Horn~1): the regress is infinite, the Lawvere
+  wall persists at every depth---more meta-levels do not close the gap.
+\item \emph{Use a finite loop} (Horn~2): the iterate dichotomy shows
+  bounded depth cannot host injective self-representation.
+\item \emph{Represent via a different object} (Horn~3): section--retraction
+  readout collapses to an idempotent on the host and the identity on the
+  source; no injective tower on either side.
+\item \emph{Use a partial self-model} (Horn~4): the diagonal blind spot
+  means the information needed for self-capture is precisely the
+  information the partial model cannot represent.
+\item \emph{Restrict to decidable predicates} (Horn~6): the $\mathrm{Bool}$
+  Lawvere horn is closed; finite cardinality does not help.
+\item \emph{Choose a different topological model} (Horn~5): the general
+  lemma defines an open-ended class of obstructed pairs---any surface
+  with incompatible boundary, not just the M\"obius strip.
+\end{itemize}
+What remains \textbf{admissible} under P2: the relevant substrate must
+\emph{already} have the target topological type (in which case it was
+never purely representational in the cylinder sense), or the account
+must invoke a discontinuous or non-topological bridge not modeled in
+this formalism.  Scaling, iteration, richer self-models, or architectural
+reparameterization within a fixed topological type are \emph{inadmissible}
+routes to the target.
+
+\subsubsection{Symbol grounding and semantic regress}
+
+In the symbol-grounding problem, arbitrary symbols must be interpreted, and
+interpreting the interpretation threatens a regress unless a non-representational
+stop is posited. Formally, a representational system already contains the morphism
+\texttt{represent} whose iterates index ``one more representational step.'' The
+type alias \leanref{SymbolSystem} is definitionally identical to
+\leanref{RepresentationalSystem}; lemmas such as
+\leanref{symbolGrounding\_metaRegressArrow\_injective} record that distinct
+natural-number depths correspond to \emph{distinct} endomorphisms of the
+awareness object.
+
+\paragraph{Closed routes and admissibility.}
+The horn closures constrain the symbol system on multiple fronts:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item If iterate indices are injective (Horn~1), interpretation levels
+  form an infinite regress with the Lawvere wall intact at every stage.
+\item If iterates collide (Horn~2), the system has only finitely many
+  distinct interpretation levels---a loop too shallow for full
+  self-interpretation.
+\item If the system tries a \emph{partial} interpretation function
+  (Horn~4), the diagonal exclusion
+  (\leanref{lawvere\_diagonal\_not\_in\_range}) guarantees a blind
+  spot: the interpretation cannot represent its own diagonal behavior.
+\item Restricting to decidable predicates (Horn~6) does not help:
+  the $\mathrm{Bool}$-valued Lawvere horn is closed.
+\end{itemize}
+Admissible grounding must therefore come from \emph{outside} the
+representational loop: the system cannot ground itself by iterating
+its own interpretive machinery, whether totally or partially, whether
+with infinite depth or finite.
+
+\subsubsection{Diagonal arguments and self-interpretation}
+
+Lawvere's theorem in \texttt{Type} implies that there is no family
+$s : A \to A \to B$ that realizes every unary $g : A \to B$ as $s(a)$ for some
+parameter $a$, once $B$ carries an endomorphism without fixed points.
+\leanref{LawvereRegressBridge} collects the instances and connects them to
+the categorical presentation;
+\leanref{lawvere\_fixed\_point\_stays\_representational} says the
+\texttt{OntologicalSlot} wall persists at every iterate depth.
+
+\paragraph{Closed routes and admissibility.}
+The diagonal closures are cumulative:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item \emph{Total self-interpreter} $s : A \to A \to B$: blocked by
+  Lawvere for any $B$ with a fixed-point-free endo
+  (\leanref{no\_universal\_parametric\_unary\_nat} for $\mathbb{N}$,
+  \leanref{no\_universal\_parametric\_unary\_bool} for $\mathrm{Bool}$).
+\item \emph{Partial self-interpreter}: abandoning surjectivity does not
+  help.  \leanref{lawvere\_diagonal\_not\_in\_range} shows that for
+  \emph{any} $s : A \to A \to B$---not necessarily surjective---the
+  diagonal $a \mapsto f(s\,a\,a)$ is never $s\,a_0$ for any $a_0$.
+  The blind spot is exactly the system's own diagonal behavior.
+\item \emph{Restrict to finite / decidable predicates} (Horn~6):
+  $\lnot : \mathrm{Bool} \to \mathrm{Bool}$ is fixed-point-free, so the
+  two-valued case is no easier.
+\item \emph{Climb the tower}: however high the self-applicative coding
+  rises, the $\mathrm{endo} \neq \mathrm{obj}$ distinction persists at
+  every iterate depth.
+\end{itemize}
+Admissible self-interpreters must therefore be \emph{incomplete}: they
+cannot model their own diagonal behavior.  This is not a resource
+limitation (compute, training data, context length) but a structural
+one; it holds for every codomain $B$ admitting a fixed-point-free
+endomorphism, and for every cardinality of $A$.
+
+\subsubsection{Quantum measurement and observer chains}
+
+Talk of apparatus, environment, and Wigner's-friend hierarchies suggests a chain of
+systems, each described relative to a larger ``observer.'' If one ever gives such
+a chain a \emph{topological} state space $\mathrm{Obs}$, together with a subset
+$\partial_{\mathrm{obs}}$ whose membership agrees with
+$\neg\,\mathrm{ChartableR2}$, then Theorem~\ref{thm:generic} applies to any
+target space whose boundary subspace is not homeomorphic to
+$\partial_{\mathrm{obs}}$---the M\"obius strip is the minimal-case
+witness, but the argument works for \emph{any} target space with
+incompatible boundary topology (Klein bottle, projective plane, or any
+other surface satisfying the three hypotheses of Theorem~\ref{thm:generic}).
+\leanref{QuantumObserverChainHypothesis} packages exactly this data as
+assumptions; the conclusion
+$\mathrm{IsEmpty}(\mathrm{Obs} \simeq_t \mathrm{Target})$ follows for
+any target satisfying the hypotheses.
+
+\paragraph{Closed routes and admissibility.}
+The same horn closures apply to the observer chain:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item Iterating the measurement chain (stacking more
+  apparatus/environment layers) does not change the topological type of
+  the state space (Horns~1--2).
+\item Encoding the observer inside a larger system via
+  section--retraction does not produce an injective tower (Horn~3).
+\item Partial models of the observer--readout process still miss their
+  own diagonal (Horn~4).
+\item Choosing a different non-orientable target does not evade
+  Theorem~\ref{thm:generic} (Horn~5).
+\end{itemize}
+The chain must either introduce genuinely new topological structure at
+some level---not representational iteration of the same type---or
+accept that its boundary organization differs from the target.  The
+library does \emph{not} define Hilbert spaces, observables, or
+projection postulates; any physical application requires an independent
+argument that a concrete model satisfies the hypothesis fields.
+
+\subsection{Scaling of language models and similar systems}
+
+Training larger models extends a representational architecture; it does not, by
+itself, produce a homeomorphism between a given topological model of that
+architecture and a different global model.  Theorem~\ref{thm:generic} is
+indifferent to the choice of target: the cylinder/M\"obius pair is the
+\emph{minimal-case witness}, but the general lemma blocks every target
+space with incompatible \texttt{ChartableR2}-detected boundary.
+
+\paragraph{Closed routes and admissibility.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item More parameters, deeper layers, longer context windows: these
+  extend the architecture \emph{within} a fixed topological type (Horn~1).
+\item Finer-grained self-models built during training: partial
+  self-interpreters still miss their own diagonal (Horn~4).
+\item Switching from infinite-depth to finite-depth loops (e.g.\
+  fixed-iteration transformers): the iterate dichotomy (Horn~2) shows
+  bounded depth cannot host injective self-representation.
+\item Choosing a different target topology does not help: the general
+  lemma covers any pair (Horn~5).
+\end{itemize}
+Admissible paths to a topological type with different boundary
+organization require \emph{structural} change---a different topology
+of the underlying state space---not quantitative extension of the same
+architecture.
+
+\subsection{Relationship to the Trans-Computational Processing argument}
+
+An earlier line of work argues from computability---halting,
+G\"odel-style diagonalization, and related limits---to constraints on
+``self-contained'' computational mind models.  Representational
+incompleteness (Theorem~\ref{thm:summit}) is logically
+\emph{independent}: it requires only a fixed-point-free endomorphism
+on the codomain, not recursion-theoretic machinery.  The topological
+strand (Theorem~\ref{thm:generic}) is likewise orthogonal: it turns on
+boundary-subspace invariants, not on recursiveness.  The two approaches
+can reinforce a common \emph{limitative} conclusion about
+representation closed under its own rules, but neither formally entails
+the other.  Importantly, the present result is \emph{stronger} in one
+respect: it holds without any computability assumption on $s$, whereas
+computability-based arguments require $s$ to be computable.
+
+\subsection{No-escape analysis: horn-by-horn closure}
+\label{sec:noescape}
+
+An adversary confronting the representational regress has, at first glance,
+several avenues of retreat.  Each is formalized and shown to fail.  The
+numbering below follows the order in which the escape was identified; each
+``horn'' names an adversarial move, and the closing theorem blocks it.
+
+\paragraph{Horn~1: Infinite injective tower.}
+\emph{Move:} accept $\mathrm{iter\_injective}$ and try to use the tower itself
+as a self-representation resource.
+\emph{Closure:} Theorem~\ref{thm:regress} yields infinitely many distinct
+meta-levels;
+Theorem~\ref{thm:wall} (the Lawvere wall) ensures the endo/obj distinction
+persists at every level.  The tower does not collapse into closure.
+
+\paragraph{Horn~2: Finite-order / periodic iterates.}
+\emph{Move:} weaken $\mathrm{iter\_injective}$---let
+$\mathrm{represent}^n = \mathrm{represent}^m$ for some $n \neq m$, so the
+loop has only finitely many distinct powers.\newline
+\noindent\emph{Closure:}
+\leanref{IterateClosure.End.pow\_iterate\_dichotomy}
+proves the dichotomy: either the iterates are all distinct (Horn~1) or
+there exists a bound $B$ such that every power equals some $e^i$ with
+$i < B$.  In the finite case the system's representational depth is
+bounded; it cannot host an injective tower at all.
+
+\paragraph{Horn~3: Cross-object readout via section--retraction.}
+\emph{Move:} represent $A$ \emph{inside} a different object $B$ using a
+section $s : A \to B$ and retraction $r : B \to A$ with $s \circ r = \mathrm{id}_A$.
+\emph{Closure:}
+\leanref{CrossObjectRepresentation.section\_retraction\_no\_injective\_tower\_either\_side}
+shows that $r \circ s$ is idempotent on $B$ (so $(r \circ s)^1 = (r \circ s)^2$,
+blocking injective powers on the host side) and $s \circ r = \mathrm{id}_A$
+(so all powers are the identity on the source side---trivially periodic).
+Neither side supports an injective $\mathbb{N}$-tower.
+
+\paragraph{Horn~4: Partial (non-surjective) self-model.}
+\emph{Move:} concede that no \emph{total} self-interpreter exists, but claim
+a useful \emph{partial} one.
+\emph{Closure:}
+\leanref{lawvere\_diagonal\_not\_in\_range}
+requires no surjectivity of $s$: for \emph{any} $s : A \to A \to B$ and any
+fixed-point-free $f : B \to B$, the diagonal function $a \mapsto f(s\,a\,a)$
+is never in the range of $s$.  Every partial self-model necessarily has a
+blind spot that includes its own diagonal---the information that matters most
+for self-capture is exactly the information it cannot represent.
+
+\paragraph{Horn~5: Different topological models.}
+\emph{Move:} reject the cylinder/M\"obius witness; substitute a
+Klein bottle, projective plane, or another geometric model.
+
+\emph{Closure:} Theorem~\ref{thm:generic}\newline
+(\leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast})\newline
+\noindent is \emph{model-agnostic}: it defines an
+\textbf{open-ended class} of obstructed pairs---any two spaces
+whose \leanref{ChartableR2}-co-characterized boundaries are
+subtype-incompatible.  The cylinder/M\"obius pair is the
+\emph{minimal-case witness}, not the argument itself.  Replacing
+one non-orientable surface with another does not evade the
+lemma; it merely changes which boundary incompatibility is
+invoked.
+
+\paragraph{Horn~6: Computability / decidable self-reference.}
+\emph{Move:} restrict to decidable predicates or finite-valued functions,
+where ``self-reference'' seems more tractable than Cantorian diagonals.
+\emph{Closure:}
+\leanref{no\_universal\_parametric\_unary\_bool}
+shows that no $s : A \to A \to \mathrm{Bool}$ can realize every
+$g : A \to \mathrm{Bool}$, since $\lnot : \mathrm{Bool} \to \mathrm{Bool}$
+is fixed-point-free.  The obstruction is not an artifact of infinite
+cardinality; it holds in the decidable, two-valued setting.
+
+\paragraph{Residual openings (not closed here).}
+Two further routes are not formally addressed in this paper:
+\emph{(i)}~\emph{higher-categorical self-maps} (a self-representation
+living in a $2$-category or $\infty$-category, where the monoid of
+endomorphisms is replaced by a richer hom-object); and
+\emph{(ii)}~\emph{non-categorical frameworks} (a system that resists
+categorical encoding entirely).  The first is subject to analogous
+monoid-element arguments once a truncation to the $1$-categorical
+endomorphism monoid is performed; the second falls outside the scope of
+any categorical formalization by definition.  Both are noted as
+limitations in \S\ref{sec:limits}.
+
+\subsection{Admissibility: what the closures tell neighboring debates}
+\label{sec:admissibility}
+
+Given that Horns~1--6 are closed, the formal landscape constrains what
+\emph{admissible} solutions look like in each neighboring debate.  The
+reasoning in every case is the same: the closures establish a structural
+barrier, so any proposed solution must either (a)~operate outside the
+barrier's hypotheses, or (b)~accept the consequences.
+
+\paragraph{Consciousness and self-presence.}
+If a system's state-space has one boundary-connectivity pattern (e.g.\
+two disjoint components, as in the cylinder), then no homeomorphism maps
+it to \emph{any} space with an incompatible pattern (e.g.\ one connected
+band, as in the M\"obius strip---but equally a Klein bottle, projective
+plane, or any other witness satisfying Theorem~\ref{thm:generic}).  An
+admissible account of self-presence must therefore either
+(i)~posit that the relevant substrate \emph{already} has the target
+topological type, or
+(ii)~invoke a discontinuous or non-topological bridge not modeled here.
+Scaling---more parameters, longer context windows, deeper
+architectures---extends a representational system \emph{within} a fixed
+topological type; it does not change boundary organization.
+
+\paragraph{Symbol grounding.}
+Any symbol system that iterates interpretation is caught in the
+Horns~1/2 dichotomy: either infinite distinct levels (full regress plus
+Lawvere wall) or finite-bounded depth (finite loop, no injective tower).
+Horn~4 adds that even a \emph{partial} interpretation function misses its
+own diagonal.  Admissible grounding must therefore come from
+\emph{outside} the representational loop: the system cannot ground itself
+by iterating its own interpretive machinery, whether totally or partially.
+
+\paragraph{Diagonal arguments / AI self-interpretation.}
+Any proposed self-interpreter $s : A \to A \to B$ (total or partial)
+necessarily fails to include its own diagonal
+(\leanref{lawvere\_diagonal\_not\_in\_range}); this holds for
+$B = \mathbb{N}$ (numeric outputs), $B = \mathrm{Bool}$ (decidable
+predicates), and any $B$ with a fixed-point-free endomorphism.
+Admissible self-interpreters \emph{must} be incomplete in a precise
+sense: they cannot model their own diagonal behavior.  This is not a
+resource limitation but a structural one; no amount of compute, training
+data, or architectural ingenuity changes the diagonal exclusion.
+
+\paragraph{Quantum measurement chains.}
+If the measurement chain's state space has a boundary pattern matching the
+cylinder side of the development, then no homeomorphism identifies it with
+\emph{any} target whose boundary pattern is incompatible---whether that
+target is M\"obius-type, Klein-bottle-type, or any other
+space satisfying the generic lemma.  The chain must either introduce
+genuinely new topological structure at some level---not representational
+iteration of the same type---or accept that its boundary organization
+differs from the target.
+
+\paragraph{LLM and AI scaling.}
+Scaling extends a representational architecture within a fixed topological
+type.  If that type has one boundary-connectivity pattern, scaling does not
+produce a homeomorphism to \emph{any} target with an incompatible pattern.
+The cylinder/M\"obius pair is the minimal witness; the obstruction is the
+general lemma, not the particular pair.
+Admissible paths to a different topological type require
+\emph{structural} change (different topology of the underlying state
+space), not quantitative extension (more of the same).
+
+% ============================================================================
+% 8. LIMITATIONS AND SCOPE
+% ============================================================================
+\section{Limitations and scope}
+\label{sec:limits}
+
+\begin{enumerate}
+\item \textbf{Hypothesis, not derivation.} $\mathrm{iter\_injective}$ is bundled,
+  not proved from minimal data. Not every $f : A \to A$ in every category satisfies it.
+  The regress is conditional on this non-triviality hypothesis.
+
+\item \textbf{Lawvere in \texttt{Type}, not abstract CCC.} The formalization uses
+  $\mathrm{Type}\ u$ and\newline
+  $\mathrm{MonoidalClosed}(\mathrm{Type}\ u)$, not a general closed category over arbitrary~$C$.
+  A fully abstract CCC version remains future work.
+
+\item \textbf{\texttt{OntologicalSlot} is definitional, not metaphysical.} The disjointness $\mathrm{endo} \neq \mathrm{obj}$ is trivially true by constructor discrimination. This is the point, but the triviality means the result is \emph{semantic} (about the structure of type theory) rather than a deep theorem.
+
+\item \textbf{Models are chosen, not unique.} The closed cylinder and M\"obius strip are the \emph{minimal-case witnesses} chosen for clarity and tractability.  Theorem~\ref{thm:generic} defines an open-ended class of obstructed pairs; any two spaces with incompatible \texttt{ChartableR2}-co-characterized boundaries (Klein bottle vs.\ torus, projective plane vs.\ sphere, etc.) would serve equally.  Discharging additional witnesses requires proving their boundary biconditionals and subtype incompatibility.
+
+\item \textbf{P2 is philosophical.} The premise ``consciousness requires non-orientable topology'' is not a theorem. Section~\ref{sec:instantiations} states only what follows when P2 is adjoined to the proved non-homeomorphism; accepting or rejecting P2 remains an independent issue.
+
+\item \textbf{No $\mathrm{IsManifold}$ polish.} The M\"obius strip is not given a full Mathlib $\mathrm{IsManifold}$ instance. The proof uses $\mathrm{ChartableR2}$ (open neighborhoods homeomorphic to $\mathbb{R}^2$) as a self-contained predicate, sidestepping the need for a full manifold-with-boundary atlas. This is sufficient for the non-homeomorphism but less elegant than a full atlas approach.
+
+\item \textbf{Route W is incomplete.} An alternative proof via circle-winding / doubling obstructions (Steps~1--4 in \leanref{CylinderMobiusNonhomeo.lean}) is partially formalized. Step~5 (transport under a hypothetical global homeomorphism) is not proved. The flagship proof via $\mathrm{ChartableR2}$ is complete and does not depend on Route~W.
+
+\item \textbf{\texttt{QuantumObserverChainHypothesis}.} This definition only
+  bundles topological assumptions (boundary set, \texttt{ChartableR2}
+  biconditional,\newline subtype non-homeomorphism to an incompatible target
+  boundary---the M\"obius boundary is the minimal witness).  It does not
+  import Hilbert spaces, operators, or measurement axioms; a physical
+  application would need a separate argument that a concrete model satisfies
+  those fields.
+
+\item \textbf{Partial self-models: blind spot, not total impossibility.}
+  \leanref{lawvere\_diagonal\_not\_in\_range} proves that every partial
+  self-model misses its own diagonal; it does not prove that partial
+  self-models are \emph{useless}---only that they are necessarily incomplete
+  in a precise, diagonal-shaped way.  Whether that incompleteness matters
+  for a given application is a separate question.
+
+\item \textbf{Higher-categorical and non-categorical frameworks.}
+  The horn closures rely on $1$-categorical endomorphism monoids.  A
+  self-representation living in a $2$-category or $\infty$-category
+  replaces the monoid with a richer hom-object; the present arguments
+  apply after truncation to the underlying $1$-categorical monoid, but
+  a native higher-categorical treatment is not given.  Systems that
+  resist categorical encoding entirely fall outside any categorical
+  formalization by definition.
+
+\item \textbf{Computability: decidable analogue only.}
+  \leanref{no\_universal\_parametric\_unary\_bool} closes the
+  $\mathrm{Bool}$-valued Lawvere horn.  A full treatment of Turing-degree
+  obstructions (Rice's theorem, Kleene's recursion theorem) in the same
+  framework is not attempted; the present result is the finite/decidable
+  endpoint of the diagonal family.
+\end{enumerate}
+
+% ============================================================================
+% 9. RELATED WORK
+% ============================================================================
+\section{Related work}
+\label{sec:related}
+
+\subsection{Formalized topology}
+Mathlib's manifold and topology libraries underpin the half-space and chart
+lemmas; other proof assistants also host substantial topology.  The weight
+here is on a \emph{general} non-homeomorphism lemma (Theorem~\ref{thm:generic})
+that defines an open-ended obstruction class, together with a fully discharged
+minimal-case witness, rather than on novel classification of differential
+invariants.
+
+\subsection{Lawvere's theorem in proof theory}
+Lawvere's fixed-point argument appears in multiple formal developments.
+\texttt{OntologicalSlot} and the wall lemmas supply complementary
+category-internal tagging alongside the \texttt{Type}-level diagonal theorem.
+
+\subsection{Consciousness, G\"odel, and AI}
+G\"odel- and computability-based limits on mechanism (including Penrose-style
+arguments, discussions of strange loops and self-reference in the sense of
+Hofstadter, and information-theoretic theories of
+consciousness) occupy a large literature.  Those arguments turn on
+decidability or information capacity; ours turns on topological type.
+Representational incompleteness (Theorem~\ref{thm:summit}) is
+independent of computability: it holds for every codomain admitting a
+fixed-point-free endomorphism, regardless of cardinality or
+decidability.  The topological strand
+(Theorem~\ref{thm:generic}) is likewise orthogonal to G\"odel-style
+reasoning: it is a finite-data invariant, not an incompleteness of a
+deductive system.
+
+\subsection{Topology in philosophy of mind}
+Topological figures of speech appear in some philosophy of mind.  The present
+work differs in two ways: (i)~its central topological claims are machine-checked
+theorems rather than metaphors, and (ii)~the generalization is explicit---a
+general lemma defining an open-ended class of obstructed space-pairs, not a
+single hard-wired example.
+
+% ============================================================================
+% 10. CONCLUSION
+% ============================================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+The summit theorem (\leanref{representational\_incompleteness},
+Theorem~\ref{thm:summit}) states the central result:
+\textbf{no self-modeling system can capture its own diagonal}.  For any
+$s : A \to A \to B$ and any fixed-point-free $f : B \to B$, the
+diagonal function $a \mapsto f(s\,a\,a)$ is never equal to any row
+$s\,a_0$---and if $s$ is claimed to be total and surjective, it simply
+cannot exist.  No assumption on the surjectivity, cardinality, or
+computability of $s$ is required.  This is
+\textbf{representational incompleteness}: the analogue of G\"odel
+incompleteness for self-modeling systems rather than formal theories.
+
+Three mutually reinforcing layers make the result robust:
+
+\begin{enumerate}[label=(\roman*)]
+\item \textbf{Categorical infrastructure.}\enspace
+  A machine-checked regress and Lawvere scaffold, including the
+  \leanref{OntologicalSlot} wall that persists at every iterate
+  depth, ensures that no climb up the meta-level tower dissolves the
+  endo/obj distinction.
+\item \textbf{Topological obstruction (general lemma + minimal witness).}\enspace
+  Theorem~\ref{thm:generic} defines an \emph{open-ended class} of
+  obstructed space-pairs: any two spaces with incompatible
+  $\mathrm{ChartableR2}$-co-characterized boundaries are not
+  homeomorphic.  The cylinder/M\"obius pair is the fully discharged
+  \emph{minimal-case witness}; Klein bottles, projective planes, or
+  any other surface satisfying the hypotheses would serve equally.
+  The obstacle is \textbf{wrong type}, not
+  \textbf{inexhaustible queue}.
+\item \textbf{Systematic no-escape closure (Horns~1--6).}\enspace
+  Six adversarial retreat routes are formally closed
+  (\S\ref{sec:noescape}): infinite regress, finite-order collapse,
+  cross-object readout, partial self-models, model substitution, and
+  decidable self-reference.  Each closure is a proved theorem in
+  Lean~4; together they leave an adversary with no viable route to
+  circumvent either the diagonal or the topological barrier.
+\end{enumerate}
+
+\paragraph{What is not being claimed.}
+The theorems are unconditional mathematics; the \emph{application} to
+any particular domain requires domain-specific premises (P2 for
+consciousness, \texttt{ChartableR2} biconditionals for a specific
+state-space model, etc.).  The formalism does not prove that
+consciousness is non-representational, that AI cannot be conscious, or
+that symbol grounding is impossible.  It proves that \emph{if} the
+relevant state space has the boundary pattern characterized here,
+\emph{then} no homeomorphism to a space with a different boundary
+pattern exists---and that the six most natural attempts to route around
+that barrier fail in formally checkable ways.
+
+\paragraph{The admissibility picture.}
+The horn closures (\S\ref{sec:noescape}) together with the
+admissibility analysis (\S\ref{sec:admissibility}) leave a clean
+landscape.  In each neighboring debate---consciousness,
+symbol grounding, diagonal limitations, measurement chains, AI
+scaling---the admissible solutions share a common shape:
+\emph{structural change} to the topological type of the substrate,
+not \emph{quantitative extension} within a fixed type.  Scaling,
+iterating, partial modeling, finite-depth loops, cross-object readout,
+and decidable restriction are all formally inadmissible.  The
+formalism makes this precise and machine-checkable, so that future
+claims about circumventing the barrier can be evaluated against a
+fixed standard rather than debated informally.
+
+\medskip
+\noindent\textbf{Future work.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0.15ex,topsep=0.3ex,parsep=0pt]
+\item Discharge additional witnesses (Klein bottle, projective plane) for
+  the general obstruction class.
+\item A full $\mathrm{IsManifold}$ instance for
+  $\mathrm{MobiusStrip}$.
+\item Completion of the optional Route~W winding track.
+\item A more abstract Lawvere statement for general cartesian closed
+  categories.
+\item Native higher-categorical horn closures ($2$-category and
+  $\infty$-category analogues).
+\item A full Turing-degree analogue of the decidable Lawvere horn
+  (Rice's theorem / Kleene recursion in the same framework).
+\end{itemize}
+
+% ============================================================================
+% APPENDICES
+% ============================================================================
+\appendix
+
+\section{Lean Module Map}
+\label{app:modules}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.95cm}>{\raggedright\arraybackslash}p{11.45cm}@{}}
+\toprule
+\textbf{Module} & \textbf{Role} \\
+\midrule
+\leanref{Basic} & \leanref{RepresentationalSystem}, iterates, \leanref{OntologicalSlot} \\
+\leanref{Regress} & Non-termination, unbounded levels \\
+\leanref{FixedPoints} & \leanref{EndoVsPoint}, Lawvere wall non-dissolution \\
+\leanref{Lawvere} & Fixed-point theorem in \texttt{Type} \\
+\leanref{LawvereCCCType} & \texttt{MonoidalClosed} packaging \\
+\leanref{Orientability} & $T_2$ homeomorphism invariance \\
+\leanref{CylinderMobius} & Fundamental domain, quotient, compact Hausdorff, boundary band \\
+\leanref{CylinderBoundary} & Closed cylinder boundary: two disjoint connected faces \\
+\leanref{CylinderChartableBoundary} & Cylinder C4 biconditional \\
+\leanref{ChartableR2Neighbor} & \leanref{ChartableR2}, \leanref{ChartableR2BoundaryModel}; openness / stability \\
+\leanref{ChartableR2Bridge} & \leanref{Homeomorph.chartableR2\_iff}; \leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}; \leanref{ChartableR2BoundaryModel.not\_homeomorphic} \\
+\leanref{ChartableR2ConcreteBoundaryModels} & M\"obius/cylinder boundary models; conditional observer chain; \leanref{QuantumObserverChainHypothesis} \\
+\leanref{SymbolGrounding} & \leanref{SymbolSystem}; \leanref{symbolGrounding\_*} \\
+\leanref{LawvereRegressBridge} & \leanref{no\_universal\_parametric\_unary\_nat}, \leanref{no\_universal\_parametric\_unary\_bool}; \leanref{lawvere\_diagonal\_not\_in\_range}; \leanref{lawvere\_fixed\_point\_stays\_representational} \\
+\leanref{NoEscapeClosure} & Iterate collisions vs.\ injective towers; section--retraction idempotent readout \\
+\leanref{ChartableR2Models} & Interior charts; cylinder interior \leanref{ChartableR2} \\
+\leanref{MobiusChartableBoundary} & Open-cell charts; boundary $\neg$\leanref{ChartableR2}; M\"obius C4 packaging \\
+\leanref{MobiusSeamChartable} & Saturated seam patches (open, saturated) \\
+\leanref{MobiusSeamChart} & IFT-based local model; trig coordinates \\
+\leanref{MobiusSeamTrigInject} & Trig injectivity on quotient windows \\
+\leanref{MobiusSeamChartableR2} & Seam charts (trig + unfold); interior-height; \textbf{M-FINAL} \\
+\leanref{MobiusCylinderBoundaryContrast} & Boundary subspaces not homeomorphic \\
+\leanref{CylinderMobiusNonhomeo} & Route W (optional; Steps 1--4) \\
+\leanref{HalfLineVsLine} & 1D half-space $\neq$ line \\
+\leanref{HalfPlaneVsPlane} & 2D half-space $\neq$ plane \\
+\leanref{HalfSpaceNeighborVsPlane} & Local half-space $\neq$ open plane patch \\
+\leanref{PuncturedPlaneNotSimplyConnected} & $\mathbb{C} \setminus \{0\}$ not simply connected \\
+\leanref{OpenCompactChartObstruction} & Compact $\mathbb{R}^2$ patch $\neq$ $\mathbb{R}^2$ \\
+\leanref{Main} & Master theorem + extended bundle \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Key Theorem Index}
+\label{app:theorems}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{3.85cm}>{\raggedright\arraybackslash}p{7.55cm}>{\raggedright\arraybackslash}p{3.15cm}@{}}
+\toprule
+\textbf{Lean name} & \textbf{Statement} & \textbf{Module} \\
+\midrule
+\leanref{representational\_incompleteness} & \textbf{Summit:} $\forall a_0$, $s\,a_0 \neq \lambda a.\,f(s\,a\,a)$; $\neg\exists$ total $s$ & \leanref{LawvereRegressBridge} \\
+\midrule
+\leanref{regress\_iterates\_unbounded} & $\forall B, \exists L > B$, distinct iterate & \leanref{Regress} \\
+\leanref{lawvere\_fixed\_point\_Type} & Universal enumerator $\Rightarrow$ every endo has fixed point & \leanref{Lawvere} \\
+\leanref{lawvere\_wall\_is\_not\_dissolution} & $\mathrm{endo}(\mathrm{represent}) \neq \mathrm{obj}(\mathrm{fp})$ & \leanref{FixedPoints} \\
+\leanref{instT2SpaceMobiusStrip} & M\"obius strip is $T_2$ & \leanref{CylinderMobius} \\
+\leanref{isConnected\_mobiusStripBoundary} & Boundary band is connected & \leanref{CylinderMobius} \\
+\leanref{closedCylinder\_boundary\_eq\_union} & Cylinder boundary = 2 disjoint faces & \leanref{CylinderBoundary} \\
+\leanref{euclideanHalfSpace2\_not\_homeomorphic\_euclidean2} & $H^2 \not\cong_t \mathbb{R}^2$ & \leanref{HalfPlaneVsPlane} \\
+\leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast} & Generic: incompatible boundaries $\Rightarrow$ $\neg$ homeo & \leanref{ChartableR2Bridge} \\
+\leanref{closedCylinder\_boundaryUnion\_iff\_not\_chartableR2} & Cylinder C4 biconditional & \leanref{CylinderChartableBoundary} \\
+\leanref{not\_chartableR2\_of\_mem\_mobiusStripBoundary} & M\"obius boundary $\Rightarrow$ $\neg$\leanref{ChartableR2} & \leanref{MobiusChartableBdy} \\
+\leanref{chartableR2\_mobiusQuotientMk\_of\_interior\_height} & Interior height $\Rightarrow$ \leanref{ChartableR2} & \leanref{MobiusSeamChartableR2} \\
+\leanref{mobiusStripBoundary\_not\_homeomorphic\ldots} & Boundary subtypes not homeo & \leanref{MobiusCylBdyContrast} \\
+\leanref{mobiusStrip\_not\_homeomorphic\_closedCylinder} & \textbf{M-FINAL} & \leanref{MobiusSeamChartableR2} \\
+\leanref{representational\_regress\_master} & Core master conjunction & \leanref{Main} \\
+\leanref{representational\_regress\_master\_extended} & Extended bundle (+ topology) & \leanref{Main} \\
+\leanref{QuantumObserverChainHypothesis.not\_homeomorphic\_mobiusStrip} & Conditional: obs.\ chain $\not\simeq_t$ M\"obius & \leanref{ChartableR2ConcreteBoundaryModels} \\
+\leanref{no\_universal\_parametric\_unary\_nat} & No universal $s : A \!\to\! A \!\to\! \mathbb{N}$ for all $g : A \!\to\! \mathbb{N}$ & \leanref{LawvereRegressBridge} \\
+\leanref{IterateClosure.End.pow\_iterate\_dichotomy} & Injective iterate powers vs.\ finite index bound & \leanref{NoEscapeClosure} \\
+\leanref{CrossObjectRepresentation.section\_retraction\_no\_injective\_tower\_either\_side} & Both-side: $\neg$ injective $\mathbb{N}$-powers on source \emph{or} host & \leanref{NoEscapeClosure} \\
+\leanref{lawvere\_diagonal\_not\_in\_range} & Diagonal never in range of any $s : A \!\to\! A \!\to\! B$ (no surjectivity) & \leanref{LawvereRegressBridge} \\
+\leanref{no\_universal\_parametric\_unary\_bool} & No universal $s : A \!\to\! A \!\to\! \mathrm{Bool}$ for all $g : A \!\to\! \mathrm{Bool}$ & \leanref{LawvereRegressBridge} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Reproduction}
+\label{app:repro}
+
+\begin{verbatim}
+cd representational-incompleteness-lean
+lake update
+lake exe cache get
+lake build RepresentationalIncompleteness
+# Verify: 0 sorry
+rg "sorry" RepresentationalIncompleteness/
+\end{verbatim}
+
+\noindent
+Toolchain: \texttt{leanprover/lean4:v4.29.0-rc6}. Mathlib: \texttt{v4.29.0-rc6}.
+
+\end{document}

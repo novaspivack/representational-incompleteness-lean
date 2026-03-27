@@ -1,4 +1,4 @@
-# representational-regress-lean
+# representational-incompleteness-lean
 
 Formal verification of the representational regress argument in the philosophy of mind.
 
@@ -40,7 +40,7 @@ Lawvere (1969): “Diagonal arguments and cartesian closed categories”; Mathli
 ```bash
 lake update              # resolve deps → exact mathlib revision
 lake exe cache get       # REQUIRED: download pre-built .olean blobs (GitHub source ≠ binaries)
-lake build RepresentationalRegress   # default library target; only this repo + uncached leaves
+lake build RepresentationalIncompleteness   # default library target; only this repo + uncached leaves
 ```
 
 If `lake build` starts compiling thousands of `Mathlib.*` files, you skipped `cache get`, hit a cache miss for an untagged mathlib rev, or removed `~/.cache/mathlib/`. Fix: run `lake exe cache get` again; keep `lakefile.lean` on a **tagged** mathlib release (as pinned) so the community cache always has artifacts.
@@ -49,14 +49,14 @@ Workspace documentation: `../docs/lean_mathlib_cache_workflow.md`, `../docs/opti
 
 ## Structure
 
-- `RepresentationalRegress/Basic.lean` — core definitions (`iter_injective`, iterates, `Over A`)
-- `RepresentationalRegress/Regress.lean` — regress chain theorems
-- `RepresentationalRegress/FixedPoints.lean` — curry/uncurry injectivity; `OntologicalSlot` “wall”
-- `RepresentationalRegress/Lawvere.lean` — Lawvere fixed-point theorem in `Type`
-- `RepresentationalRegress/Orientability.lean` — T₂ and homeomorphisms
-- `RepresentationalRegress/CylinderMobius.lean` — cylinder vs Möbius definitions  
-- `RepresentationalRegress/CylinderBoundary.lean` — closed cylinder boundary (two faces)
-- `RepresentationalRegress/Main.lean` — master conditional theorem
+- `RepresentationalIncompleteness/Basic.lean` — core definitions (`iter_injective`, iterates, `Over A`)
+- `RepresentationalIncompleteness/Regress.lean` — regress chain theorems
+- `RepresentationalIncompleteness/FixedPoints.lean` — curry/uncurry injectivity; `OntologicalSlot` “wall”
+- `RepresentationalIncompleteness/Lawvere.lean` — Lawvere fixed-point theorem in `Type`
+- `RepresentationalIncompleteness/Orientability.lean` — T₂ and homeomorphisms
+- `RepresentationalIncompleteness/CylinderMobius.lean` — cylinder vs Möbius definitions  
+- `RepresentationalIncompleteness/CylinderBoundary.lean` — closed cylinder boundary (two faces)
+- `RepresentationalIncompleteness/Main.lean` — master conditional theorem
 - `docs/argument-structure.md` — plain-language map
 
-See also `MANIFEST.md`, `THEOREM_INVENTORY.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, `ARTIFACT.md`.
+See also `MANIFEST.md`, `THEOREM_INVENTORY.md`, `REPRESENTATIONAL_INCOMPLETENESS_FORMALIZATION_MAP.md`, `ARTIFACT.md`.

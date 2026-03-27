@@ -14,5 +14,5 @@ if [[ $# -gt 0 ]]; then
   done
 else
   compile_one "Program_Notes.tex"
-  compile_one "The_Representational_Regress.tex"
+  compile_one "Representational_Incompleteness.tex"
 fi

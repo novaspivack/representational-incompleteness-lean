@@ -1,6 +1,6 @@
 # Representational Regress — theorem inventory (Lean names)
 
-**Last updated:** 2026-03-27 — **0** `sorry` in `RepresentationalRegress/`; **M-FINAL** **`mobiusStrip_not_homeomorphic_closedCylinder`**; **`NoEscapeClosure`** (iterate collision vs.\ cross-object readout); **`ChartableR2BoundaryModel`**, **`SymbolGrounding`**, **`LawvereRegressBridge`**, **`ChartableR2ConcreteBoundaryModels`** (incl. **`QuantumObserverChainHypothesis`** schematic). Paired with `MANIFEST.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, `docs/ADVISOR_OVERVIEW.md`, and `lake build RepresentationalRegress`.  
+**Last updated:** 2026-03-27 — **0** `sorry` in `RepresentationalIncompleteness/`; **M-FINAL** **`mobiusStrip_not_homeomorphic_closedCylinder`**; **`NoEscapeClosure`** (iterate collision vs.\ cross-object readout); **`ChartableR2BoundaryModel`**, **`SymbolGrounding`**, **`LawvereRegressBridge`**, **`ChartableR2ConcreteBoundaryModels`** (incl. **`QuantumObserverChainHypothesis`** schematic). Paired with `MANIFEST.md`, `REPRESENTATIONAL_INCOMPLETENESS_FORMALIZATION_MAP.md`, `docs/ADVISOR_OVERVIEW.md`, and `lake build RepresentationalIncompleteness`.  
 **Purpose:** Index of principal `def`s / `theorem`s by module.
 
 ---
@@ -37,7 +37,7 @@
 | `MobiusSeamChart` | **Vertical seam local model** on `R²`: **`mobiusSeamSlidingCoord`**, **strict window** **`mobiusSeamSlidingStrictCoordSet`**, **`homeomorph_subtype_mobiusSeamSlidingCoord_preimage`**; **`mobiusSeamLocalMap*`** / IFT **`mobiusSeamLocalMapOpenPartialHomeomorph`**; **`mobiusStripTrigCoord`** / **`continuous_mobiusStripTrigCoord`**. Consumed by **`MobiusSeamChartableR2`** (trig charts, sliding windows). |
 | `MobiusSeamChartable` | **`mobiusSeamLeftPatchGluePartners`**, **`mobiusSeamLeftPatch_mk_preimage_image_eq`**. Saturated patches **`mobiusSeamSaturatedPatch`**, **`isOpen_mobiusSeamSaturatedPatch`**, **`isOpen_mobiusSeamLeftPatch`**, **`isOpen_mobiusSeamRightPatch`**, **`mobiusSeamSaturatedPatch_sat`**, sheet interior **`mobiusSeamSaturatedPatchSheetInterior`**, **`mobiusSeamSaturatedPatchSheetInterior_sat`**, **`mobiusQuotientMk_injective_on_mobiusSeamSaturatedPatchSheetInterior`**. |
 | `MobiusSeamTrigInject` | Away from `t = ½` on saturated seam patches: **`sub_half_ne_zero_of_mem_mobiusSeamSaturatedPatch`**, **`mobiusRel₀_of_eq_mobiusFDTrigCoord_of_seamPatch`**, **`onPatch_mobiusFDTrigCoord_eq_iff_mobiusRel₀`**, **`injective_mobiusStripTrigCoord_on_image_quotient_mk_mobiusSeamSaturatedPatch`**, **`image_mobiusStripTrigCoord_quotient_mk_image_mobiusSeamSaturatedPatch`**. Inputs: `MobiusSeamChart` / `MobiusSeamChartable` patch hypotheses + `δ < |t₀ - ½|` where needed. |
-| `Main` | Re-exports: `SymbolGrounding`, `LawvereRegressBridge`, `ChartableR2ConcreteBoundaryModels`; `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterExtended`, `representational_regress_master_extended`, `representational_regress_topology_halfLineModel`. Root `RepresentationalRegress.lean` also imports `NoEscapeClosure`. |
+| `Main` | Re-exports: `SymbolGrounding`, `LawvereRegressBridge`, `ChartableR2ConcreteBoundaryModels`; `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalIncompletenessMasterExtended`, `representational_regress_master_extended`, `representational_regress_topology_halfLineModel`. Root `RepresentationalIncompleteness.lean` also imports `NoEscapeClosure`. |
 
 ---
 
@@ -180,7 +180,7 @@ Orthogonal to the main **`iter_injective`** hypothesis: records what follows if 
 |------|-----------|--------|
 | `def` | `representational_regress_master_claim` | Master conjunction as one `Prop` (universe-coupled to `R`) |
 | `theorem` | `representational_regress_master` | Proves `representational_regress_master_claim` |
-| `abbrev` | `RepresentationalRegressMasterExtended` | `representational_regress_master_claim R ∧` half-line `≄ₜ` **`∧`** **`IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)`** (**M-FINAL**); **not** a replacement for the core master theorem |
+| `abbrev` | `RepresentationalIncompletenessMasterExtended` | `representational_regress_master_claim R ∧` half-line `≄ₜ` **`∧`** **`IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)`** (**M-FINAL**); **not** a replacement for the core master theorem |
 | `theorem` | `representational_regress_master_extended` | Proves that extended conjunction (incl. **`mobiusStrip_not_homeomorphic_closedCylinder`**) |
 | `theorem` | `representational_regress_topology_halfLineModel` | 1D half-space vs line only (first topology leg; pair with `representational_regress_master` if splitting the bundle) |
 

@@ -1,6 +1,6 @@
 # Argument structure (plain language)
 
-This note tracks the formal modules in `RepresentationalRegress/` against the philosophical argument. Detailed obligations live in `specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md` (outer workspace).
+This note tracks the formal modules in `RepresentationalIncompleteness/` against the philosophical argument. Detailed obligations live in `specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md` (outer workspace).
 
 ## `Basic.lean`
 

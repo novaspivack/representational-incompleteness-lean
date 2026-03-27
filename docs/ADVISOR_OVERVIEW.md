@@ -1,8 +1,8 @@
-# Representational Regress (Lean) — overview for advisors
+# Representational Incompleteness (Lean) — overview for advisors
 
-**Repository:** `representational-regress-lean`  
-**Build:** `lake build RepresentationalRegress` — **0** `sorry`, **0** project axioms beyond Mathlib + Lean's core  
-**Navigation:** `MANIFEST.md`, `THEOREM_INVENTORY.md`, `REPRESENTATIONAL_REGRESS_FORMALIZATION_MAP.md`, `ARTIFACT.md`  
+**Repository:** `representational-incompleteness-lean`  
+**Build:** `lake build RepresentationalIncompleteness` — **0** `sorry`, **0** project axioms beyond Mathlib + Lean's core  
+**Navigation:** `MANIFEST.md`, `THEOREM_INVENTORY.md`, `REPRESENTATIONAL_INCOMPLETENESS_FORMALIZATION_MAP.md`, `ARTIFACT.md`  
 **Topology program spec:** `../specs/IN-PROCESS/SPEC_002_K7P_TOPOLOGY_PUNCHLINE_AND_PAPER.md`  
 **Seam chart spec:** `../specs/IN-PROCESS/SPEC_003_NF8_MOBIUS_SEAM_CHARTABLE_AND_M_FINAL_CLOSURE.md`
 
@@ -99,17 +99,17 @@ The generic theorem means the **same obstruction applies to any compact surface 
 
 ## 6. Suggested citation strings
 
-- **Regress / Lawvere package:** `RepresentationalRegress.representational_regress_master` and modules `Basic`, `Regress`, `Lawvere`.  
-- **Same + topology punchline in one theorem:** `RepresentationalRegress.representational_regress_master_extended` (abbrev `RepresentationalRegressMasterExtended`; **not** a successor — extends the core master with half-line and M-FINAL lemmas).  
-- **Generic boundary-contrast obstruction:** `RepresentationalRegress.not_homeomorphic_of_chartableR2_boundary_contrast` (universal engine for any pair with incompatible `ChartableR2`-detected boundaries).  
-- **Mobius vs cylinder:** `RepresentationalRegress.mobiusStrip_not_homeomorphic_closedCylinder`.  
-- **Interior charts:** `RepresentationalRegress.chartableR2_mobiusQuotientMk_of_interior_height`.  
-- **Cylinder boundary sensor:** `RepresentationalRegress.closedCylinder_boundaryUnion_iff_not_chartableR2`.  
-- **Mobius boundary sensor (conditional packaging):** `RepresentationalRegress.mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`.  
-- **Bundled boundary models:** `RepresentationalRegress.ChartableR2BoundaryModel`, concrete instances `mobiusStripChartableR2BoundaryModel`, `closedCylinderChartableR2BoundaryModel` (`ChartableR2ConcreteBoundaryModels`).  
-- **Symbol grounding (same math as `RepresentationalSystem`):** `RepresentationalRegress.SymbolSystem`, `symbolGrounding_*`.  
-- **Diagonal / no universal interpreter:** `RepresentationalRegress.no_universal_parametric_unary_nat`, `no_universal_parametric_unary_bool`, `lawvere_diagonal_not_in_range`, `lawvere_fixed_point_stays_representational` (`LawvereRegressBridge`).  
-- **No-escape horn closures:** `RepresentationalRegress.IterateClosure.End.pow_iterate_dichotomy` (iterate collision → finite bound), `CrossObjectRepresentation.section_retraction_no_injective_tower_either_side` (retraction → no injective tower on either side) (`NoEscapeClosure`).  
-- **Schematic QM / measurement chain (hypotheses only, no axioms):** `RepresentationalRegress.QuantumObserverChainHypothesis`, `QuantumObserverChainHypothesis.not_homeomorphic_mobiusStrip`.
+- **Regress / Lawvere package:** `RepresentationalIncompleteness.representational_regress_master` and modules `Basic`, `Regress`, `Lawvere`.  
+- **Same + topology punchline in one theorem:** `RepresentationalIncompleteness.representational_regress_master_extended` (abbrev `RepresentationalIncompletenessMasterExtended`; **not** a successor — extends the core master with half-line and M-FINAL lemmas).  
+- **Generic boundary-contrast obstruction:** `RepresentationalIncompleteness.not_homeomorphic_of_chartableR2_boundary_contrast` (universal engine for any pair with incompatible `ChartableR2`-detected boundaries).  
+- **Mobius vs cylinder:** `RepresentationalIncompleteness.mobiusStrip_not_homeomorphic_closedCylinder`.  
+- **Interior charts:** `RepresentationalIncompleteness.chartableR2_mobiusQuotientMk_of_interior_height`.  
+- **Cylinder boundary sensor:** `RepresentationalIncompleteness.closedCylinder_boundaryUnion_iff_not_chartableR2`.  
+- **Mobius boundary sensor (conditional packaging):** `RepresentationalIncompleteness.mobiusStripBoundary_iff_not_chartableR2_of_forall_off_edge_chartable`.  
+- **Bundled boundary models:** `RepresentationalIncompleteness.ChartableR2BoundaryModel`, concrete instances `mobiusStripChartableR2BoundaryModel`, `closedCylinderChartableR2BoundaryModel` (`ChartableR2ConcreteBoundaryModels`).  
+- **Symbol grounding (same math as `RepresentationalSystem`):** `RepresentationalIncompleteness.SymbolSystem`, `symbolGrounding_*`.  
+- **Diagonal / no universal interpreter:** `RepresentationalIncompleteness.no_universal_parametric_unary_nat`, `no_universal_parametric_unary_bool`, `lawvere_diagonal_not_in_range`, `lawvere_fixed_point_stays_representational` (`LawvereRegressBridge`).  
+- **No-escape horn closures:** `RepresentationalIncompleteness.IterateClosure.End.pow_iterate_dichotomy` (iterate collision → finite bound), `CrossObjectRepresentation.section_retraction_no_injective_tower_either_side` (retraction → no injective tower on either side) (`NoEscapeClosure`).  
+- **Schematic QM / measurement chain (hypotheses only, no axioms):** `RepresentationalIncompleteness.QuantumObserverChainHypothesis`, `QuantumObserverChainHypothesis.not_homeomorphic_mobiusStrip`.
 
 For a full Lean name index, use **`THEOREM_INVENTORY.md`**.

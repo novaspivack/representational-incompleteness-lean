@@ -27,6 +27,10 @@ Machine-checked renditions of:
 
 4. Orientability / invariance claims aligned to mathlib once the geometric interface is chosen (`Orientability`).
 
+5. **No-escape horn closures** (`NoEscapeClosure`): iterate collision ⇒ bounded distinct powers; section--retraction readout ⇒ idempotent loop on host, blocking injective ℕ-towers on both source and host objects.
+
+6. **Diagonal-exclusion and decidable Lawvere** (`LawvereRegressBridge`): partial self-models necessarily miss their own diagonal (`lawvere_diagonal_not_in_range`); no universal evaluator into `Bool` (`no_universal_parametric_unary_bool`) — decidable/computability analogue.
+
 Explicitly **not** in scope for Lean: phenomenological immediacy premises, philosophical bridge to non-orientable identity structure.
 
 ---

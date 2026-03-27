@@ -159,6 +159,30 @@ theorem End.not_injective_pow_section_retraction (s : A ⟶ B) (r : B ⟶ A) (h 
     ¬∀ {n m : ℕ}, n ≠ m → (End.of (r ≫ s)) ^ n ≠ (End.of (r ≫ s)) ^ m :=
   End.not_injective_pow_of_mul_self _ (End.mul_self_section_retraction s r h)
 
+/-- The A-side composite `s ≫ r` is the identity, so `(End.of (s ≫ r))^n = 1` for all `n`.
+    Combined with the B-side idempotent result, a section--retraction pair blocks injective
+    ℕ-towers on BOTH sides: A-side is trivially periodic (all powers = id), B-side is
+    idempotent (powers 1 and 2 collide). -/
+theorem End.section_retraction_A_side_trivial (s : A ⟶ B) (r : B ⟶ A) (h : s ≫ r = 𝟙 A) :
+    ∀ n : ℕ, (End.of (s ≫ r)) ^ n = 1 := by
+  intro n
+  have hid : End.of (s ≫ r) = 1 := End.ext h
+  rw [hid, one_pow]
+
+/-- Full cross-object closure: given `s ≫ r = 𝟙 A`, neither `End.of (s ≫ r)` on `A`
+    nor `End.of (r ≫ s)` on `B` can sustain an injective ℕ-tower. -/
+theorem section_retraction_no_injective_tower_either_side
+    (s : A ⟶ B) (r : B ⟶ A) (h : s ≫ r = 𝟙 A) :
+    (¬∀ {n m : ℕ}, n ≠ m → (End.of (s ≫ r)) ^ n ≠ (End.of (s ≫ r)) ^ m) ∧
+    (¬∀ {n m : ℕ}, n ≠ m → (End.of (r ≫ s)) ^ n ≠ (End.of (r ≫ s)) ^ m) := by
+  constructor
+  · intro hinj
+    have h01 := hinj (show (0 : ℕ) ≠ 1 by decide)
+    rw [End.section_retraction_A_side_trivial s r h 0,
+        End.section_retraction_A_side_trivial s r h 1] at h01
+    exact absurd rfl h01
+  · exact End.not_injective_pow_section_retraction s r h
+
 end CrossObjectRepresentation
 
 end RepresentationalRegress

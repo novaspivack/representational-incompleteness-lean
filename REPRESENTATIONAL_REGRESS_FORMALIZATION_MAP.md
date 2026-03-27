@@ -14,7 +14,8 @@
 | `RepresentationalRegress/FixedPoints.lean` | Monoidal-closed curry/uncurry injectivity; `EndoVsPoint`; non-collapse lemma vs `OntologicalSlot` |
 | `RepresentationalRegress/Lawvere.lean` | Lawvere fixed-point theorem and corollary in **`Type`** (diagonal / universal enumerator argument) |
 | `RepresentationalRegress/LawvereCCCType.lean` | Same story via **`MonoidalClosed (Type u)`**: `lawvereBinary`, `curry`/`uncurry`, surjectivity bridge |
-| `RepresentationalRegress/LawvereRegressBridge.lean` | Paper-facing: **`no_universal_parametric_unary*`**, **`lawvere_fixed_point_stays_representational`** |
+| `RepresentationalRegress/LawvereRegressBridge.lean` | Paper-facing: **`no_universal_parametric_unary*`** (incl. `_bool`), **`lawvere_diagonal_not_in_range*`** (partial-model blind spot), **`lawvere_fixed_point_stays_representational`** |
+| `RepresentationalRegress/NoEscapeClosure.lean` | Iterate collision → finite power repertoire (**`End.pow_iterate_dichotomy`**); section--retraction readout → idempotent loop, no injective ℕ-tower on either side (**`section_retraction_no_injective_tower_either_side`**) |
 | `RepresentationalRegress/SymbolGrounding.lean` | **`SymbolSystem`** (= `RepresentationalSystem`); semantic-regress aliases |
 | `RepresentationalRegress/Orientability.lean` | T₂ / Hausdorff as separation surrogate; invariance under homeomorphism |
 | `RepresentationalRegress/CylinderMobius.lean` | `mobiusRel₀`, compact Hausdorff **`MobiusStrip`**, **`mobiusStripBoundary`**, saturation **`mobiusQuot_mk_preimage_image`** |

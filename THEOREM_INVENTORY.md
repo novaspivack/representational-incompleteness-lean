@@ -13,8 +13,8 @@
 | `Regress` | `regress_no_termination`, `regress_over_injective`, `regress_iterates_unbounded`, `regress_is_infinite`, `meta_range_infinite` |
 | `FixedPoints` | `EndoVsPoint`, `endo_ne_point`, `fixed_point_preserves_distinction`, `uncurry_injective_on`, `lawvere_wall_is_not_dissolution` |
 | `Lawvere` | `lawvere_fixed_point_Type`, `lawvere_fixed_point_corollary_no_universal` |
-| `LawvereRegressBridge` | **`no_universal_parametric_unary`**, **`no_universal_parametric_unary_nat`**, **`lawvere_fixed_point_stays_representational`**, **`ontological_wall_never_collapses_represent`** |
-| `NoEscapeClosure` | **`IterateClosure`**: collision ⇒ bounded iterate labels; **`CrossObjectRepresentation`**: section--retraction readout ⇒ non-injective iterate indices on the host object |
+| `LawvereRegressBridge` | **`no_universal_parametric_unary`**, **`no_universal_parametric_unary_nat`**, **`no_universal_parametric_unary_bool`** (computability horn), **`lawvere_diagonal_not_in_range`** (partial-model blind spot), **`lawvere_diagonal_not_in_range_nat`**, **`lawvere_diagonal_not_in_range_bool`**, **`lawvere_fixed_point_stays_representational`**, **`ontological_wall_never_collapses_represent`** |
+| `NoEscapeClosure` | **`IterateClosure`**: collision ⇒ bounded iterate labels; **`CrossObjectRepresentation`**: section--retraction readout ⇒ non-injective iterate indices on both host and source (**`section_retraction_no_injective_tower_either_side`**) |
 | `SymbolGrounding` | **`SymbolSystem`** (abbrev `RepresentationalSystem`), **`symbolGrounding_*`** alias lemmas for semantic-regress citation |
 | `LawvereCCCType` | `lawvereBinary`, `curry_lawvereBinary`, `lawvere_universal_iff_surjective_curry`, `lawvere_fixed_point_MonoidalClosedType` |
 | `Orientability` | `RepresentationalSeparationInvariant`, T₂ homeomorphism invariance, `surjective_continuous_maps_need_not_preserve_t2` |
@@ -155,6 +155,21 @@ Orthogonal to the main **`iter_injective`** hypothesis: records what follows if 
 | `theorem` | `CrossObjectRepresentation.End.pow_pos_eq_self_of_mul_self` | Idempotent `e` has `e^n=e` for all `n>0` |
 | `theorem` | `CrossObjectRepresentation.End.not_injective_pow_of_mul_self` | Idempotent ⇒ `e^1=e^2`, so ℕ-powers are not all distinct |
 | `theorem` | `CrossObjectRepresentation.End.not_injective_pow_section_retraction` | No injective infinite ℕ-tower along that cross-object channel |
+| `theorem` | `CrossObjectRepresentation.End.section_retraction_A_side_trivial` | A-side composite `s ≫ r = 𝟙` ⇒ all powers = 1 |
+| `theorem` | `CrossObjectRepresentation.section_retraction_no_injective_tower_either_side` | Full closure: neither A-side nor B-side of a section--retraction can sustain injective ℕ-powers |
+
+## Lawvere ↔ regress bridge (`LawvereRegressBridge`) — extended
+
+| Kind | Lean name | Notes |
+|------|-----------|--------|
+| `theorem` | `no_universal_parametric_unary` | No universal `s : A → A → B` when `B` has a fixed-point-free endo |
+| `theorem` | `no_universal_parametric_unary_nat` | Instantiation for `B = ℕ`, `succ` |
+| `theorem` | `no_universal_parametric_unary_bool` | Instantiation for `B = Bool`, `not` — decidable/computability horn |
+| `theorem` | `lawvere_diagonal_not_in_range` | For ANY `s : A → A → B` (not necessarily surjective), the diagonal `fun a => f (s a a)` is never `s a₀` — partial self-models have a blind spot |
+| `theorem` | `lawvere_diagonal_not_in_range_nat` | Corollary for `ℕ` / `succ` |
+| `theorem` | `lawvere_diagonal_not_in_range_bool` | Corollary for `Bool` / `not` |
+| `theorem` | `lawvere_fixed_point_stays_representational` | `endo (represent^n) ≠ obj c` for all `n`, `c` |
+| `theorem` | `ontological_wall_never_collapses_represent` | `endo represent ≠ obj c` |
 
 ## Main
 

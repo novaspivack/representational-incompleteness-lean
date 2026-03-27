@@ -26,6 +26,39 @@ theorem no_universal_parametric_unary_nat :
   rintro ⟨A, s, hs⟩
   exact lawvere_fixed_point_corollary_no_universal Nat.succ Nat.succ_ne_self s hs
 
+/-- `Bool.not` has no fixed point: `!b ≠ b` for every `b : Bool`. -/
+private theorem Bool.not_ne_self : ∀ b : Bool, (!b) ≠ b := by decide
+
+/-- **No universal binary evaluator into `Bool`:** closes the computability horn.
+    Any proposed `s : A → A → Bool` covering all `g : A → Bool` contradicts Lawvere,
+    since `Bool.not` is fixed-point-free. This is the finite/decidable analogue of the
+    Kleene diagonal (Rice's theorem setting). -/
+theorem no_universal_parametric_unary_bool :
+    ¬∃ (A : Type) (_s : A → A → Bool), ∀ g : A → Bool, ∃ a : A, _s a = g := by
+  rintro ⟨A, s, hs⟩
+  exact lawvere_fixed_point_corollary_no_universal (fun b => !b) Bool.not_ne_self s hs
+
+/-- **Diagonal exclusion (partial models):** for ANY `s : A → A → B` and any
+    fixed-point-free `f : B → B`, the diagonal `fun a => f (s a a)` is **never** equal
+    to `s a₀` for any `a₀`.  This does NOT require surjectivity of `s`; it says the
+    adversary's self-model necessarily has a blind spot containing its own diagonal. -/
+theorem lawvere_diagonal_not_in_range {A B : Type u} (f : B → B) (hf : ∀ b, f b ≠ b)
+    (s : A → A → B) (a₀ : A) :
+    s a₀ ≠ fun a => f (s a a) := by
+  intro h
+  have := congr_fun h a₀
+  exact hf (s a₀ a₀) this.symm
+
+/-- Corollary for `ℕ`: the successor-diagonal is never a row of `s`. -/
+theorem lawvere_diagonal_not_in_range_nat {A : Type} (s : A → A → ℕ) (a₀ : A) :
+    s a₀ ≠ fun a => Nat.succ (s a a) :=
+  lawvere_diagonal_not_in_range Nat.succ Nat.succ_ne_self s a₀
+
+/-- Corollary for `Bool`: the negation-diagonal is never a row of `s`. -/
+theorem lawvere_diagonal_not_in_range_bool {A : Type} (s : A → A → Bool) (a₀ : A) :
+    s a₀ ≠ fun a => !(s a a) :=
+  lawvere_diagonal_not_in_range (fun b => !b) Bool.not_ne_self s a₀
+
 /--
   **Categorical “no collapse” (all iterates):** `represent^n` never equals the **object** slot of
   any `c : R.C`. Distinct from `lawvere_fixed_point_Type` (fixed points of `B → B` in `Type`), but

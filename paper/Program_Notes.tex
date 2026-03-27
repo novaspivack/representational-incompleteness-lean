@@ -86,7 +86,7 @@ appeared in the literature in this form. See Section~\ref{sec:ontoslot}.
   is compact. The model boundary band (image of the two horizontal edges) is
   \textbf{connected} --- one circle, not two.
 \item \textbf{Proved (boundary subspaces):} \texttt{mobiusStripBoundary\_not\_homeomorphic\_closedCylinderBoundaryUnion} --- the \texttt{Subtype}s of the model boundary band vs.\ the two-face boundary union are not homeomorphic (connected vs.\ disconnected).
-\item \texttt{$\neg$ Nonempty (MobiusStrip $\simeq_t$ ClosedCylinder)}: \textbf{[TO BE PROVED]} --- needs a lemma linking a global homeomorphism to those boundary subspaces (or a winding transport); see \texttt{SPEC\_002} master sequence.
+\item \textbf{Proved (M-FINAL):} \texttt{mobiusStrip\_not\_homeomorphic\_closedCylinder}: \texttt{IsEmpty (MobiusStrip $\simeq_t$ ClosedCylinder)}. Via \texttt{ChartableR2} boundary sensors on both models + boundary-subspace contrast; see \texttt{ChartableR2Bridge}, \texttt{MobiusSeamChartableR2}.
 \end{itemize}
 
 \textbf{Novelty assessment:} The topology of the M\"obius strip and cylinder is
@@ -96,13 +96,14 @@ invariant in a proof assistant for this purpose.
 
 \subsection{Master Theorem}
 
-\texttt{representational\_regress\_master}: the conjunction of
+\texttt{representational\_regress\_master}: the conjunction of unbounded distinct meta-levels, Lawvere wall non-dissolution, and $T_2$ homeomorphism invariance.
+
+\texttt{representational\_regress\_master\_extended} (abbrev \texttt{RepresentationalRegressMasterExtended}): extends the above with
 \begin{enumerate}
-\item unbounded distinct meta-levels (regress never terminates);
-\item Lawvere wall does not dissolve the object/morphism distinction;
-\item $T_2$ separation is preserved under homeomorphism;
-\item \textbf{[TO BE ADDED]} $\texttt{MobiusStrip} \not\simeq_t \texttt{ClosedCylinder}$.
+\item \texttt{IsEmpty (EuclideanHalfSpace 1 $\simeq_t$ EuclideanSpace $\mathbb{R}$ (Fin 1))} (1D boundary-chart obstruction),
+\item \texttt{IsEmpty (MobiusStrip $\simeq_t$ ClosedCylinder)} (\textbf{M-FINAL}).
 \end{enumerate}
+\noindent Not a replacement for \texttt{representational\_regress\_master}; an extension that bundles the topology punchline for single-theorem citation.
 
 \section{What The Artifact Assumes}
 
@@ -281,9 +282,9 @@ is the same.
 \section{Next Steps}
 
 \begin{enumerate}
-\item Complete \texttt{$\neg$ Nonempty (MobiusStrip $\simeq_t$ ClosedCylinder)} (bridge lemma + Route W transport or boundary induction).
-\item \textbf{Done:} \texttt{T2Space MobiusStrip}; \texttt{OntologicalSlot} tower/no-collapse; \texttt{representational\_regress\_master\_v2}; boundary subtype non-homeomorphism.
-\item Write the actual paper (these notes are preparation).
+\item \textbf{Done:} M-FINAL (\texttt{mobiusStrip\_not\_homeomorphic\_closedCylinder}); \texttt{T2Space MobiusStrip}; \texttt{OntologicalSlot} tower/no-collapse; \texttt{representational\_regress\_master\_extended}; boundary subtype non-homeomorphism; seam + equator charts.
+\item Write the actual paper from \texttt{PAPER\_OUTLINE.tex}.
+\item Optional: complete Route W Step 5 (independent cross-check); full \texttt{IsManifold} polish.
 \end{enumerate}
 
 \end{document}

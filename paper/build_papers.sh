@@ -14,4 +14,5 @@ if [[ $# -gt 0 ]]; then
   done
 else
   compile_one "Program_Notes.tex"
+  compile_one "PAPER_OUTLINE.tex"
 fi

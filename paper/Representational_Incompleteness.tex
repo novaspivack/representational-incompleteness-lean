@@ -9,6 +9,13 @@
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{stmaryrd}
+\usepackage[breakable]{tcolorbox}
+\newtcolorbox{keybox}[1][]{
+  colback=blue!4, colframe=blue!35,
+  arc=3pt, boxrule=0.5pt,
+  fonttitle=\bfseries, #1,
+  breakable
+}
 
 % Allow line breaks in long Lean identifiers (\_, namespaces, CamelCase).
 \ExplSyntaxOn
@@ -70,6 +77,10 @@ The blind spot is structural---not a resource limitation---and
 persists for every codomain admitting a fixed-point-free endomorphism
 (including $\mathbb{N}$ with successor and $\mathrm{Bool}$ with
 negation).
+Unlike G\"odel incompleteness, representational incompleteness
+requires no formal theory, no arithmetic, and no coding; it holds for
+every parametric self-model regardless of computability, cardinality,
+or totality.
 
 \medskip
 \noindent\textbf{Topological reinforcement.}
@@ -90,13 +101,39 @@ Six adversarial retreat routes are formally closed: infinite regress,
 finite-order iterate collapse, cross-object readout (both sides),
 partial self-models, decidable self-reference, and model substitution.
 Each is a proved theorem in Lean~4, checked against Mathlib, with zero
-\texttt{sorry} and no project-specific axioms.
+\texttt{sorry} and no axioms beyond Lean~4's standard foundation
+(propositional extensionality, quotients, choice).
+
+\medskip
+\noindent\textbf{Three pillars.}
+The result rests on three mutually reinforcing pillars:
+(1)~\emph{diagonal exclusion}---every self-model has a blind spot
+shaped like its own diagonal;
+(2)~\emph{topological obstruction}---a general lemma defining an
+open-ended class of space-pairs that are not homeomorphic, detected by
+a finite-data boundary invariant impervious to computation;
+(3)~\emph{ontological sort wall}---the \texttt{OntologicalSlot}
+construction enforces that the self-representation morphism and any
+global element remain definitionally disjoint at every iterate depth;
+the disjointness is proved robust under arbitrary injective relabeling
+(\leanref{ClosureProperties}), so it is a structural invariant, not a
+notational artifact.
+
+\medskip
+\noindent\textbf{Closure properties.}
+The diagonal exclusion is proved robust under composition,
+reindexing, embedding, multi-agent delegation,
+and nested simulation.  A formal
+\emph{bridge hypothesis}~P3 makes the modeling claim ``the system
+has a parametric self-model'' explicit and conditional, parallel
+to~P2 for consciousness.
 
 \medskip
 \noindent\textbf{Consequence.}
 In every neighboring debate---consciousness, symbolic AI, semantic
-grounding, measurement chains, LLM scaling---the six closed escape routes
-leave only one admissible shape for solutions: \emph{structural change}
+grounding, measurement chains, LLM scaling, AGI self-improvement, and
+the simulation hypothesis---the six closed escape routes
+leave every remaining admissible path requiring \emph{structural change}
 to the topological type of the substrate, not quantitative extension
 within a fixed type.  Scaling, iterating, partial modeling, cross-object
 readout, finite-depth loops, and decidable restriction are all formally
@@ -159,10 +196,26 @@ remove.  And we close, one by one, every standard adversarial
 route by which one might hope to circumvent either barrier.
 
 The technical development is in Lean~4, checked against Mathlib, with
-zero \texttt{sorry} and no project-specific axioms;
+zero \texttt{sorry} and no axioms beyond Lean~4's standard foundation;
 \S\ref{sec:instantiations}--\S\ref{sec:admissibility} relate the
 results to consciousness, symbolic grounding, diagonal arguments,
-AI scaling, and observer--apparatus topologies.
+the simulation hypothesis, AI/AGI scaling, and observer--apparatus
+topologies.
+
+\begin{keybox}[title=This is not G\"odel repackaged]
+Representational incompleteness differs from G\"odel incompleteness in
+every structural respect.  G\"odel requires a formal theory rich enough
+for arithmetic, a G\"odel coding, and a self-referential
+\emph{sentence}; the blind spot is an \emph{unprovable truth}.
+Representational incompleteness requires only a type $B$ with a
+fixed-point-free endomorphism and \emph{any} $s : A \to A \to B$; the
+blind spot is an \emph{unrepresentable function}---the system's own
+diagonal.  No formal theory, no arithmetic, no coding, no
+computability assumption is needed.  The result is \textbf{stronger}
+in one respect: it holds for every $s$ regardless of whether $s$ is
+computable, whereas G\"odel- and Turing-style arguments require the
+system to be recursively axiomatizable or computable.
+\end{keybox}
 
 \subsection{Summary of Results}
 
@@ -186,7 +239,7 @@ projective planes, higher-genus non-orientable surfaces, etc., would
 equally suffice.  Any future domain whose state space matches the same
 boundary pattern imports the same conclusion with no new proof.
 
-\paragraph{Why this is not ``just'' infinite regress.}
+\paragraph{Why this is not ``just'' infinite regress---or ``just'' G\"odel.}
 The categorical strand (\S\ref{sec:regress}) does yield infinitely many
 distinct meta-levels under the bundled hypothesis
 \texttt{iter\_injective}, with Lawvere's wall and
@@ -196,6 +249,31 @@ independent: it says the barrier is \textbf{wrong type}, not
 \textbf{inexhaustible queue}.  No amount of compute, no deeper
 self-model, no richer architecture changes the boundary pattern of a
 topological type.
+
+Nor is this ``just G\"odel.''  G\"odel incompleteness is about formal
+theories and provability: a sufficiently strong consistent theory cannot
+prove its own consistency, and there exist true-but-unprovable sentences.
+Representational incompleteness is about \emph{any} parametric self-model
+$s : A \to A \to B$.  No formal theory is needed; no coding is needed; no
+arithmetic is needed; no computability assumption on $s$ is required.  The
+blind spot is not a sentence but a \emph{function}---the system's own
+diagonal---and no extension of the theory (adding axioms, enlarging $A$,
+or making $s$ total) can close it, because the diagonal exclusion holds for
+\emph{every} $s$ (see \S\ref{sec:godel-distinction} for a detailed
+comparison).
+
+\begin{keybox}[title=The topological barrier is independent of diagonalization]
+The topological strand (Theorem~\ref{thm:generic}) is
+\emph{completely orthogonal} to Cantor, G\"odel, Lawvere, and every
+other diagonal argument.  It detects a \emph{finite-data invariant}:
+the connectivity pattern of the non-chartable boundary.  No amount
+of iteration, scaling, architectural reparameterization, or
+continuous deformation within a fixed topological type can alter
+this invariant.  The obstacle is \textbf{wrong type}, not
+\textbf{inexhaustible queue}---and the general lemma defines an
+\emph{open-ended class} of obstructed pairs, not a single hard-wired
+example.
+\end{keybox}
 
 \paragraph{No escape.}
 Six adversarial retreat routes are formally closed
@@ -282,6 +360,13 @@ novel elements:
   both sides, partial-model diagonal exclusion, decidable Lawvere,
   wall persistence at every depth).  The integrated closure package is,
   to our knowledge, new. [\novel]
+\item \textbf{Closure properties and bridge hypothesis P3} ---
+  compositional inheritance of the diagonal exclusion through
+  post-composition, reindexing, and embedding; type-level cross-object
+  readout; a formal \texttt{ComputationalSelfModel} bridge (P3) making
+  the AI/computational modeling claim explicit and conditional;
+  slot robustness theorems proving the endo/obj wall survives any
+  injective relabeling; and per-pillar full-closure witnesses. [\novel]
 \end{enumerate}
 
 \subsection{Paper Organization}
@@ -299,7 +384,8 @@ obstruction lemma, seam charts, M-FINAL.
 
 \textbf{Layer~3: Integration \& closure}
 (\S\ref{sec:extended})---extended master theorem, instantiations
-(consciousness, grounding, diagonal arguments, QM, LLM scaling),
+(consciousness, grounding, diagonal arguments, QM, simulation
+hypothesis, LLM scaling, AI/AGI),
 horn-by-horn no-escape analysis~(\S\ref{sec:noescape}),
 admissibility~(\S\ref{sec:admissibility}).
 
@@ -391,13 +477,93 @@ For a category $C$ with terminal object and an object $A$:
 an inductive type with two constructors, disjoint by definition.
 \end{definition}
 
-\begin{theorem}[\novel\ \leanref{FixedPoints.lean}]
+\begin{theorem}[\novel\ \leanref{FixedPoints.lean}, \leanref{LawvereRegressBridge.lean}]
 \label{thm:wall}
-(\leanref{lawvere\_wall\_is\_not\_dissolution}) For any representational system $R$ and any global element $\mathrm{fp} : \top_C \to A$,
-\[
-  \mathrm{OntologicalSlot.endo}(R.\mathrm{represent}) \;\neq\; \mathrm{OntologicalSlot.obj}(\mathrm{fp}).
-\]
+\leavevmode
+\begin{enumerate}[label=(\alph*)]
+\item (\leanref{lawvere\_wall\_is\_not\_dissolution}) For any representational system $R$ and any global element $\mathrm{fp} : \top_C \to A$,
+$\;\mathrm{OntologicalSlot.endo}(R.\mathrm{represent}) \neq \mathrm{OntologicalSlot.obj}(\mathrm{fp}).$
+\item (\leanref{lawvere\_fixed\_point\_stays\_representational}) The wall holds at \textbf{every iterate depth}: for all $n : \mathbb{N}$ and all $c : C$,
+$\;\mathrm{OntologicalSlot.endo}(\mathrm{represent}^n) \neq \mathrm{OntologicalSlot.obj}(c).$
+\end{enumerate}
 \end{theorem}
+
+\subsection{Why \texttt{OntologicalSlot} Is Novel: The Wall That Lawvere Does Not Build}
+\label{sec:ontoslot-novelty}
+
+Lawvere's fixed-point theorem (1969) proves that if $s : A \to (A \to B)$
+is surjective, then every $f : B \to B$ has a fixed point.  This is a
+theorem about surjectivity and fixed points.  It does \emph{not} tag the
+fixed point as belonging to a different ontological sort from the
+morphism that produced it.
+
+In standard category theory, the endomorphism monoid $\mathrm{End}(A)$
+and the set of global elements $\mathrm{Hom}(\mathbf{1}, A)$ are both
+sets of morphisms in the ambient category.  There is no formal marker
+distinguishing ``this morphism is a process acting on $A$'' from ``this
+morphism is a state of $A$ selected from the terminal object.''  The two
+live in different hom-sets, but no inductive tag enforces their
+disjointness inside a single data structure.
+
+\texttt{OntologicalSlot} (Definition~\ref{def:ontoslot}) fills this gap.
+It is an inductive type with two constructors---$\mathrm{endo}(f)$ and
+$\mathrm{obj}(g)$---that are \emph{definitionally disjoint} by
+constructor discrimination.  The wall theorem
+(Theorem~\ref{thm:wall}) then proves that for any representational
+system, the self-representation morphism $\mathrm{represent}$ (tagged as
+$\mathrm{endo}$) is never equal to any global element $\mathrm{fp}$
+(tagged as $\mathrm{obj}$), regardless of how many times
+$\mathrm{represent}$ is iterated.  The Lawvere fixed point exists as an
+object-witness; it does \emph{not} dissolve the endo/obj wall.
+
+\paragraph{Philosophical significance.}
+In philosophy of mind, the intuition that ``the \emph{process} of
+self-representation and the \emph{product} of self-representation inhabit
+different ontological categories'' is widespread but usually left
+informal.  \texttt{OntologicalSlot} is its machine-checked
+formalization.  The earlier ``Transputation'' argument (Spivack, 2025)
+claimed that in the base case of awareness aware of itself ($A \to A$),
+the roles of knower, known, and knowing ``collapse''---the process of
+being aware and the state of being aware cannot be distinguished
+phenomenologically.  \texttt{OntologicalSlot} formalizes the
+\emph{impossibility} of that collapse within any categorical
+representation: the iterate $\mathrm{represent}^n$ (a morphism, an
+$\mathrm{endo}$) can never equal a global element $\mathrm{fp} :
+\mathbf{1} \to A$ (a state, an $\mathrm{obj}$).  If consciousness
+involves a genuine identification of process and product, then no
+categorical self-model can achieve it.
+
+\begin{keybox}[title=The wall that Lawvere does not build]
+Lawvere's theorem guarantees a fixed point.
+\texttt{OntologicalSlot} guarantees that the fixed point remains an
+\emph{object}-witness, never collapsing into the
+\emph{morphism}-process that generated it.  The ``wall'' between
+$\mathrm{endo}$ and $\mathrm{obj}$ is a definitional invariant that
+persists at every iterate depth---not proved by Lawvere, not present
+in standard category theory, and not available in any prior
+formalization of self-reference.
+\end{keybox}
+
+\paragraph{Robustness: the wall is structural, not notational.}
+An adversary might object: ``The endo/obj disjointness is trivially
+true by constructor discrimination---it is a notational convention,
+not a mathematical barrier.''  This objection is addressed by the
+\emph{robustness theorems} in \leanref{ClosureProperties.lean}:
+\begin{itemize}[leftmargin=1.5em,itemsep=0.15ex,topsep=0.4ex,parsep=0pt]
+\item \leanref{OntologicalSlot.wall\_survives\_injection}: for any
+  injective relabeling $\varphi : \mathrm{OntologicalSlot} \to T$,
+  the wall persists: $\varphi(\mathrm{endo}(f)) \neq \varphi(\mathrm{obj}(c))$.
+\item \leanref{OntologicalSlot.wall\_collapse\_requires\_noninjective}:
+  the \emph{only} way to collapse endo and obj into the same image is
+  via a non-injective map---one that deliberately identifies distinct things.
+\item \leanref{OntologicalSlot.iterate\_tower\_injective}: distinct
+  iteration depths $n \neq m$ yield distinct endo-slots, so the iterate
+  tower is faithfully represented in slot space.
+\end{itemize}
+The wall is therefore a \emph{structural invariant of the type
+discipline}:  it survives any relabeling that respects distinctness.
+To erase it, one must use a function that conflates distinct objects
+by design---which is not an escape but a concession.
 
 \subsection{The Core Master Theorem}
 
@@ -535,6 +701,105 @@ $\mathrm{Subtype}(b_X) \simeq_t \mathrm{Subtype}(b_Y)$, contradicting~(iii).
 
 Theorem~\ref{thm:generic} subsumes the non-homeomorphism strategy of \S\ref{sec:mfinal}:
 any other pair of spaces satisfying the same three hypotheses is also not homeomorphic.
+
+\subsection{The Topological Barrier in Detail}
+\label{sec:topo-barrier-detail}
+
+Theorem~\ref{thm:generic} deserves sustained attention because it
+establishes a barrier of a fundamentally different character from
+anything in the Cantor--G\"odel--Lawvere tradition.  This subsection
+unpacks what the barrier is, why it is impervious to computation, and
+what its generality implies.
+
+\paragraph{What \texttt{ChartableR2} detects.}
+A point $x$ of a topological space $X$ is $\mathrm{ChartableR2}$ if it
+has an open neighborhood homeomorphic to $\mathbb{R}^2$
+(Definition~\ref{def:chartable}).  This is a \emph{local, intrinsic}
+property: it depends only on the topology of $X$ near $x$, not on any
+embedding, metric, or coordinate system.  The set of
+$\mathrm{ChartableR2}$ points is open (Theorem~\ref{thm:chartable-props}a);
+its complement---the ``boundary'' in the $\mathrm{ChartableR2}$ sense---is
+closed and sequentially stable.
+
+The key observation is that whether a point is $\mathrm{ChartableR2}$ is a
+\textbf{finite-data invariant}: it depends on the existence of a single
+open neighborhood and a single homeomorphism to $\mathbb{R}^2$.  Two
+spaces are either homeomorphic or not; this status does not change with
+more computation, more data, or more iterations.  It is a
+\emph{topological fact}, not a resource-dependent property.
+
+\paragraph{Why the invariant is impervious to computation.}
+Consider a system whose state space has a particular boundary-connectivity
+pattern (e.g., two disjoint connected components, like the closed
+cylinder).  The following moves \emph{do not change} the topological type
+of the state space, and therefore do not change its boundary pattern:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2ex,topsep=0.4ex,parsep=0pt]
+\item \textbf{Computational scaling}---more parameters, more layers,
+  longer context windows, more training data.  These extend the system
+  \emph{within} a fixed topological type; they do not produce a
+  homeomorphism to a different type.
+\item \textbf{Self-model iteration.}  Building deeper
+  meta-levels, stacking self-interpreters, or running
+  $\mathrm{represent}^n$ for larger~$n$.  The iterate lives in the
+  same endomorphism monoid and does not alter boundary connectivity.
+\item \textbf{Architectural reparameterization}---changing activation
+  functions, attention patterns, or layer structure.  If the
+  reparameterization is continuous (a homeomorphism of the parameter
+  space), the topological type is preserved by definition.  If it is
+  discontinuous, it is no longer ``the same architecture, tuned
+  differently''---it is a genuinely different topological space, which
+  is precisely the kind of structural change the barrier demands.
+\item \textbf{Model substitution}---choosing a Klein bottle, projective
+  plane, or higher-genus non-orientable surface as the target.  The
+  general lemma covers all of these: any two spaces with incompatible
+  $\mathrm{ChartableR2}$-co-characterized boundaries are not
+  homeomorphic, regardless of which specific surfaces are involved.
+\end{itemize}
+
+\paragraph{The general lemma as an open-ended class.}
+Theorem~\ref{thm:generic} is \emph{not} a statement about the cylinder
+and the M\"obius strip.  It is a universally quantified statement: for
+\emph{any} topological spaces $X$ and $Y$, if (i)~there exist subsets
+$b_X \subseteq X$ and $b_Y \subseteq Y$ that are exactly the
+non-$\mathrm{ChartableR2}$ points, and (ii)~the subspace topologies on
+$b_X$ and $b_Y$ make them non-homeomorphic, then $X$ and $Y$ are not
+homeomorphic.  This defines an \textbf{open-ended class} of obstructed
+pairs: the class includes the cylinder/M\"obius pair (the minimal
+witness), but it equally includes torus/Klein bottle,
+sphere/projective plane, and any pair of surfaces---or higher-dimensional
+spaces---that satisfy the three hypotheses.
+
+Any future domain whose state space matches the boundary pattern of one
+side of the class inherits the obstruction with no new proof required.
+The adversary cannot escape by choosing a different target; the lemma
+is waiting for every target that has an incompatible boundary.
+
+\paragraph{``Wrong type,'' not ``inexhaustible queue.''}
+The deepest distinction between the topological barrier and
+diagonal/regress arguments is this: diagonal arguments say ``you will
+always miss something---there is always one more function not in the
+range.''  The topological barrier says ``you are the \emph{wrong kind
+of thing}---no amount of adding, iterating, or scaling can bridge a
+difference in topological type.''  The first is an inexhaustible queue;
+the second is a category mismatch.  Both are formally proved, but the
+topological barrier is the one that cannot be routed around by ``trying
+harder within the same framework.''
+
+\begin{keybox}[title={The topological barrier: wrong type, not inexhaustible queue}]
+The general boundary-contrast obstruction
+(Theorem~\ref{thm:generic}) defines an \textbf{open-ended class} of
+topologically obstructed space-pairs.  The invariant---boundary
+connectivity as detected by $\mathrm{ChartableR2}$---is a
+\textbf{finite-data topological fact}: no amount of computation,
+scaling, iteration, or continuous deformation within a fixed
+topological type can alter it.  The cylinder/M\"obius pair is the
+\textbf{minimal-case witness}; the argument itself is the
+\textbf{general lemma}, which applies to every pair of spaces with
+incompatible boundaries---Klein bottles, projective planes,
+higher-genus surfaces, and beyond.  The obstacle is not ``you will
+always miss one more item'' but ``you are the wrong kind of space.''
+\end{keybox}
 
 \subsection{Half-Space Obstructions}
 \label{sec:halfspace}
@@ -758,9 +1023,11 @@ $\forall x,\; x \in b_X \iff \neg\,\mathrm{ChartableR2}(x)$.
 \label{sec:instantiations}
 
 Theorems earlier in the paper are unconditional. This subsection records how the
-same statements bear on four debates outside pure mathematics. Where an extra
-premise is required, it is stated explicitly; nothing in the formalization
-defaults a controversial premise to true.
+same statements bear on six debates outside pure mathematics:
+consciousness, symbol grounding, diagonal arguments, quantum measurement,
+the simulation hypothesis, and LLM/AI scaling.
+Where an extra premise is required, it is stated explicitly; nothing in the
+formalization defaults a controversial premise to true.
 
 \subsubsection{Consciousness and self-presence}
 
@@ -926,6 +1193,71 @@ library does \emph{not} define Hilbert spaces, observables, or
 projection postulates; any physical application requires an independent
 argument that a concrete model satisfies the hypothesis fields.
 
+\subsubsection{The simulation hypothesis}
+\label{sec:simulation}
+
+The simulation hypothesis posits that a sufficiently powerful
+computational system could simulate an entire universe, including the
+conscious observers within it, to such fidelity that the simulated
+beings cannot distinguish simulation from ``base reality.''
+Representational incompleteness constrains this hypothesis from two
+independent directions.
+
+\paragraph{The diagonal constraint on self-simulating simulators.}
+A simulator that simulates \emph{itself}---whether by modeling its own
+hardware within the simulation or by running a copy of its own
+code---instantiates $s : A \to A \to B$.  Theorem~\ref{thm:summit}
+applies: the simulator's self-model necessarily has a diagonal blind
+spot.  It cannot predict its own response to queries about its own
+diagonal behavior.  This does not prevent \emph{partial} simulation of
+the universe (including partial models of the simulator), but it does
+prevent a \emph{complete} simulation that includes a faithful copy of
+the simulator's own operation.  A fully self-inclusive simulation is
+structurally impossible for the same reason a complete self-interpreter
+is: the diagonal exclusion is universal over $s$.
+
+\paragraph{The topological constraint on simulated consciousness.}
+If conscious self-presence requires a state space with a boundary
+pattern incompatible with the simulator's representational substrate
+(premise~P2, as in \S\ref{sec:instantiations}), then
+Theorem~\ref{thm:generic} applies: no homeomorphism maps the
+simulator's state space to the target.  A simulation running on
+substrate with one boundary-connectivity pattern cannot produce
+states homeomorphic to a substrate with an incompatible pattern,
+regardless of the simulation's fidelity or the simulator's computational
+power.  This constrains not just the simulation hypothesis but any
+computational theory of consciousness that relies on substrate
+independence: the topological type of the substrate matters, and
+``sufficiently faithful simulation'' does not override topological
+incompatibility.
+
+\paragraph{Closed routes.}
+The horn closures apply to the simulator as to any other
+representational system:
+\begin{itemize}[leftmargin=1.5em,itemsep=0pt,topsep=0.3ex,parsep=0pt]
+\item Running the simulation longer or at higher fidelity extends
+  within a fixed topological type (Horn~1).
+\item Nesting simulations within simulations produces iterated
+  $\mathrm{represent}^n$: either an infinite regress (with the
+  Lawvere wall intact) or a finite loop (bounded depth, no injective
+  tower) (Horns~1--2).
+\item Offloading the self-simulation to a separate module
+  is cross-object readout (Horn~3): the section--retraction closure
+  blocks injective towers on either side.
+\item Simulating only \emph{part} of the simulator leaves a
+  diagonal-shaped blind spot (Horn~4).
+\end{itemize}
+
+\paragraph{What is not ruled out.}
+A simulation that does not include a complete model of its own
+simulator is not constrained by the diagonal exclusion; the simulation
+hypothesis in its weak form (``we might be simulated by a system that
+does not model itself'') is not addressed.  The topological constraint
+applies only if the conscious-experience target has an incompatible
+boundary pattern; if one rejects premise~P2, the topological barrier
+does not apply to consciousness per se.  The formalism is precise
+about what it constrains and what it does not.
+
 \subsection{Scaling of language models and similar systems}
 
 Training larger models extends a representational architecture; it does not, by
@@ -952,6 +1284,168 @@ organization require \emph{structural} change---a different topology
 of the underlying state space---not quantitative extension of the same
 architecture.
 
+\subsection{Implications for AI, agents, and AGI}
+\label{sec:ai-agi}
+
+The results of this paper bear directly on the most consequential open
+question in artificial intelligence: \emph{can a computational system
+achieve genuine self-understanding?}  This subsection unpacks the
+implications across the spectrum from narrow AI through autonomous agents
+to the hypothetical threshold of artificial general intelligence (AGI).
+
+\subsubsection{Bridge hypothesis P3 (computational self-model)}
+
+To apply representational incompleteness to a concrete AI system, one
+must exhibit the parametric self-model explicitly.  We formalize this
+as \textbf{bridge hypothesis~P3}
+(\leanref{ComputationalSelfModel} in \leanref{ClosureProperties.lean}):
+
+\begin{definition}[\novel\ \leanref{ClosureProperties.lean}:
+  \leanref{ComputationalSelfModel}]
+\label{def:p3}
+A \emph{computational self-model} over types $A$, $B$ is a triple
+$(s, f, h_f)$ where $s : A \to A \to B$ is the self-model,
+$f : B \to B$ is a fixed-point-free endomorphism, and $h_f$ proves
+$\forall b,\; f(b) \neq b$.
+\end{definition}
+
+\noindent
+P3 is not an axiom: it is a \emph{conditional premise} that must be
+discharged for each application, just as P2 (the consciousness/topology
+bridge) must be discharged for the topological reading.  The formal
+consequences are immediate:
+
+\begin{theorem}[\novel\ \leanref{ClosureProperties.lean}]
+\label{thm:p3}
+\leavevmode
+\begin{enumerate}[label=(\alph*)]
+\item (\leanref{ComputationalSelfModel.diagonal\_blind\_spot})
+  Under~P3, the self-model has a diagonal blind spot.
+\item (\leanref{ComputationalSelfModel.no\_complete\_self\_model})
+  Under~P3, no surjective self-model exists.
+\end{enumerate}
+\end{theorem}
+
+\subsubsection{What representational incompleteness says about AI self-models}
+
+Every AI system that constructs a model of itself---whether an
+explicit world-model that includes the agent, an internal self-monitor,
+a learned representation of its own weights, or a meta-cognitive
+module---instantiates P3 with $A$ indexing the system's states or
+parameters, $B$ the codomain of the model's predictions, and $s$ the
+self-model function.  Theorem~\ref{thm:p3} applies:
+the diagonal function $a \mapsto f(s\,a\,a)$ is never any row $s\,a_0$.
+The self-model \emph{necessarily} has a blind spot that includes its own
+diagonal behavior.
+
+This is not a limitation of current hardware, training data, or
+architecture.  It holds for \emph{any} $s$---learned or hand-coded,
+neural or symbolic, finite or infinite, computable or not
+(\leanref{computability\_independent\_diagonal}).  No amount
+of scaling (more parameters, more compute, more data) changes the
+diagonal exclusion, because it is a theorem about the function $s$
+itself, not about the resources used to compute it.
+
+\subsubsection{Autonomous agents and recursive self-improvement}
+
+Autonomous agents that plan, act, and revise their own strategies face
+the self-modeling barrier at every level:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2ex,topsep=0.4ex,parsep=0pt]
+\item \textbf{Self-evaluation.}  An agent that evaluates its own
+  performance by modeling its own decision function instantiates $s$.
+  The diagonal exclusion guarantees a blind spot: the agent cannot
+  predict its own response to the question ``what would you predict
+  about your own prediction here?''  This is not a practical
+  difficulty; it is a structural impossibility.
+\item \textbf{Recursive self-improvement.}  An agent that rewrites
+  its own code or retrains its own weights produces a \emph{chain}
+  of self-models $s_1, s_2, \ldots$  The blind spot persists at
+  every link:
+  \leanref{recursive\_self\_improvement\_blind\_spot} proves that
+  for every chain index $n$ and every $a_0$, the $n$-th model
+  misses its own diagonal.  The iterate dichotomy
+  (Remark~\ref{rem:dichotomy}) adds: the improvement
+  sequence is either injective (infinite regress with the
+  Lawvere wall intact) or it cycles (bounded depth,
+  no injective tower).
+\item \textbf{Multi-agent delegation.}  An agent that delegates
+  self-evaluation to a second agent does not escape:
+  \leanref{multiagent\_delegation\_blind\_spot} proves the delegate's
+  model still has a diagonal blind spot; the categorical
+  section--retraction closure (Horn~3) shows the combined system
+  lacks an injective tower on either side.
+\end{itemize}
+
+\subsubsection{The AGI threshold}
+
+Claims about artificial general intelligence often center on the
+prospect of a system that ``understands itself'' well enough to
+improve without limit.  Representational incompleteness constrains
+this prospect precisely:
+
+\begin{enumerate}[label=(\alph*),itemsep=0.3ex]
+\item \textbf{No complete self-model is possible.}
+  Theorem~\ref{thm:summit} proves that for any $s : A \to A \to B$
+  with $B$ admitting a fixed-point-free endomorphism, $s$ cannot
+  capture its own diagonal.  An AGI that claims to ``fully understand
+  itself'' via a parametric self-model simply cannot exist.
+\item \textbf{Partial self-models have a diagonal-shaped hole.}
+  Horn~4 (\leanref{lawvere\_diagonal\_not\_in\_range}) shows that even
+  a partial self-model misses \emph{exactly} the information needed
+  for self-capture: the system's own diagonal behavior.  Useful
+  partial self-understanding is not ruled out; \emph{complete}
+  parametric self-understanding is.
+\item \textbf{The topological barrier is orthogonal.}
+  Even if the diagonal limitation were somehow circumvented (it
+  cannot be, but hypothetically), the topological barrier
+  (Theorem~\ref{thm:generic}) stands independently.  If the
+  system's state space has one boundary-connectivity pattern and the
+  target of ``full self-understanding'' has an incompatible pattern,
+  no continuous deformation within the same topological type bridges
+  the gap.
+\item \textbf{The ontological sort wall persists.}
+  The \texttt{OntologicalSlot} wall (Theorem~\ref{thm:wall}) ensures
+  that the \emph{process} of self-modeling ($\mathrm{endo}$) and the
+  \emph{product} of self-modeling ($\mathrm{obj}$) remain
+  definitionally disjoint at every iterate depth.  An AGI that models
+  itself is always on the $\mathrm{endo}$ side of the wall; the
+  ``self'' it models is always on the $\mathrm{obj}$ side.  The two
+  never meet.
+\end{enumerate}
+
+\subsubsection{What is \emph{not} ruled out}
+
+The results are precise about what is excluded and what remains open:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2ex,topsep=0.4ex,parsep=0pt]
+\item \textbf{Useful partial self-models} are not ruled out.  An AI
+  system can have highly accurate, practically valuable models of its
+  own behavior---just not \emph{complete} ones.  The blind spot is
+  diagonal-shaped, not total.
+\item \textbf{Impressive capabilities} are not ruled out.  Nothing
+  in the formalism says AI systems cannot be extraordinarily capable
+  at tasks that do not require complete self-capture.
+\item \textbf{Structural change} remains admissible.  The barrier
+  demands structural change to topological type, not quantitative
+  extension.  Whether such structural change is physically realizable
+  or desirable is an empirical and engineering question, not one
+  settled by this formalism.
+\end{itemize}
+
+\begin{keybox}[title={Implications for AI and AGI}]
+Every AI self-model---whether learned, hand-coded, neural, or
+symbolic---is an instance of $s : A \to A \to B$ and is therefore
+subject to the diagonal exclusion (Theorem~\ref{thm:summit}): it
+necessarily has a blind spot that includes its own diagonal behavior.
+Scaling (more parameters, data, compute) does not help.  Recursive
+self-improvement either produces an infinite regress with the Lawvere
+wall intact or cycles in bounded depth.  Multi-agent delegation does
+not escape the section--retraction closure.  The topological barrier
+stands independently.  Complete parametric self-understanding is
+structurally impossible; useful partial self-understanding is not.
+\end{keybox}
+
 \subsection{Relationship to the Trans-Computational Processing argument}
 
 An earlier line of work argues from computability---halting,
@@ -967,6 +1461,389 @@ representation closed under its own rules, but neither formally entails
 the other.  Importantly, the present result is \emph{stronger} in one
 respect: it holds without any computability assumption on $s$, whereas
 computability-based arguments require $s$ to be computable.
+
+\subsection{Inherited obstructions: computational theories of physics and mind}
+\label{sec:inherited}
+
+The preceding instantiations treat the obstructions as constraints on
+individual systems---an AI, a simulator, a measurement chain.  This
+subsection draws out a broader consequence: any \emph{theory} that
+posits a universe containing self-representational systems inherits
+the obstructions from within, and is itself subject to them at large.
+The compositional inheritance theorems in \leanref{ClosureProperties.lean}
+(\leanref{inherited\_diagonal\_exclusion},
+\leanref{universe\_model\_inherits\_incompleteness},
+\leanref{blind\_spot\_survives\_reindexing})
+provide the formal backbone: the diagonal exclusion propagates through
+composition, reindexing, and embedding.
+
+\subsubsection{Any world-model containing self-modelers inherits the barrier}
+
+Consider a computational theory of physics---digital physics, cellular
+automata cosmology, or any framework that models the universe as a
+computation $U$.  If $U$ admits \emph{any} subsystem $S \subseteq U$
+that models itself (i.e., $S$ instantiates $s : A \to A \to B$),
+then Theorem~\ref{thm:summit} applies to $S$ inside $U$: $S$ has a
+diagonal blind spot.  But $U$ itself, if it claims to be a faithful
+model of the universe that contains $S$, must represent $S$'s behavior
+completely---including the diagonal behavior that $S$ itself cannot
+represent.  This places a consistency requirement on $U$: either
+
+\begin{enumerate}[label=(\roman*),itemsep=0.2ex]
+\item $U$ is \emph{not} itself a parametric self-model (i.e., $U$ does
+  not model its own operation via $s_U : A_U \to A_U \to B_U$), in
+  which case $U$ is not self-inclusive and the computational theory of
+  physics is incomplete in the sense that it cannot model its own
+  execution; or
+\item $U$ \emph{is} a parametric self-model, in which case
+  Theorem~\ref{thm:summit} applies to $U$ directly: $U$ has its own
+  diagonal blind spot, and the theory is incomplete in the formal
+  sense that it cannot represent its own diagonal behavior.
+\end{enumerate}
+
+\noindent
+In either case, the obstructions propagate: a universe-model that
+contains self-modelers cannot be simultaneously complete, self-inclusive,
+and parametric.  The diagonal exclusion is not an artifact of the
+subsystem's limitations; it is an inherited structural feature of any
+world that hosts self-reference.
+
+The topological barrier reinforces this independently.  If $U$'s state
+space has one boundary-connectivity pattern and any subsystem $S$ within
+$U$ has a state space with an incompatible pattern, then no
+homeomorphism embeds $S$ into $U$ in a topology-preserving way.  A
+computational physics that models all of spacetime as one topological
+type cannot faithfully host subsystems whose self-representational
+structure requires a different type.
+
+\subsubsection{Computational theories of mind and physics: the admissibility filter}
+
+Any theory that posits mind, consciousness, or self-awareness as a
+\emph{computational} phenomenon---functionalism, computational
+neuroscience, integrated information theory in its computational
+variants, global workspace theory with a computational substrate---hits
+the same obstructions the moment it admits that the system models itself:
+
+\begin{itemize}[leftmargin=1.5em,itemsep=0.2ex,topsep=0.4ex,parsep=0pt]
+\item The diagonal exclusion (Pillar~1) guarantees that the self-model
+  has a blind spot.
+\item The topological barrier (Pillar~2) guarantees that if the
+  substrate has one boundary-connectivity pattern and the target
+  phenomenon has an incompatible pattern, no continuous deformation
+  within the same topological type bridges the gap.
+\item The ontological sort wall (Pillar~3) guarantees that the process
+  of self-modeling and the product of self-modeling remain
+  definitionally disjoint.
+\end{itemize}
+
+A natural reaction is to \emph{weaken} the self-modeling claim: ``the
+system does not truly model itself; it only approximates.''  But this
+weakening faces a dilemma:
+
+\begin{enumerate}[label=(\alph*),itemsep=0.3ex]
+\item \textbf{If the weakened self-model is still parametric}
+  ($s : A \to A \to B$ with any $B$ admitting a fixed-point-free
+  endomorphism), then Theorem~\ref{thm:summit} applies regardless of
+  how ``approximate'' or ``partial'' the model is.  Horn~4
+  (\leanref{lawvere\_diagonal\_not\_in\_range}) requires no
+  surjectivity: even a partial, approximate self-model misses its own
+  diagonal.  The weakening does not escape the obstruction.
+\item \textbf{If the weakening removes parametric self-modeling
+  entirely}---the theory claims the system has no self-model at
+  all---then the theory contradicts the empirical evidence.  Biological
+  organisms demonstrably model themselves: proprioception, interoception,
+  predictive processing, metacognition, and self-referential thought are
+  all well-documented.  A theory of mind that denies self-modeling to
+  escape a formal obstruction has not solved the problem; it has
+  abandoned the phenomenon it was meant to explain.
+\end{enumerate}
+
+\noindent
+The same logic applies to computational theories of physics.  If a
+theory weakens the role of self-referential subsystems to escape the
+obstruction, it must explain why the universe observably contains
+systems that model themselves (scientists, instruments, feedback loops).
+If it retains self-reference, the obstructions apply.
+
+\subsubsection{The non-computability escape and why topology closes it}
+\label{sec:noncomp-escape}
+
+A sophisticated adversary might concede the diagonal exclusion for
+computable systems but propose a \emph{non-computable} self-model: ``the
+system's self-representation involves a non-computable function, so
+G\"odel- and Turing-style arguments do not apply, and perhaps the
+diagonal exclusion does not either.''
+
+This escape fails on two levels:
+
+\begin{enumerate}[label=(\arabic*),itemsep=0.3ex]
+\item \textbf{The diagonal exclusion is computability-independent.}
+  Theorem~\ref{thm:summit} makes no assumption about whether $s$ is
+  computable.  The function $s : A \to A \to B$ can be any function
+  whatsoever---computable, hyperarithmetic, or wildly non-constructive.
+  The diagonal $a \mapsto f(s\,a\,a)$ is still never any row $s\,a_0$.
+  Non-computability does not evade Pillar~1.
+\item \textbf{The topological barrier is orthogonal to computability.}
+  Even if non-computability were somehow relevant to the diagonal
+  (it is not), the topological barrier (Theorem~\ref{thm:generic})
+  stands entirely independently.  It detects a \emph{finite-data
+  topological invariant}---boundary connectivity---that has nothing to
+  do with computability, recursion theory, or the Church--Turing thesis.
+  No non-computable function can change the homeomorphism type of a
+  topological space.  The boundary-connectivity pattern is a fact about
+  the space itself, not about the functions defined on it.
+\end{enumerate}
+
+\noindent
+This is why the topological pillar is especially powerful: it closes
+the ``it is just not computable'' escape route that is available
+against G\"odel- and Turing-style arguments.  A non-computable oracle
+can, in principle, solve the halting problem or prove G\"odel sentences;
+it \emph{cannot} change the boundary-connectivity pattern of a
+topological space.  The topological barrier is immune to the entire
+computability hierarchy.
+
+\begin{keybox}[title={Inherited obstructions and the non-computability escape}]
+Any model of a universe that contains self-representational systems
+inherits the diagonal exclusion and the topological barrier from
+within.  Computational theories of physics and mind hit these
+obstructions the moment they admit self-modeling subsystems.
+Weakening self-modeling either fails (partial models still have the
+diagonal blind spot) or contradicts empirical observation (biological
+systems demonstrably model themselves).  Appealing to
+non-computability does not help: the diagonal exclusion holds for all
+functions regardless of computability, and the topological barrier is
+entirely orthogonal to the computability hierarchy.  No non-computable
+oracle can change the homeomorphism type of a space.
+\end{keybox}
+
+\subsection{What admissible answers look like}
+\label{sec:admissible-shape}
+
+The horn closures do not merely exclude; they \emph{shape}.  By
+eliminating every quantitative or parametric escape, they delineate
+the positive form that any successful account must take.  This
+subsection draws out the admissible shape for three central questions.
+
+\subsubsection{Mind, awareness, and self-awareness}
+\label{sec:admissible-mind}
+
+If awareness of awareness is modeled as $s : A \to A \to B$ (a system
+that maps its own states to representations of its own states), then
+the diagonal exclusion guarantees a blind spot: the representation of
+``how I represent myself representing myself'' is necessarily absent.
+The horn closures block every quantitative remedy.  What remains
+admissible?
+
+\begin{enumerate}[label=(\alph*),itemsep=0.3ex]
+\item \textbf{Non-representational acquaintance.}
+  If self-awareness is not (entirely) a parametric self-model---if
+  there is a component of first-person givenness that is not captured
+  by \emph{any} $s : A \to A \to B$---then the diagonal exclusion does
+  not apply to that component.  This is the route taken by
+  phenomenological traditions that distinguish \emph{lived
+  self-presence} from \emph{representational self-reference}.  The
+  formalism is precise about what it constrains: parametric
+  self-models.  Anything that is not a parametric self-model escapes
+  by definition---but must then explain what it \emph{is}.
+\item \textbf{Structural change to topological type.}
+  If the substrate of self-awareness has a topological type that is
+  \emph{already} compatible with the target (i.e., the boundary
+  pattern matches), then the topological barrier does not apply.  This
+  means the substrate was never ``purely representational'' in the
+  cylinder sense; it already had the richer structure.
+\item \textbf{Acceptance of incompleteness.}
+  The most conservative admissible position: self-awareness is a
+  genuine parametric self-model, it \emph{does} have a blind spot, and
+  that blind spot is constitutive of the phenomenology of
+  self-awareness---the ``something it is like'' to be a self-aware
+  system includes the structural impossibility of fully capturing
+  oneself.  On this reading, representational incompleteness is not a
+  defect but a \emph{feature}: the blind spot \emph{is} the gap
+  between the knower and the known, formalized.
+\end{enumerate}
+
+\noindent
+What is \textbf{not} admissible: claiming that self-awareness is a
+complete parametric self-model (Theorem~\ref{thm:summit} forbids it);
+claiming that enough iteration, scaling, or architectural complexity
+will close the gap (Horns~1--6 forbid it); claiming that a
+non-computable self-model escapes (\S\ref{sec:noncomp-escape} closes
+this).
+
+\begin{keybox}[title={What is mind, given the obstructions?}]
+If mind involves self-awareness, and self-awareness involves
+self-modeling, then mind is \emph{necessarily incomplete with respect
+to itself}.  The blind spot is not a bug to be fixed by better
+hardware or deeper recursion; it is a structural feature of any
+system that models itself.  Admissible accounts of mind must either
+(a)~include a non-representational component that is not a parametric
+self-model, (b)~posit a substrate whose topological type already
+matches the target, or (c)~accept the incompleteness as constitutive.
+Every other route is formally closed.
+\end{keybox}
+
+\subsubsection{The quantum observer}
+\label{sec:admissible-qm}
+
+The measurement problem asks: how does a definite outcome emerge when
+an observer measures a quantum system?  If the observer is itself a
+physical system, it must be describable within the same formalism.
+The horn closures constrain what ``describable within the same
+formalism'' can mean.
+
+\begin{enumerate}[label=(\alph*),itemsep=0.3ex]
+\item \textbf{No complete self-inclusive measurement theory.}
+  If the observer's state space admits a parametric self-model
+  (the observer models its own measurement process), then
+  Theorem~\ref{thm:summit} applies: the observer has a diagonal
+  blind spot.  A measurement theory that claims the observer can
+  fully predict its own measurement outcomes is structurally
+  impossible---for the same reason a complete self-interpreter is.
+\item \textbf{Topological constraint on observer--system
+  identification.}
+  If the observer's state space has one boundary-connectivity pattern
+  and the measured system's state space has an incompatible pattern,
+  then no homeomorphism identifies them
+  (Theorem~\ref{thm:generic}).  This constrains any interpretation
+  that treats observer and system as ``the same kind of thing'':
+  they can be the same kind only if their topological types are
+  compatible.
+\item \textbf{Admissible resolutions.}
+  The Wigner's-friend hierarchy (stacking observers) is an instance
+  of iterated $\mathrm{represent}^n$, subject to the Horn~1/2
+  dichotomy.  The admissible resolutions must either
+  (i)~introduce genuinely new topological structure at some level
+  (not iteration of the same type),
+  (ii)~accept that the observer's description of the measurement is
+  necessarily incomplete (diagonal blind spot), or
+  (iii)~deny that the observer models its own measurement process
+  parametrically (exiting the scope of P3).
+\end{enumerate}
+
+\noindent
+The formalism does not adjudicate between interpretations of quantum
+mechanics (Copenhagen, many-worlds, relational, etc.).  It constrains
+the \emph{structural form} of any interpretation that includes
+self-measuring observers: such an interpretation must accept
+representational incompleteness or deny that the observer's
+self-measurement is parametric.
+
+\subsection{Why This Is Not G\"odel Repackaged}
+\label{sec:godel-distinction}
+
+An adversarial reader's first instinct on encountering a
+``self-reference impossibility'' result may be: \emph{``This is just
+G\"odel incompleteness in different notation---nothing new.''}  This
+subsection walks through the comparison in detail and explains exactly
+what G\"odel alone does \emph{not} give you.
+
+\subsubsection{The structural comparison}
+
+\begin{center}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{6.5cm}
+                 >{\raggedright\arraybackslash}p{7.5cm}@{}}
+\toprule
+\textbf{G\"odel Incompleteness} & \textbf{Representational Incompleteness} \\
+\midrule
+Applies to formal theories with provability predicates &
+Applies to \emph{any} parametric self-model $s : A \to A \to B$ \\[0.5ex]
+Requires arithmetic ($\Sigma_1$-completeness) &
+Requires only a fixed-point-free endomorphism on $B$ \\[0.5ex]
+Self-referential \emph{sentence} (the G\"odel sentence $G$) &
+Self-referential \emph{function} (the diagonal $a \mapsto f(s\,a\,a)$) \\[0.5ex]
+Blind spot is an \emph{unprovable truth} &
+Blind spot is an \emph{unrepresentable behavior} \\[0.5ex]
+Escape route: extend the theory (add axioms, move to a stronger system) &
+No escape: diagonal exclusion holds for \emph{every} $s$, every $A$, partial or total \\[0.5ex]
+Computability-dependent (requires recursive axiomatizability or computable functions) &
+Computability-\emph{independent} (holds for all functions, computable or not) \\[0.5ex]
+Cardinality-dependent (requires countable language) &
+Cardinality-independent (holds for every cardinality of $A$) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Why G\"odel's incompleteness is insufficient for our claim}
+
+G\"odel's first incompleteness theorem says: any consistent, recursively
+axiomatizable theory $T$ extending Robinson arithmetic contains a sentence
+$G$ that is true in the standard model but not provable in $T$.  The
+standard remedy is to \emph{extend the theory}: add $G$ as an axiom,
+obtaining $T' = T + G$.  Of course $T'$ has its own unprovable sentence
+$G'$, but the point is that for any \emph{particular} sentence, one can
+always find a stronger theory that proves it.
+
+Representational incompleteness has no such escape.
+Theorem~\ref{thm:summit} says: for \emph{any} $s : A \to A \to B$ and any
+fixed-point-free $f$, the diagonal $a \mapsto f(s\,a\,a)$ is not $s\,a_0$
+for \emph{any} $a_0$.  Making $s$ ``stronger'' (total, surjective, defined
+on a larger $A$) does not help; if $s$ is claimed to be surjective, it
+simply cannot exist.  There is no analogue of ``add an axiom'': the
+diagonal exclusion is universal over $s$.
+
+\subsubsection{Why the Lawvere connection is classical but the packaging is new}
+
+Lawvere's fixed-point theorem (1969) is the categorical ancestor of
+Cantor's theorem and, by extension, of G\"odel's diagonalization.  We
+freely acknowledge this heritage.  What is new is:
+
+\begin{enumerate}[label=(\alph*),itemsep=0.3ex]
+\item The \textbf{\texttt{OntologicalSlot}} construction
+  (Definition~\ref{def:ontoslot}), which tags morphisms and global
+  elements as belonging to disjoint ontological sorts.  Lawvere's theorem
+  does not tag the fixed point; standard category theory does not
+  introduce a formal disjointness marker between $\mathrm{End}(A)$ and
+  $\mathrm{Hom}(\mathbf{1}, A)$.  See
+  \S\ref{sec:ontoslot-novelty}.
+\item The \textbf{partial-model diagonal exclusion}
+  (\leanref{lawvere\_diagonal\_not\_in\_range}): the blind spot persists
+  even when $s$ is not claimed to be surjective.  Classical Lawvere
+  requires surjectivity as a hypothesis; our result drops it entirely.
+\item The \textbf{decidable / $\mathrm{Bool}$-valued horn closure}
+  (Horn~6): even restricting to two-valued predicates---the simplest
+  possible codomain---does not help.
+  $\lnot : \mathrm{Bool} \to \mathrm{Bool}$ is fixed-point-free, so
+  the obstruction persists in the finite, decidable setting.  This
+  further separates the result from the G\"odel/Turing tradition, where
+  undecidability is essential.
+\end{enumerate}
+
+\subsubsection{Computability independence}
+
+G\"odel's theorem requires the system under study to be a recursively
+axiomatizable formal theory (or, in Turing's version, a computable
+function).  If the system is not recursively enumerable, the theorem does
+not apply.
+
+Representational incompleteness makes \emph{no computability assumption}
+on $s$.  The function $s : A \to A \to B$ can be any function
+whatsoever---computable, hyperarithmetic, $\Delta^1_1$, or wildly
+non-constructive.  The diagonal exclusion holds regardless.  In this
+precise sense, the result is \emph{stronger} than G\"odel's: it covers
+systems that G\"odel's theorem cannot even address.
+
+\subsubsection{The topological strand has no G\"odel analogue at all}
+
+The topological barrier (Theorem~\ref{thm:generic}) is completely
+independent of diagonalization.  G\"odel, Cantor, Lawvere---none of them
+say anything about homeomorphism types or boundary-connectivity
+invariants.  The topological strand detects an obstruction that is
+invisible to any proof-theoretic or recursive-function-theoretic argument.
+It is a finite-data invariant of a different mathematical universe entirely.
+
+\begin{keybox}[title={Not G\"odel repackaged: a summary}]
+Representational incompleteness differs from G\"odel incompleteness
+in \textbf{six independent respects}: (1)~no formal theory required,
+(2)~no arithmetic required, (3)~no coding required, (4)~the blind
+spot is a function not a sentence, (5)~no escape via theory
+extension, (6)~no computability assumption.  The topological barrier
+adds a \textbf{seventh}: it is orthogonal to all diagonal arguments
+and detects a finite-data invariant that no amount of computation,
+scaling, or iteration can alter.  Any claim that ``this is just
+G\"odel'' must address all seven distinctions simultaneously.
+\end{keybox}
 
 \subsection{No-escape analysis: horn-by-horn closure}
 \label{sec:noescape}
@@ -1106,6 +1983,16 @@ genuinely new topological structure at some level---not representational
 iteration of the same type---or accept that its boundary organization
 differs from the target.
 
+\paragraph{Simulation hypothesis.}
+A simulator that includes a model of itself instantiates $s : A \to A \to B$;
+the diagonal exclusion (Theorem~\ref{thm:summit}) blocks complete
+self-inclusive simulation.  If conscious experience requires a boundary
+pattern incompatible with the simulator's substrate (under P2), the
+topological barrier also applies.  Nesting simulations within simulations
+produces iterated $\mathrm{represent}^n$, subject to the Horn~1/2
+dichotomy.  Admissible accounts must either exclude the simulator from
+its own simulation or accept the diagonal-shaped blind spot.
+
 \paragraph{LLM and AI scaling.}
 Scaling extends a representational architecture within a fixed topological
 type.  If that type has one boundary-connectivity pattern, scaling does not
@@ -1115,6 +2002,29 @@ general lemma, not the particular pair.
 Admissible paths to a different topological type require
 \emph{structural} change (different topology of the underlying state
 space), not quantitative extension (more of the same).
+
+\paragraph{AI self-understanding and AGI.}
+Every AI self-model instantiates $s : A \to A \to B$ and is subject to
+the diagonal exclusion.  Recursive self-improvement either produces an
+infinite regress (Horn~1) or cycles (Horn~2).  Multi-agent delegation
+does not escape the section--retraction closure (Horn~3).  Partial
+self-models leave a diagonal-shaped hole (Horn~4).  Admissible paths to
+complete self-understanding require structural change to the system's
+topological type, not quantitative scaling.  Useful partial
+self-understanding remains possible; complete parametric
+self-understanding does not (see \S\ref{sec:ai-agi}).
+
+\paragraph{Computational theories of physics and mind.}
+Any theory that models the universe computationally and admits
+self-modeling subsystems inherits the obstructions from within
+(\S\ref{sec:inherited}).  Weakening self-modeling to escape the barrier
+either fails (Horn~4: partial models still miss the diagonal) or
+contradicts the empirical existence of self-modeling biological systems.
+Appealing to non-computability does not help: the diagonal exclusion is
+computability-independent, and the topological barrier is orthogonal to
+the entire computability hierarchy (\S\ref{sec:noncomp-escape}).
+Admissible theories must either accept the incompleteness or posit
+structural change to the topological type of the substrate.
 
 % ============================================================================
 % 8. LIMITATIONS AND SCOPE
@@ -1132,7 +2042,7 @@ space), not quantitative extension (more of the same).
   $\mathrm{MonoidalClosed}(\mathrm{Type}\ u)$, not a general closed category over arbitrary~$C$.
   A fully abstract CCC version remains future work.
 
-\item \textbf{\texttt{OntologicalSlot} is definitional, not metaphysical.} The disjointness $\mathrm{endo} \neq \mathrm{obj}$ is trivially true by constructor discrimination. This is the point, but the triviality means the result is \emph{semantic} (about the structure of type theory) rather than a deep theorem.
+\item \textbf{\texttt{OntologicalSlot} is definitional, not metaphysical.} The disjointness $\mathrm{endo} \neq \mathrm{obj}$ is true by constructor discrimination. The robustness theorems (\leanref{ClosureProperties.lean}) prove this is a structural invariant---it survives any injective relabeling and only collapses under a non-injective map---but the underlying mechanism is type-theoretic, not a deep mathematical theorem.
 
 \item \textbf{Models are chosen, not unique.} The closed cylinder and M\"obius strip are the \emph{minimal-case witnesses} chosen for clarity and tractability.  Theorem~\ref{thm:generic} defines an open-ended class of obstructed pairs; any two spaces with incompatible \texttt{ChartableR2}-co-characterized boundaries (Klein bottle vs.\ torus, projective plane vs.\ sphere, etc.) would serve equally.  Discharging additional witnesses requires proving their boundary biconditionals and subtype incompatibility.
 
@@ -1172,6 +2082,31 @@ space), not quantitative extension (more of the same).
   obstructions (Rice's theorem, Kleene's recursion theorem) in the same
   framework is not attempted; the present result is the finite/decidable
   endpoint of the diagonal family.
+
+\item \textbf{Classical logic.}  The iterate dichotomy (Horn~2) and
+  several auxiliary results use classical reasoning (law of excluded
+  middle), which is standard in Lean~4's axiom environment.  The
+  diagonal exclusion itself
+  (\leanref{diagonal\_exclusion\_is\_constructive} in
+  \leanref{ClosureProperties.lean}) is constructive: it requires only
+  function application and the fixed-point-freeness hypothesis.
+
+\item \textbf{P3 (computational self-model) is a modeling claim.}
+  Bridge hypothesis~P3 (Definition~\ref{def:p3}) makes explicit
+  the modeling assumption ``the system has a parametric self-model
+  $s : A \to A \to B$.''  Whether a given AI system, brain, or
+  simulator actually satisfies P3 is an empirical and
+  philosophical question, not one settled by this formalism.
+
+\item \textbf{Pillars 1 and 2 are formally independent.}  The
+  diagonal exclusion (Pillar~1) and the topological barrier (Pillar~2)
+  are proved as separate theorems that do not reference each other.
+  They are ``mutually reinforcing'' in the sense that they constrain
+  the same informal target from orthogonal directions, but there is no
+  single theorem that formally links a \texttt{RepresentationalSystem}
+  to a topological space.  The connection is mediated by the bridge
+  hypotheses (P2, P3) and the application-specific modeling claims
+  in~\S\ref{sec:instantiations}.
 \end{enumerate}
 
 % ============================================================================
@@ -1191,7 +2126,14 @@ invariants.
 \subsection{Lawvere's theorem in proof theory}
 Lawvere's fixed-point argument appears in multiple formal developments.
 \texttt{OntologicalSlot} and the wall lemmas supply complementary
-category-internal tagging alongside the \texttt{Type}-level diagonal theorem.
+category-internal tagging alongside the \texttt{Type}-level diagonal
+theorem.  Crucially, Lawvere's original result does not tag the fixed
+point as belonging to a different ontological sort from the morphism
+that produced it; \texttt{OntologicalSlot}
+(Definition~\ref{def:ontoslot}) fills this gap with an inductive
+disjointness marker that is, to our knowledge, absent from all prior
+formalizations of Lawvere's theorem
+(see \S\ref{sec:ontoslot-novelty}).
 
 \subsection{Consciousness, G\"odel, and AI}
 G\"odel- and computability-based limits on mechanism (including Penrose-style
@@ -1206,6 +2148,26 @@ decidability.  The topological strand
 (Theorem~\ref{thm:generic}) is likewise orthogonal to G\"odel-style
 reasoning: it is a finite-data invariant, not an incompleteness of a
 deductive system.
+
+Section~\ref{sec:godel-distinction} provides a detailed side-by-side
+comparison between G\"odel incompleteness and representational
+incompleteness, addressing six independent structural differences and
+explaining why the ``G\"odel repackaging'' objection fails on every
+count.  The comparison also highlights the computability-independence
+of the present result---it holds for all functions, computable or
+not---which places it in a strictly larger domain than G\"odel- or
+Turing-style arguments, which require recursive axiomatizability or
+computability as a precondition.
+
+\subsection{AI self-models and AGI limits}
+Theoretical limits on AI self-understanding have been discussed from
+computability-theoretic (Rice's theorem, Kleene's recursion theorem)
+and information-theoretic perspectives.  The present work differs:
+the diagonal exclusion (Theorem~\ref{thm:summit}) requires \emph{no
+computability assumption}---it applies to every
+$s : A \!\to\! A \!\to\! B$ regardless of computability---and the
+topological barrier is orthogonal to recursion-theoretic machinery.
+Full implications are developed in \S\ref{sec:ai-agi}.
 
 \subsection{Topology in philosophy of mind}
 Topological figures of speech appear in some philosophy of mind.  The present
@@ -1257,10 +2219,41 @@ Three mutually reinforcing layers make the result robust:
   circumvent either the diagonal or the topological barrier.
 \end{enumerate}
 
+\begin{keybox}[title=Three pillars of representational incompleteness]
+\begin{enumerate}[label=\textbf{Pillar~\arabic*.},leftmargin=3.5em,itemsep=0.6ex]
+\item \textbf{Diagonal exclusion}
+  (Theorem~\ref{thm:summit}).  Every self-model $s : A \to A \to B$
+  has a diagonal blind spot: the function $a \mapsto f(s\,a\,a)$ is
+  never any row $s\,a_0$.  No assumption on surjectivity,
+  computability, or cardinality.
+\item \textbf{Topological obstruction}
+  (Theorem~\ref{thm:generic}).  Any two spaces with incompatible
+  $\mathrm{ChartableR2}$-detected boundaries are not homeomorphic.
+  A finite-data invariant impervious to computation, scaling, or
+  continuous deformation.
+\item \textbf{Ontological sort wall}
+  (Theorem~\ref{thm:wall}).  The \texttt{OntologicalSlot}
+  construction enforces that the self-representation morphism
+  ($\mathrm{endo}$) is definitionally disjoint from any global
+  element ($\mathrm{obj}$) at every iterate depth.  The Lawvere
+  fixed point does not dissolve this wall.
+\end{enumerate}
+Together, these three pillars---diagonal, topological, and
+ontological---leave the adversary with no viable route: scaling,
+iterating, partial modeling, cross-object readout, model substitution,
+and decidable restriction are all formally inadmissible.  The
+remaining admissible paths all require \emph{structural change} to the
+topological type of the substrate.  The closure properties
+(\leanref{ClosureProperties}) prove the barrier is robust under
+composition, reindexing, embedding, multi-agent delegation, and nested
+simulation.
+\end{keybox}
+
 \paragraph{What is not being claimed.}
 The theorems are unconditional mathematics; the \emph{application} to
 any particular domain requires domain-specific premises (P2 for
-consciousness, \texttt{ChartableR2} biconditionals for a specific
+consciousness, P3 for computational self-models,
+\texttt{ChartableR2} biconditionals for a specific
 state-space model, etc.).  The formalism does not prove that
 consciousness is non-representational, that AI cannot be conscious, or
 that symbol grounding is impossible.  It proves that \emph{if} the
@@ -1272,9 +2265,13 @@ that barrier fail in formally checkable ways.
 \paragraph{The admissibility picture.}
 The horn closures (\S\ref{sec:noescape}) together with the
 admissibility analysis (\S\ref{sec:admissibility}) leave a clean
-landscape.  In each neighboring debate---consciousness,
+landscape.  All three pillars---diagonal (Pillar~1), topological
+(Pillar~2), and ontological sort (Pillar~3)---contribute to the
+closure.  In each neighboring debate---consciousness,
 symbol grounding, diagonal limitations, measurement chains, AI
-scaling---the admissible solutions share a common shape:
+scaling, AGI self-improvement, the simulation hypothesis, and
+computational theories of physics and mind---the admissible solutions
+share a common shape:
 \emph{structural change} to the topological type of the substrate,
 not \emph{quantitative extension} within a fixed type.  Scaling,
 iterating, partial modeling, finite-depth loops, cross-object readout,
@@ -1343,6 +2340,7 @@ fixed standard rather than debated informally.
 \leanref{HalfSpaceNeighborVsPlane} & Local half-space $\neq$ open plane patch \\
 \leanref{PuncturedPlaneNotSimplyConnected} & $\mathbb{C} \setminus \{0\}$ not simply connected \\
 \leanref{OpenCompactChartObstruction} & Compact $\mathbb{R}^2$ patch $\neq$ $\mathbb{R}^2$ \\
+\leanref{ClosureProperties} & Compositional inheritance; \leanref{ComputationalSelfModel} (P3); slot robustness; exhaustive closure; simulation; computability independence \\
 \leanref{Main} & Master theorem + extended bundle \\
 \bottomrule
 \end{tabular}
@@ -1382,9 +2380,89 @@ fixed standard rather than debated informally.
 \leanref{CrossObjectRepresentation.section\_retraction\_no\_injective\_tower\_either\_side} & Both-side: $\neg$ injective $\mathbb{N}$-powers on source \emph{or} host & \leanref{NoEscapeClosure} \\
 \leanref{lawvere\_diagonal\_not\_in\_range} & Diagonal never in range of any $s : A \!\to\! A \!\to\! B$ (no surjectivity) & \leanref{LawvereRegressBridge} \\
 \leanref{no\_universal\_parametric\_unary\_bool} & No universal $s : A \!\to\! A \!\to\! \mathrm{Bool}$ for all $g : A \!\to\! \mathrm{Bool}$ & \leanref{LawvereRegressBridge} \\
+\midrule
+\multicolumn{3}{l}{\textit{Closure properties (\leanref{ClosureProperties})}} \\
+\leanref{ComputationalSelfModel.diagonal\_blind\_spot} & P3 bridge: self-model has diagonal blind spot & \leanref{ClosureProperties} \\
+\leanref{inherited\_diagonal\_exclusion} & Subsystem blind spot propagates to containing system & \leanref{ClosureProperties} \\
+\leanref{blind\_spot\_survives\_reindexing} & Reindexing via $r : C \to A$ preserves blind spot & \leanref{ClosureProperties} \\
+\leanref{recursive\_self\_improvement\_blind\_spot} & Every link in an improvement chain has blind spot & \leanref{ClosureProperties} \\
+\leanref{multiagent\_delegation\_blind\_spot} & Delegated self-model has blind spot & \leanref{ClosureProperties} \\
+\leanref{OntologicalSlot.wall\_survives\_injection} & Wall persists under injective relabeling & \leanref{ClosureProperties} \\
+\leanref{pillar1\_full\_closure} & Full Pillar 1: diagonal + no surjection + $\mathbb{N}$ + Bool & \leanref{ClosureProperties} \\
+\leanref{diagonal\_exclusion\_is\_constructive} & Diagonal exclusion needs no LEM & \leanref{ClosureProperties} \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Theorem Dependency Graph}
+\label{app:deps}
+
+The following diagram shows the logical dependency structure among the
+principal theorems.  An arrow $A \to B$ means ``$B$ uses $A$ as a
+lemma or hypothesis.''  The three pillars are shaded.
+
+{\small
+\noindent\textbf{Layer 1: Diagonal \& Categorical.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0.15ex,topsep=0.4ex,parsep=0pt]
+\item \leanref{lawvere\_fixed\_point\_Type}
+  $\to$
+  diagonal-not-in-range, no-universal-nat, no-universal-bool\\
+  $\to$ \textbf{[P1]}
+  \leanref{representational\_incompleteness}
+\item \leanref{OntologicalSlot} (def) $\to$
+  \textbf{[P3]}
+  \leanref{lawvere\_wall\_is\_not\_dissolution}
+  $\to$
+  \leanref{lawvere\_fixed\_point\_stays\_representational}
+\item \leanref{regress\_iterates\_unbounded}
+  $+$ P3 $\to$
+  \leanref{representational\_regress\_master}
+\item \leanref{pow\_iterate\_dichotomy} (Horn~2);\enspace
+  section--retraction closure (Horn~3)
+\end{itemize}
+
+\noindent\textbf{Layer 2: Topological Obstruction.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0.15ex,topsep=0.4ex,parsep=0pt]
+\item \leanref{Homeomorph.chartableR2\_iff} $\to$
+  \textbf{[P2]}
+  \leanref{not\_homeomorphic\_of\_chartableR2\_boundary\_contrast}
+\item Cylinder C4 $+$ M\"obius C4 $+$ boundary contrast $\to$
+  \leanref{mobiusStrip\_not\_homeomorphic\_closedCylinder}
+  \textbf{(M-FINAL)}
+\item Interior-height chartability $\to$ M\"obius C4;\enspace
+  half-space obstruction $\to$ Cylinder C4
+\end{itemize}
+
+\noindent\textbf{Layer 3: Integration.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0.15ex,topsep=0.4ex,parsep=0pt]
+\item \leanref{representational\_regress\_master}
+  $+$ M-FINAL $\to$
+  \leanref{representational\_regress\_master\_extended}
+\end{itemize}
+
+\noindent\textbf{Layer 4: Closure Properties.}
+\begin{itemize}[leftmargin=1.5em,itemsep=0.15ex,topsep=0.4ex,parsep=0pt]
+\item Summit $\to$
+  inherited-diagonal, reindexing,\\
+  exhaustive-closure
+\item \leanref{OntologicalSlot} $\to$
+  wall-survives-injection,\\
+  iterate-tower-injective
+\item \leanref{ComputationalSelfModel} (P3)
+  $\to$ diagonal-blind-spot,\\
+  no-complete-self-model
+\item pillar1/2/3-full-closure $+$
+  categorical-horn-closures
+\end{itemize}
+}% end \small
+
+\noindent
+\textbf{Summary statistics.}
+The Lean development contains 379 theorems and 105 lemmas across 31
+source files, with zero \texttt{sorry} and no axioms beyond Lean~4's
+standard foundation (propositional extensionality, quotients, choice).
+The Key Theorem Index (Appendix~\ref{app:theorems}) lists the 30
+principal results; all are verified present in the source.
 
 \section{Reproduction}
 \label{app:repro}

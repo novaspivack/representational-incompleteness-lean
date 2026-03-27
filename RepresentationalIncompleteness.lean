@@ -28,6 +28,7 @@ import RepresentationalIncompleteness.MobiusSeamChartable
 import RepresentationalIncompleteness.MobiusSeamTrigInject
 import RepresentationalIncompleteness.MobiusSeamChartableR2
 import RepresentationalIncompleteness.NoEscapeClosure
+import RepresentationalIncompleteness.ClosureProperties
 import RepresentationalIncompleteness.Main
 
 namespace RepresentationalIncompleteness

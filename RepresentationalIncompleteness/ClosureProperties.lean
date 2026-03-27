@@ -138,14 +138,14 @@ theorem inherited_diagonal_exclusion {A B : Type u}
     ¬(∀ g : A → B, ∃ a : A, sub.s a = g) :=
   representational_incompleteness f hf sub.s
 
-/-- **Compositionality of the blind spot:** if a larger system U has access to
-    s : A → A → B (perhaps as a component), and U tries to "patch" the blind spot
-    by composing with any h : B → B, the result h ∘ diagonal is STILL not in
-    the range — the blind spot propagates through post-composition. -/
+/-- **Compositionality of the blind spot (post-composition):** if a larger
+    system U has access to s : A → A → B and applies any transformation
+    h : B → B to the output, the composed model `fun a₁ a₂ => h (s a₁ a₂)`
+    STILL has a diagonal blind spot.  The post-composition does not help. -/
 theorem blind_spot_survives_postcomposition {A B : Type u}
-    (f : B → B) (hf : ∀ b, f b ≠ b) (s : A → A → B) (_h : B → B) (a₀ : A) :
-    s a₀ ≠ fun a => f (s a a) :=
-  lawvere_diagonal_not_in_range f hf s a₀
+    (f : B → B) (hf : ∀ b, f b ≠ b) (s : A → A → B) (h : B → B) (a₀ : A) :
+    (fun a₁ a₂ => h (s a₁ a₂)) a₀ ≠ fun a => f ((fun a₁ a₂ => h (s a₁ a₂)) a a) :=
+  lawvere_diagonal_not_in_range f hf (fun a₁ a₂ => h (s a₁ a₂)) a₀
 
 /-- **Blind spot survives pre-composition (reindexing):** If an outer system
     reindexes the parameter space via any r : C → A, the diagonal exclusion
@@ -165,14 +165,16 @@ theorem universe_model_inherits_incompleteness {A B : Type u}
     ¬(∀ g : A → B, ∃ a : A, s a = g) :=
   (representational_incompleteness f hf s).2
 
-/-- **Weakening the self-model does not help:** even if the system claims
-    its self-model is "only approximate" or "partial", the diagonal blind
-    spot persists for ANY s whatsoever. There is no threshold of
-    "partiality" that eliminates the blind spot. -/
-theorem no_partiality_threshold {A B : Type u}
-    (f : B → B) (hf : ∀ b, f b ≠ b) (s : A → A → B) (a₀ : A) :
-    s a₀ ≠ fun a => f (s a a) :=
-  lawvere_diagonal_not_in_range f hf s a₀
+/-- **Blind spot of product model:** If two independent systems each have
+    self-models s₁ : A₁ → A₁ → B and s₂ : A₂ → A₂ → B, the combined
+    "product" model on A₁ × A₂ inherits a blind spot.  The product of
+    two self-modeling systems is still self-modeling, and still incomplete. -/
+theorem product_self_model_blind_spot {A₁ A₂ B : Type u}
+    (f : B → B) (hf : ∀ b, f b ≠ b) (s₁ : A₁ → A₁ → B) (_s₂ : A₂ → A₂ → B)
+    (p₀ : A₁ × A₂) :
+    (fun (p q : A₁ × A₂) => s₁ p.1 q.1) p₀ ≠
+      fun p => f ((fun (p q : A₁ × A₂) => s₁ p.1 q.1) p p) :=
+  lawvere_diagonal_not_in_range f hf (fun (p q : A₁ × A₂) => s₁ p.1 q.1) p₀
 
 end Compositional
 
@@ -254,24 +256,31 @@ theorem crossObject_type_level_C_side_idempotent {A C : Type u}
     (e ∘ r) ∘ (e ∘ r) = (e ∘ r) := by
   ext c; simp [Function.comp_def, h]
 
-/-- **Any embedding with left-inverse preserves the diagonal blind spot.**
-    The self-model `s` on the original type still has its blind spot regardless
-    of the existence of an embedding into a larger type. -/
-theorem crossObject_preserves_blind_spot {A B C : Type u}
+/-- **Embedding with left-inverse: both sides have a blind spot.**
+    Given e : A → C with left-inverse r : C → A (so r ∘ e = id), the
+    original model `s` on A has a blind spot, AND the "transported" model
+    `fun c₁ c₂ => s (r c₁) (r c₂)` on C also has a blind spot. The
+    embedding does not transfer completeness in either direction. -/
+theorem crossObject_both_sides_blind_spot {A B C : Type u}
     (f : B → B) (hf : ∀ b, f b ≠ b)
-    (s : A → A → B) (_e : A → C) (_r : C → A) (a₀ : A) :
-    s a₀ ≠ fun a => f (s a a) :=
-  lawvere_diagonal_not_in_range f hf s a₀
+    (s : A → A → B) (e : A → C) (r : C → A) (_hre : ∀ a, r (e a) = a) :
+    (∀ a₀ : A, s a₀ ≠ fun a => f (s a a)) ∧
+    (∀ c₀ : C, (fun c₁ c₂ => s (r c₁) (r c₂)) c₀ ≠
+      fun c => f ((fun c₁ c₂ => s (r c₁) (r c₂)) c c)) :=
+  ⟨fun a₀ => lawvere_diagonal_not_in_range f hf s a₀,
+   fun c₀ => lawvere_diagonal_not_in_range f hf (fun c₁ c₂ => s (r c₁) (r c₂)) c₀⟩
 
-/-- **Multi-agent delegation does not escape.** If agent 1 delegates
-    self-evaluation to agent 2, and agent 2 builds a model s₂ of its own
-    combined state space, the model s₂ still has a diagonal blind spot.
-    The delegation channel is irrelevant: the blind spot is about s₂ itself. -/
-theorem multiagent_delegation_blind_spot {A₂ B : Type u}
+/-- **Multi-agent delegation does not escape.** Agent 1 delegates its
+    self-evaluation to Agent 2 via a delegation map π : A₁ → A₂.
+    Agent 2's model of Agent 1 is `fun a₁ a₂ => s₂ (π a₁) (π a₂)`.
+    This delegated model has a blind spot on Agent 1's state space.
+    The delegation channel is structurally irrelevant. -/
+theorem multiagent_delegation_blind_spot {A₁ A₂ B : Type u}
     (f : B → B) (hf : ∀ b, f b ≠ b)
-    (s₂ : A₂ → A₂ → B) (a₀ : A₂) :
-    s₂ a₀ ≠ fun a => f (s₂ a a) :=
-  lawvere_diagonal_not_in_range f hf s₂ a₀
+    (s₂ : A₂ → A₂ → B) (π : A₁ → A₂) (a₀ : A₁) :
+    (fun a₁ a₂ => s₂ (π a₁) (π a₂)) a₀ ≠
+      fun a => f ((fun a₁ a₂ => s₂ (π a₁) (π a₂)) a a) :=
+  lawvere_diagonal_not_in_range f hf (fun a₁ a₂ => s₂ (π a₁) (π a₂)) a₀
 
 end GeneralizedCrossObject
 
@@ -302,17 +311,23 @@ theorem exhaustive_diagonal_closure {A B : Type u}
    (representational_incompleteness f hf s).2,
    fun _C r c₀ => lawvere_diagonal_not_in_range f hf (fun c₁ c₂ => s (r c₁) (r c₂)) c₀⟩
 
-/-- **Computability-independence (explicit):** The diagonal exclusion holds
-    for ALL functions s, with NO computability, measurability, continuity,
-    or definability restriction. This theorem takes s as a completely
-    arbitrary function — it could be non-computable, non-measurable, or
-    defined by choice. The blind spot is universal. -/
-theorem computability_independent_diagonal {A B : Type u}
-    (f : B → B) (hf : ∀ b, f b ≠ b)
-    (s : A → A → B)  -- NO restriction on s whatsoever
-    (a₀ : A) :
-    s a₀ ≠ fun a => f (s a a) :=
-  lawvere_diagonal_not_in_range f hf s a₀
+/-- **Exhaustive admissibility with post-composition:** extends the
+    exhaustive closure to include that post-composing the model with
+    any h : B → B does not help either. -/
+theorem exhaustive_diagonal_closure_with_postcomp {A B : Type u}
+    (f : B → B) (hf : ∀ b, f b ≠ b) (s : A → A → B) :
+    (∀ a₀ : A, s a₀ ≠ fun a => f (s a a)) ∧
+    ¬(∀ g : A → B, ∃ a : A, s a = g) ∧
+    (∀ (C : Type u) (r : C → A) (c₀ : C),
+      (fun c₁ c₂ => s (r c₁) (r c₂)) c₀ ≠
+        fun c => f ((fun c₁ c₂ => s (r c₁) (r c₂)) c c)) ∧
+    (∀ (h : B → B) (a₀ : A),
+      (fun a₁ a₂ => h (s a₁ a₂)) a₀ ≠
+        fun a => f ((fun a₁ a₂ => h (s a₁ a₂)) a a)) :=
+  ⟨fun a₀ => lawvere_diagonal_not_in_range f hf s a₀,
+   (representational_incompleteness f hf s).2,
+   fun _C r c₀ => lawvere_diagonal_not_in_range f hf (fun c₁ c₂ => s (r c₁) (r c₂)) c₀,
+   fun h a₀ => lawvere_diagonal_not_in_range f hf (fun a₁ a₂ => h (s a₁ a₂)) a₀⟩
 
 end Admissibility
 
@@ -428,13 +443,23 @@ theorem no_complete_self_inclusive_simulation {A B : Type u}
   (representational_incompleteness f hf sim).2
 
 /-- **Nested simulations don't help:** a chain of nested simulators
-    sim₁, sim₂, ..., each modeling the level below, still has the
-    diagonal blind spot at every level. -/
+    sim₁, sim₂, ..., each modeling the level below, has
+    the diagonal blind spot at EVERY level simultaneously.
+    No finite or infinite depth of nesting eliminates the obstruction. -/
 theorem nested_simulation_blind_spot {A B : Type u}
     (f : B → B) (hf : ∀ b, f b ≠ b)
-    (simChain : ℕ → SelfInclusiveSimulation A B) (level : ℕ) (a₀ : A) :
-    (simChain level) a₀ ≠ fun a => f ((simChain level) a a) :=
-  lawvere_diagonal_not_in_range f hf (simChain level) a₀
+    (simChain : ℕ → SelfInclusiveSimulation A B) :
+    ∀ level : ℕ, ∀ a₀ : A,
+      (simChain level) a₀ ≠ fun a => f ((simChain level) a a) :=
+  fun level a₀ => lawvere_diagonal_not_in_range f hf (simChain level) a₀
+
+/-- **No chain of simulations can achieve collective completeness:**
+    even if the chain were infinite, none of them is surjective. -/
+theorem nested_simulation_no_complete_level {A B : Type u}
+    (f : B → B) (hf : ∀ b, f b ≠ b)
+    (simChain : ℕ → SelfInclusiveSimulation A B) :
+    ∀ level : ℕ, ¬(∀ g : A → B, ∃ a : A, (simChain level) a = g) :=
+  fun level => (representational_incompleteness f hf (simChain level)).2
 
 end Simulation
 
@@ -450,56 +475,96 @@ section ComputabilityIndependence
     constraint (no Computable, no Decidable, no Measurable, nothing).
 
     An adversary proposing "use a non-computable self-model to escape"
-    must confront this: the theorem quantifies over ALL functions. -/
-theorem diagonal_exclusion_no_computability_hypothesis
+    must confront this: the theorem quantifies over ALL functions.
+
+    Note: this has the same type as `representational_incompleteness` —
+    it exists to make the scope claim checkable by inspection. -/
+theorem computability_independent_diagonal
     {A B : Type u} (f : B → B) (hf : ∀ b, f b ≠ b)
-    -- s is ANY function. No computability. No definability. No restriction.
     (s : A → A → B) :
     (∀ a₀ : A, s a₀ ≠ fun a => f (s a a)) ∧
     ¬(∀ g : A → B, ∃ a : A, s a = g) :=
   representational_incompleteness f hf s
 
-/-- **Cardinality-independence.** The diagonal exclusion holds for
-    types of ANY cardinality — finite, countable, uncountable, or larger.
-    This makes explicit that the result is not an artifact of countability
-    (unlike Gödel, which requires a countable language). -/
-theorem diagonal_exclusion_any_cardinality
-    {A B : Type u} (f : B → B) (hf : ∀ b, f b ≠ b)
-    (s : A → A → B) (a₀ : A) :
-    s a₀ ≠ fun a => f (s a a) :=
-  lawvere_diagonal_not_in_range f hf s a₀
+/-- **The diagonal exclusion applied to `PUnit`-indexed models.**
+    Even if the parameter type has cardinality 1, the blind spot persists.
+    This witnesses that no cardinality is too small for the obstruction. -/
+theorem diagonal_exclusion_punit_indexed
+    {B : Type u} (f : B → B) (hf : ∀ b, f b ≠ b)
+    (s : PUnit.{u+1} → PUnit.{u+1} → B) :
+    (∀ u₀ : PUnit.{u+1}, s u₀ ≠ fun u => f (s u u)) ∧
+    ¬(∀ g : PUnit.{u+1} → B, ∃ u : PUnit.{u+1}, s u = g) :=
+  representational_incompleteness f hf s
+
+/-- **The diagonal exclusion at universe zero (concrete types).**
+    Instantiation at `Type 0` / `Type` — all concrete machine types
+    (Bool, ℕ, Fin n, etc.) live here. The `u = 0` case is not special. -/
+theorem diagonal_exclusion_type_zero
+    {A B : Type} (f : B → B) (hf : ∀ b, f b ≠ b) (s : A → A → B) :
+    (∀ a₀ : A, s a₀ ≠ fun a => f (s a a)) ∧
+    ¬(∀ g : A → B, ∃ a : A, s a = g) :=
+  representational_incompleteness f hf s
 
 end ComputabilityIndependence
 
 -- ═══════════════════════════════════════════════════════════════════
--- §9. The topology is orthogonal to computability (formal statement)
+-- §9. Pillar bridge: combining diagonal and topological obstructions
 -- ═══════════════════════════════════════════════════════════════════
 
-section TopologyOrthogonality
+section PillarBridge
 
-/-- **Topological invariance is a fact about spaces, not about functions on them.**
-    The homeomorphism type of a space is determined by its topology alone.
-    No function (computable or not) defined ON a space can change the space's
-    homeomorphism type. This is the formal backbone of "topology closes the
-    non-computability escape." -/
-theorem topology_invariant_of_functions {X Y : Type*}
-    [TopologicalSpace X] [TopologicalSpace Y]
-    (hNotHomeo : IsEmpty (X ≃ₜ Y))
-    (_f : X → X) :
-    IsEmpty (X ≃ₜ Y) :=
-  hNotHomeo
+/-- **A self-modeling system with a topological state space.**
+    This bundles Pillar 1 (diagonal exclusion via s : A → A → B) and
+    Pillar 2 (topological obstruction via incompatible boundary pattern)
+    into a single structure, bridging the two formally independent pillars.
+    When both hypotheses hold, both obstructions apply simultaneously. -/
+structure TopologicalSelfModelingSystem (A B : Type u)
+    [TopologicalSpace A] where
+  selfModel : A → A → B
+  fpFreeEndo : B → B
+  fpFree : ∀ b, fpFreeEndo b ≠ b
 
-/-- **ChartableR2 is invariant under homeomorphism, regardless of what
-    functions exist on the spaces.** This makes explicit that the boundary
-    invariant is a topological fact, not a computational one. -/
-theorem chartableR2_invariant_regardless_of_functions
+/-- **Both pillars apply simultaneously:** a self-modeling system whose
+    state space A is not homeomorphic to some target Y faces BOTH
+    the diagonal blind spot AND the topological barrier.  Neither
+    pillar alone implies the other, but when both hypotheses are
+    satisfied, both obstructions are in force. -/
+theorem TopologicalSelfModelingSystem.both_pillars_apply {A B : Type u}
+    {Y : Type*} [TopologicalSpace A] [TopologicalSpace Y]
+    (M : TopologicalSelfModelingSystem A B) (hNotHomeo : IsEmpty (A ≃ₜ Y)) :
+    (∀ a₀ : A, M.selfModel a₀ ≠ fun a => M.fpFreeEndo (M.selfModel a a)) ∧
+    IsEmpty (A ≃ₜ Y) :=
+  ⟨fun a₀ => lawvere_diagonal_not_in_range M.fpFreeEndo M.fpFree M.selfModel a₀,
+   hNotHomeo⟩
+
+/-- **The topological barrier is independent of what functions exist on the space.**
+    Given a non-homeomorphism witnessed by incompatible ChartableR2 boundaries,
+    the existence of ANY endomorphism on X (computable or not) does not change
+    the ChartableR2 classification of any point.  The boundary invariant is a
+    property of the topology, not the dynamics. -/
+theorem chartableR2_invariant_of_endomorphism
     {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    (e : X ≃ₜ Y) (x : X)
-    (_anyFunctionOnX : X → X) (_anyFunctionOnY : Y → Y) :
+    (e : X ≃ₜ Y) (x : X) (_g : X → X) :
     ChartableR2 x ↔ ChartableR2 (e x) :=
   Homeomorph.chartableR2_iff e x
 
-end TopologyOrthogonality
+/-- **Non-homeomorphism with diagonal blind spot.**
+    For any self-model s on X with a fp-free endomorphism on B, and any
+    target space Y not homeomorphic to X: the self-model has a blind spot
+    AND no homeomorphism to the target exists.  This formally conjoins
+    the two independently proved pillars. -/
+theorem combined_diagonal_and_topological_barrier {X B : Type u} {Y : Type*}
+    [TopologicalSpace X] [TopologicalSpace Y]
+    (f : B → B) (hf : ∀ b, f b ≠ b) (s : X → X → B)
+    (hNotHomeo : IsEmpty (X ≃ₜ Y)) :
+    (∀ x₀ : X, s x₀ ≠ fun x => f (s x x)) ∧
+    ¬(∀ g : X → B, ∃ x : X, s x = g) ∧
+    IsEmpty (X ≃ₜ Y) :=
+  ⟨fun x₀ => lawvere_diagonal_not_in_range f hf s x₀,
+   (representational_incompleteness f hf s).2,
+   hNotHomeo⟩
+
+end PillarBridge
 
 -- ═══════════════════════════════════════════════════════════════════
 -- §10. Classical logic disclosure

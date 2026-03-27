@@ -1462,7 +1462,7 @@ private lemma continuous_quotientLift_unfold_on_saturatedImage
       intro x y ⟨hxS', hxW⟩ hxy; exact ⟨hS'sat hxS' hxy, hf_rel x y hxy ▸ hxW⟩
     exact isOpen_mobiusQuotient_image_of_saturated _ hSW_open hSW_sat
   · ext ⟨z, hz⟩
-    simp only [mem_preimage, Subtype.coe_mk, mem_setOf_eq]
+    simp only [mem_preimage, mem_setOf_eq]
     exact ⟨fun h => h.2, fun h => ⟨hz, h⟩⟩
 
 /-- **SPEC_003 (Phase E, left seam equator).** Chart at `⟦(0, ½)⟧` via piecewise-linear
@@ -1766,7 +1766,7 @@ theorem chartableR2_mobiusQuotientMk_of_left_seam_half {p : MobiusFundamentalDom
         · simp [mobiusFD_of_planeIcoIoo_left, hcoord0_eq]
         · exact hx1
         · simp [mobiusFD_of_planeIcoIoo_left, mobiusPlaneTrigSeamPartnerSub,
-            mobiusPlaneCoord_apply_one, hx1, PiLp.add_apply, EuclideanSpace.single_apply]
+            mobiusPlaneCoord_apply_one, PiLp.add_apply, EuclideanSpace.single_apply]
       · -- interior case: q_fd.1 < 1, so coord0 < 0, σ dispatches to fR
         have hx1_lt : q_fd.1.val < 1 := lt_of_le_of_ne q_fd.1.2.2 hx1
         have huτ : ¬ mobiusPlaneTrigSeamPartnerSub (mobiusPlaneCoord q_fd) ∈ τ := by
@@ -1799,7 +1799,7 @@ theorem chartableR2_mobiusQuotientMk_of_left_seam_half {p : MobiusFundamentalDom
         mobiusPlaneCoord q ∈ Ball} := by
       have : {q : MobiusFundamentalDomain | q ∈ mobiusSeamLeftPatch t₀ ε δ ∧
           mobiusPlaneCoord q ∈ Ball} =
-          mobiusSeamLeftPatch t₀ ε δ ∩ mobiusPlaneCoord ⁻¹' Ball := by ext; simp [and_comm]
+          mobiusSeamLeftPatch t₀ ε δ ∩ mobiusPlaneCoord ⁻¹' Ball := by ext; simp
       rw [this]; exact hLP.inter (hBallOpen.preimage continuous_mobiusPlaneCoord)
     have hR_pre : IsOpen {q : MobiusFundamentalDomain | q ∈ mobiusSeamRightPatch t₀ ε δ ∧
         mobiusPlaneTrigSeamPartnerSub (mobiusPlaneCoord q) ∈ Ball} := by
@@ -1813,7 +1813,7 @@ theorem chartableR2_mobiusQuotientMk_of_left_seam_half {p : MobiusFundamentalDom
       have : {q : MobiusFundamentalDomain | q ∈ mobiusSeamRightPatch t₀ ε δ ∧
           mobiusPlaneTrigSeamPartnerSub (mobiusPlaneCoord q) ∈ Ball} =
           mobiusSeamRightPatch t₀ ε δ ∩ (mobiusPlaneTrigSeamPartnerSub ∘ mobiusPlaneCoord) ⁻¹' Ball := by
-        ext; simp [and_comm, Function.comp]
+        ext; simp [Function.comp]
       rw [this]; exact hRP.inter (hBallOpen.preimage (hPartnerSub.comp continuous_mobiusPlaneCoord))
     -- S' = left preimage ∪ right preimage
     suffices h : S' = {q | q ∈ mobiusSeamLeftPatch t₀ ε δ ∧ mobiusPlaneCoord q ∈ Ball} ∪
@@ -1849,7 +1849,7 @@ theorem chartableR2_mobiusQuotientMk_of_left_seam_half {p : MobiusFundamentalDom
   -- p ∈ S' (unfoldFD p = v, center of Ball)
   have hunfold_p : unfoldFD p = v := by
     have hle : p.1.val ≤ 1 / 2 := by rw [hp0]; norm_num
-    simp [unfoldFD, if_pos hle]
+    simp [unfoldFD]
     refine PiLp.ext fun i => ?_
     fin_cases i <;> simp [mobiusPlaneCoord, v, PiLp.add_apply, EuclideanSpace.single_apply, hp0, hth]
   have hpS' : p ∈ S' := ⟨hpS, by rw [hunfold_p]; exact Metric.mem_ball_self hε0⟩

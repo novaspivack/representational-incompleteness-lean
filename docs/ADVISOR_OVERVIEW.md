@@ -98,6 +98,7 @@ So **M-FINAL** is **not** a separate geometric argument; it is the **contradicti
 ## 6. Suggested citation strings
 
 - **Regress / Lawvere package:** `RepresentationalRegress.representational_regress_master` and modules `Basic`, `Regress`, `Lawvere`.  
+- **Same + topology punchline in one theorem:** `RepresentationalRegress.representational_regress_master_extended` (abbrev `RepresentationalRegressMasterExtended`; **not** a successor — extends the core master with half-line and M-FINAL lemmas).  
 - **Möbius vs cylinder:** `RepresentationalRegress.mobiusStrip_not_homeomorphic_closedCylinder`.  
 - **Interior charts:** `RepresentationalRegress.chartableR2_mobiusQuotientMk_of_interior_height`.  
 - **Cylinder boundary sensor:** `RepresentationalRegress.closedCylinder_boundaryUnion_iff_not_chartableR2`.  

@@ -14,7 +14,8 @@ universe u
 
 namespace RepresentationalRegress
 
-/-- Propositional alias for the master conjunction (for `RepresentationalRegressMasterV2`). -/
+/-- Propositional alias for the master conjunction (`representational_regress_master`). Bundled with topology lemmas in
+  `RepresentationalRegressMasterExtended` when citing the full paper stack (`SPEC_002` P2-2). -/
 def representational_regress_master_claim (R : RepresentationalSystem.{u}) : Prop :=
   (∀ bound : ℕ, ∃ level : ℕ, bound < level ∧ metaRegressArrow R level ≠ metaRegressArrow R bound) ∧
   (∀ fp : R.C, OntologicalSlot.endo R.represent ≠ OntologicalSlot.obj fp) ∧
@@ -40,26 +41,30 @@ theorem representational_regress_master (R : RepresentationalSystem.{u}) :
     exact orientability_is_homeomorphism_invariant h hsep
 
 /--
-  Machine-checked **1D** half-space vs line (closed ray vs `ℝ` in one coordinate): foundational for
-  boundary-chart / half-space local models (`SPEC_002`). Also the first topological leg of
-  `RepresentationalRegressMasterV2`; use `representational_regress_master_v2` for the full bundle including **M-FINAL**.
+  **Topology leg (1D boundary model):** half-space vs line in one coordinate — input to half-space local models (`SPEC_002`).
+  First conjunct of the topology extension beyond `representational_regress_master`; see `representational_regress_master_extended`
+  for the full bundle including **M-FINAL**.
 -/
-theorem representational_regress_master_v2_halfLineModel :
+theorem representational_regress_topology_halfLineModel :
     IsEmpty (EuclideanHalfSpace 1 ≃ₜ EuclideanSpace ℝ (Fin 1)) :=
   euclideanHalfSpace1_not_homeomorphic_euclidean1
 
-/-- Bundled “v2” claims for citation (`SPEC_002` P2-2): master regress + **1D** half-space obstruction + **M-FINAL**
-  (`MobiusStrip ≄ₜ ClosedCylinder`). Cylinder **C4** is **`closedCylinder_boundaryUnion_iff_not_chartableR2`**
-  (`CylinderChartableBoundary`). Möbius interior **`ChartableR2`** and **`mobiusStrip_not_homeomorphic_closedCylinder`**
-  are in **`MobiusSeamChartableR2`** via **`chartableR2_mobiusQuotientMk_of_interior_height`** and **`ChartableR2Bridge`**.
-  See **`CylinderMobiusNonhomeo.lean`** for optional Route W lemmas. -/
-abbrev RepresentationalRegressMasterV2 (R : RepresentationalSystem.{u}) : Prop :=
+/--
+  **Extended master (role, not a successor version):** core `representational_regress_master_claim` plus the main topology
+  lemmas cited with the paper punchline (`SPEC_002` P2-2): **1D** half-space obstruction and **M-FINAL**
+  (`MobiusStrip ≄ₜ ClosedCylinder`). Does **not** replace `representational_regress_master` — that theorem remains the
+  modular RR core. Cylinder **C4** is **`closedCylinder_boundaryUnion_iff_not_chartableR2`** (`CylinderChartableBoundary`).
+  Möbius interior **`ChartableR2`** and **`mobiusStrip_not_homeomorphic_closedCylinder`** are in **`MobiusSeamChartableR2`**
+  via **`chartableR2_mobiusQuotientMk_of_interior_height`** and **`ChartableR2Bridge`**. See **`CylinderMobiusNonhomeo.lean`**
+  for optional Route W lemmas.
+-/
+abbrev RepresentationalRegressMasterExtended (R : RepresentationalSystem.{u}) : Prop :=
   representational_regress_master_claim R ∧
     IsEmpty (EuclideanHalfSpace 1 ≃ₜ EuclideanSpace ℝ (Fin 1)) ∧
     IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)
 
-theorem representational_regress_master_v2 (R : RepresentationalSystem.{u}) :
-    RepresentationalRegressMasterV2 R :=
+theorem representational_regress_master_extended (R : RepresentationalSystem.{u}) :
+    RepresentationalRegressMasterExtended R :=
   ⟨representational_regress_master R, euclideanHalfSpace1_not_homeomorphic_euclidean1,
     mobiusStrip_not_homeomorphic_closedCylinder⟩
 

@@ -54,7 +54,7 @@
 | Half-line vs line | `RepresentationalRegress/HalfLineVsLine.lean` | `euclideanHalfSpace1_not_homeomorphic_euclidean1` (1D chart obstacle) |
 | Half-plane vs plane | `RepresentationalRegress/HalfPlaneVsPlane.lean` | `euclideanHalfSpace2_not_homeomorphic_euclidean2` (2D punctured half-plane vs punctured `ℝ²` / simple connectivity) |
 | Half-space neighbor vs plane | `RepresentationalRegress/HalfSpaceNeighborVsPlane.lean` | `isEmpty_homeomorph_subtype_openH2_zero_nbhd_R2`; **`isEmpty_homeomorph_subtype_openH2_zero_nbhd_subtype_openPlane`** — open `V ⊆ H2`, `0 ∈ V`, open `O ⊆ ℝ²` ⇒ no `Subtype V ≃ₜ Subtype O` |
-| Assembly | `RepresentationalRegress/Main.lean` | `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterV2`, `representational_regress_master_v2` |
+| Assembly | `RepresentationalRegress/Main.lean` | `representational_regress_master`, `representational_regress_master_claim`, `RepresentationalRegressMasterExtended`, `representational_regress_master_extended`, `representational_regress_topology_halfLineModel` |
 
 `RepresentationalRegress.lean` imports the above (including `Lawvere`, `CylinderMobius`, and `CylinderBoundary`) so they participate in the default library target.
 

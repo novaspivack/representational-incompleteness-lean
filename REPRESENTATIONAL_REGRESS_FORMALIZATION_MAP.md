@@ -30,7 +30,7 @@
 | `RepresentationalRegress/CylinderMobiusNonhomeo.lean` | Optional **Route W** (circle doubling / winding) |
 | `RepresentationalRegress/HalfLineVsLine.lean`, `HalfPlaneVsPlane.lean`, `HalfSpaceNeighborVsPlane.lean` | Low-dimensional **half-space vs Euclidean** obstructions |
 | `RepresentationalRegress/PuncturedPlaneNotSimplyConnected.lean` | Punctured plane / disk not simply connected |
-| `RepresentationalRegress/Main.lean` | `representational_regress_master` + **`RepresentationalRegressMasterV2`** packaging |
+| `RepresentationalRegress/Main.lean` | `representational_regress_master` + **`RepresentationalRegressMasterV2`** (master + 1D half-line + **M-FINAL**) |
 
 **Advisor narrative:** `docs/ADVISOR_OVERVIEW.md`
 

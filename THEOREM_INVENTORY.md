@@ -140,9 +140,9 @@
 |------|-----------|--------|
 | `def` | `representational_regress_master_claim` | Master conjunction as one `Prop` (universe-coupled to `R`) |
 | `theorem` | `representational_regress_master` | Proves `representational_regress_master_claim` |
-| `abbrev` | `RepresentationalRegressMasterV2` | `representational_regress_master_claim R ∧` half-line non-homeomorphism |
-| `theorem` | `representational_regress_master_v2` | Supplies that bundled conjunction |
-| `theorem` | `representational_regress_master_v2_halfLineModel` | Half-line leg only (pair with `representational_regress_master` until Möbius/cylinder punchline) |
+| `abbrev` | `RepresentationalRegressMasterV2` | `representational_regress_master_claim R ∧` half-line `≄ₜ` **`∧`** **`IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)`** (**M-FINAL**) |
+| `theorem` | `representational_regress_master_v2` | Supplies that bundled conjunction (incl. **`mobiusStrip_not_homeomorphic_closedCylinder`**) |
+| `theorem` | `representational_regress_master_v2_halfLineModel` | Half-line leg only (for citations that split the bundle) |
 
 ## Cylinder / Möbius non-homeomorphism (`CylinderMobiusNonhomeo`)
 

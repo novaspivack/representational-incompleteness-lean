@@ -8,6 +8,7 @@ import RepresentationalRegress.Regress
 import RepresentationalRegress.FixedPoints
 import RepresentationalRegress.Orientability
 import RepresentationalRegress.HalfLineVsLine
+import RepresentationalRegress.MobiusSeamChartableR2
 
 universe u
 
@@ -40,24 +41,26 @@ theorem representational_regress_master (R : RepresentationalSystem.{u}) :
 
 /--
   Machine-checked **1D** half-space vs line (closed ray vs `ℝ` in one coordinate): foundational for
-  boundary-chart / half-space local models (`SPEC_002`). Pair with `representational_regress_master`
-  for the full “master + topology lemma” story until `MobiusStrip ≄ₜ ClosedCylinder` lands.
+  boundary-chart / half-space local models (`SPEC_002`). Also the first topological leg of
+  `RepresentationalRegressMasterV2`; use `representational_regress_master_v2` for the full bundle including **M-FINAL**.
 -/
 theorem representational_regress_master_v2_halfLineModel :
     IsEmpty (EuclideanHalfSpace 1 ≃ₜ EuclideanSpace ℝ (Fin 1)) :=
   euclideanHalfSpace1_not_homeomorphic_euclidean1
 
-/-- Bundled “v2” claims for citation (`SPEC_002` P2-2): master + 1D half-space obstruction.
-Closed cylinder **C4** is **`closedCylinder_boundaryUnion_iff_not_chartableR2`** (`CylinderChartableBoundary`).
-Möbius **C4** and unconditional **M-FINAL** (**`mobiusStrip_not_homeomorphic_closedCylinder`**) are proved in
-**`MobiusSeamChartableR2`** (**`chartableR2_mobiusQuotientMk_of_interior_height`**) with packaging from **`ChartableR2Bridge`**.
-See **`CylinderMobiusNonhomeo.lean`** for optional Route W lemmas. -/
+/-- Bundled “v2” claims for citation (`SPEC_002` P2-2): master regress + **1D** half-space obstruction + **M-FINAL**
+  (`MobiusStrip ≄ₜ ClosedCylinder`). Cylinder **C4** is **`closedCylinder_boundaryUnion_iff_not_chartableR2`**
+  (`CylinderChartableBoundary`). Möbius interior **`ChartableR2`** and **`mobiusStrip_not_homeomorphic_closedCylinder`**
+  are in **`MobiusSeamChartableR2`** via **`chartableR2_mobiusQuotientMk_of_interior_height`** and **`ChartableR2Bridge`**.
+  See **`CylinderMobiusNonhomeo.lean`** for optional Route W lemmas. -/
 abbrev RepresentationalRegressMasterV2 (R : RepresentationalSystem.{u}) : Prop :=
   representational_regress_master_claim R ∧
-    IsEmpty (EuclideanHalfSpace 1 ≃ₜ EuclideanSpace ℝ (Fin 1))
+    IsEmpty (EuclideanHalfSpace 1 ≃ₜ EuclideanSpace ℝ (Fin 1)) ∧
+    IsEmpty (MobiusStrip ≃ₜ ClosedCylinder)
 
 theorem representational_regress_master_v2 (R : RepresentationalSystem.{u}) :
     RepresentationalRegressMasterV2 R :=
-  ⟨representational_regress_master R, euclideanHalfSpace1_not_homeomorphic_euclidean1⟩
+  ⟨representational_regress_master R, euclideanHalfSpace1_not_homeomorphic_euclidean1,
+    mobiusStrip_not_homeomorphic_closedCylinder⟩
 
 end RepresentationalRegress

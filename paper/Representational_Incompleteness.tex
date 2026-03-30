@@ -61,6 +61,7 @@ Independent Researcher}
 % ABSTRACT
 % ============================================================================
 \begin{abstract}
+\raggedright
 \noindent\textbf{Summit theorem (\leanref{representational\_incompleteness}).}
 Any system that models itself---any $s : A \to A \to B$ whatsoever---is
 \emph{necessarily incomplete} with respect to its own diagonal behavior:
@@ -152,7 +153,34 @@ can substitute for it.  Self-awareness with perfect self-transparency
 is the one thing that is structurally impossible; self-awareness with
 a diagonal opacity is what the formalism predicts and what empirical
 evidence confirms.
+
+\medskip
+\noindent\textbf{Trust boundary:} Diagonal and topological clauses are Lean theorems at the cited declarations; philosophical deployment claims require explicit modeling bridges beyond the formal artifact.
 \end{abstract}
+
+\noindent\textbf{Keywords:} representational incompleteness, self-reference, Lean~4, diagonal arguments, topology
+
+\noindent\textbf{MSC 2020:} 03F40, 03B70, 54A05, 68T27
+
+\noindent\textbf{Code/Data availability:}
+\texttt{representational-incompleteness} Lean library;
+\texttt{lake build};
+repository \texttt{README} and module index at repository root.
+
+\section{Premises, disagreement coordinates, and trust boundary}\label{sec:premises-ri-flagship}
+\begin{keybox}[title=Where disagreement can (and cannot) live]
+\textbf{Formal spine.}
+The summit barrier and the six closed escape routes are discharged as \texttt{theorem} values in the artifact; informal debates route through those declarations.
+
+\medskip
+\textbf{Premise coordinates (for external readers).}
+\begin{itemize}[leftmargin=2em]
+\item \textbf{Generality of $s$.} The main diagonal exclusion assumes only a parametric self-map $s:A\to A\to B$ and a fixed-point-free $f$ on $B$; no computability or cardinality strengthening is required for the core lemma.
+  \emph{Logical effect:} Adding resource bounds is an optional specialization, not the negation of the base theorem.
+\item \textbf{Topological strand.} The planar-chart boundary lemma is a separate pillar with its own hypotheses; it reinforces but does not silently replace the diagonal clause.
+  \emph{Logical effect:} One may accept diagonal incompleteness while auditing topology proofs independently.
+\end{itemize}
+\end{keybox}
 
 % ============================================================================
 % 1. INTRODUCTION

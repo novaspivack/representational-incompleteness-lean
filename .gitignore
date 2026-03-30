@@ -13,7 +13,6 @@ lake-packages/
 **/paper/*.out
 **/paper/*.toc
 **/paper/*.synctex.gz
-**/paper/*.pdf
 
 # Local scratch (do not commit)
 Scratch*.lean

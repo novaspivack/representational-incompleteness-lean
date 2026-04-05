@@ -60,3 +60,6 @@ Workspace documentation: `../docs/lean_mathlib_cache_workflow.md`, `../docs/opti
 - `docs/argument-structure.md` — plain-language map
 
 See also `MANIFEST.md`, `THEOREM_INVENTORY.md`, `REPRESENTATIONAL_INCOMPLETENESS_FORMALIZATION_MAP.md`, `ARTIFACT.md`.
+<!-- NOVA_ZPO_ZENODO_SOFTWARE_BEGIN -->
+**Archival software (Zenodo):** https://doi.org/10.5281/zenodo.19429237
+<!-- NOVA_ZPO_ZENODO_SOFTWARE_END -->

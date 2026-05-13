@@ -1,7 +1,7 @@
 # representational-incompleteness-lean — artifact documentation
 
-**Lean:** `leanprover/lean4:v4.29.0-rc6`  
-**Mathlib:** `v4.29.0-rc6` — use **`lake exe cache get`** after `lake update`  
+**Lean:** `leanprover/lean4:v4.29.1`  
+**Mathlib:** `v4.29.1` — use **`lake exe cache get`** after `lake update`  
 **Build:** `lake build RepresentationalIncompleteness` from this directory (`RepresentationalIncompleteness/` has **0** `sorry`)  
 **Lake deps:** Mathlib only (`lakefile.lean`, `lake-manifest.json`)  
 **Workspace handoff:** `../specs/IN-PROCESS/SPEC_001_RR1_REPRESENTATIONAL_REGRESS_LEAN_EPIC.md`  

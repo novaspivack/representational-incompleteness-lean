@@ -1,7 +1,7 @@
 # representational-incompleteness-lean — manifest
 
-**Toolchain:** `leanprover/lean4:v4.29.0-rc6`  
-**Mathlib:** `v4.29.0-rc6` (via `lakefile.lean`); use `lake exe cache get`  
+**Toolchain:** `leanprover/lean4:v4.29.1`  
+**Mathlib:** `v4.29.1` (via `lakefile.lean`); use `lake exe cache get`  
 **Build:** `lake build RepresentationalIncompleteness` (or `lake build`) from this directory  
 **Root import:** `RepresentationalIncompleteness.lean`  
 **Formalization map:** `REPRESENTATIONAL_INCOMPLETENESS_FORMALIZATION_MAP.md`  
